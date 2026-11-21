@@ -10,4 +10,4 @@ pydantic>=2.6
 streamlit>=1.40
 plotly>=5.20
 pydeck>=0.9
-pytest>=8.0
+pytest>=9.2.0
