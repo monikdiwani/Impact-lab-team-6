@@ -119,3 +119,25 @@ This step is paid, needs `ANTHROPIC_API_KEY`, and needs Eval 2 done first. The j
 4. Run the pilot and approve the harness: `python -m evals.run_eval --suite narrative --target app --approve-harness --limit 5`
 5. Run the full set: `python -m evals.run_eval --suite narrative --target app`
 6. Run with the judge: `python -m evals.run_eval --suite narrative --target app --judge`
+
+## Notebook check of the output files (`pipeline/audit/m2_output_checks.ipynb`)
+
+Run on 2026-11-21. The notebook recomputes every column of `audit_flags.parquet`, `contractor_scorecard.parquet`, `ward_scorecard.parquet` and `scorecard_text.json` from the raw CSVs, independently of the pipeline.
+
+**Result: 101 PASS, 1 FAIL out of 102 checks.**
+
+| Section | Result |
+|---|---|
+| Files exist, contract columns and types | all pass |
+| `audit_flags` integrity and counts (114 / 45 / 493 / 1259 / 611) | all pass |
+| OVERBILL, DOUBLE_BILL, DLP_PAID recomputed from raw data | all pass |
+| SLA_MISS | 1 FAIL (below) |
+| REPEAT_REPAIR follow-up WO and ₹ | all pass |
+| Evidence and explanation text | all pass |
+| Contractor scorecard (every column recomputed) | all pass |
+| Ward scorecard (every column recomputed) | all pass |
+| `scorecard_text.json` | all pass |
+
+**The 1 failure:** `WO25-00541` finished exactly at its 24 h deadline (0 h late by the recompute), but the source data marks it `sla_met = N`, so M2 flags it as SLA_MISS. This is the 1 boundary case the blueprint (§2, A4) mentions, and the blueprint decides to trust the `sla_met` column. M2 follows the blueprint. The check is left failing on purpose rather than loosened.
+
+A first run showed a second failure (109 REPEAT_REPAIR mismatches). That was a bug in the notebook itself: it compared a missing value (`NaN`) with `None`. It was fixed in the notebook. No M2 code or output changed.
