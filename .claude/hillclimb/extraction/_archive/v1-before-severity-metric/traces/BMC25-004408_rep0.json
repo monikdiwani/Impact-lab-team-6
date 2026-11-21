@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004408\",\n \"received_at\": \"2025-08-19 17:11\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Sion Trombay Road पर मैनहोल खुला है, बहुत खतरनाक है.\",\n \"locality_text\": \"Antop Hill\",\n \"ward_code\": \"F/N\",\n \"lat\": 19.030328,\n \"lon\": 72.874181,\n \"photo_description\": \"Road under brown water up to car wheel arches\",\n \"upvotes\": 6\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"F/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Waterlogging reported at Antop Hill (original text in hi).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

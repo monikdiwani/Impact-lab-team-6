@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003566\",\n \"received_at\": \"2025-07-31 16:27\",\n \"channel\": \"Ward Office Walk-in\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"Kitni baar complaint karein? Bellasis Road Byculla pe wahi gadda phir se khul gaya\",\n \"locality_text\": \"Byculla\",\n \"ward_code\": \"E\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"E\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Citizen complains that the same pothole on Bellasis Road, Byculla has opened up again despite repeated complaints.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

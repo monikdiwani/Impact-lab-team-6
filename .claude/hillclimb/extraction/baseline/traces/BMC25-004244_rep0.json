@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004244\",\n \"received_at\": \"2025-08-13 16:57\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Pothole\",\n \"description\": \"vegetable market जवळ रस्त्यावर मोठा खड्डा आहे, Marve Road. लवकर दुरुस्त करा.\",\n \"locality_text\": \"Marve Road\",\n \"ward_code\": \"P/N\",\n \"lat\": 19.186236,\n \"lon\": 72.846241,\n \"photo_description\": \"Close-up of a crater filled with muddy water, broken asphalt edges\",\n \"upvotes\": 11\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Pothole reported at Marve Road (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

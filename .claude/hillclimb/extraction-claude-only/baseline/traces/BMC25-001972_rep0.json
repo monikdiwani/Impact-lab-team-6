@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001972\",\n \"received_at\": \"2025-07-09 10:56\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Citizen informs open or broken manhole at Malvani, near petrol pump on Marve Road. Repeat caller.\",\n \"locality_text\": \"Malvani\",\n \"ward_code\": \"P/N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"A repeat caller reports an open or broken manhole near the petrol pump on Marve Road in Malvani.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

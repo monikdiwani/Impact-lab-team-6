@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000130\",\n \"received_at\": \"2025-06-06 17:50\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Broken paver blocks\",\n \"description\": \"Paver blocks uprooted on footpath near church, Trombay. Senior citizens tripping.\",\n \"locality_text\": \"Trombay\",\n \"ward_code\": null,\n \"lat\": 19.061575,\n \"lon\": 72.926393,\n \"photo_description\": \"Uprooted paver blocks on footpath\",\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Broken paver blocks\",\n \"severity_1_5\": 1,\n \"ward_code\": \"M/E\",\n \"ward_source\": \"gps\",\n \"language\": \"en\",\n \"english_summary\": \"Paver blocks uprooted on footpath near church, Trombay. Senior citizens tripping.\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

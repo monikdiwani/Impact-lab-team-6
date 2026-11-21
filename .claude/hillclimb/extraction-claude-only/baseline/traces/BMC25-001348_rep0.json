@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001348\",\n \"received_at\": \"2025-07-02 11:24\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"en\",\n \"category_reported\": \"Road related\",\n \"description\": \"Manhole cover broken near police chowky. Someone kept a stick and plastic as warning. Fix ASAP.\",\n \"locality_text\": \"Masjid Bunder\",\n \"ward_code\": \"B\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"B\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"A broken manhole cover near the police chowky in Masjid Bunder has only a stick and plastic placed as a warning, and the citizen asks for an urgent repair.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

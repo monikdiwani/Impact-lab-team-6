@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002648\",\n \"received_at\": \"2025-07-21 21:11\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"mr\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Link Road वर गटाराचे झाकण उघडे आहे, खूप धोकादायक आहे.\",\n \"locality_text\": \"Thakur Village\",\n \"ward_code\": \"R/S\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": \"Nullah water overflowing onto road\",\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"R/S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"The citizen reports an open drain cover on Link Road in Thakur Village and calls it very dangerous, while the attached photo shows nullah water overflowing onto the road.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

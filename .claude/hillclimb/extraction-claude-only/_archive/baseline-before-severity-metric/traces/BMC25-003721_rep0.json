@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003721\",\n \"received_at\": \"2025-08-03 20:00\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Citizen informs open or broken manhole at Bandra West, near medical store on Linking Road. Caller agitated.\",\n \"locality_text\": \"Bandra West\",\n \"ward_code\": \"H/W\",\n \"lat\": 19.060882,\n \"lon\": 72.833214,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"H/W\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Caller reports an open or broken manhole near a medical store on Linking Road, Bandra West.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

@@ -26,7 +26,10 @@ Severity: in this data severity depends on the category alone. Within a category
 noise: urgency words, upvotes, photo, road type and area show no signal. So severity is a
 lookup from the final category (mode per category). With the true category that scores
 47% exact / 89% within one, the ceiling for any method that only sees the complaint;
-with the extracted category it scores 46.2% / 88.1%.
+with the extracted category it scores 46.2% / 88.1%. Checked with a cross-validated model
+(grouped by work order) on 30 features - channel, language, upvotes, time, rainfall, tides,
+ward, hotspot distance, GPS, photo, text length, and even work-order cost/method/area/road
+traffic: 42.7-45.9% exact, i.e. worse than the lookup's 46.6%. More features only fit noise.
 """
 from __future__ import annotations
 

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002998\",\n \"received_at\": \"2025-07-25 13:08\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Malad West station road pe itna paani hai ki bus band hai. BMC kab aayegi?\",\n \"locality_text\": \"Malad West\",\n \"ward_code\": null,\n \"lat\": 19.187543,\n \"lon\": 72.848054,\n \"photo_description\": null,\n \"upvotes\": 7\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"gps\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Waterlogging reported at Malad West (original text in hi-en).\",\n \"extraction_source\": \"citizen\"\n}"
+ }
+]

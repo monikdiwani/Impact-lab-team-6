@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005020\",\n \"received_at\": \"2025-08-22 13:55\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Bhai Kamani Junction Road pe metro station ke paas bahut bada khadda hai, roz koi na koi girta hai. Please jaldi theek karo\",\n \"locality_text\": \"Saki Naka Junction\",\n \"ward_code\": \"L\",\n \"lat\": 19.075108,\n \"lon\": 72.896837,\n \"photo_description\": \"Wide shot of road with several potholes, auto rickshaw swerving\",\n \"upvotes\": 8\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Pothole reported at Saki Naka Junction (original text in hi-en).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

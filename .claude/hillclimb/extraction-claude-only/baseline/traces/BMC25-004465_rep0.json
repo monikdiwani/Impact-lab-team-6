@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004465\",\n \"received_at\": \"2025-08-18 22:29\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Road has caved in near chawl gate, Bandra West. Big hole about dangerous. Barricade needed immediately.\",\n \"locality_text\": \"Bandra West\",\n \"ward_code\": null,\n \"lat\": 19.063962,\n \"lon\": 72.827859,\n \"photo_description\": \"Large sinkhole on road edge with exposed pipe\",\n \"upvotes\": 30\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"H/W\",\n \"ward_source\": \"gps\",\n \"language\": \"en\",\n \"english_summary\": \"Citizen reports that the road has caved in near a chawl gate in Bandra West, leaving a big, dangerous hole, and asks for a barricade immediately.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

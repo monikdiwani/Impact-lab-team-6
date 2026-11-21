@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004080\",\n \"received_at\": \"2025-08-09 07:15\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"Caller reports pothole at Wadala, near hospital gate on Bhaudaji Road. Water level rising.\",\n \"locality_text\": \"Wadala\",\n \"ward_code\": \"F/N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"F/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Pothole reported at Wadala (original text in hi-en).\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

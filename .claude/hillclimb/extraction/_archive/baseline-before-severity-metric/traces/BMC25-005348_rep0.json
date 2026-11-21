@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005348\",\n \"received_at\": \"2025-08-29 22:17\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Other\",\n \"description\": \"BEST depot ke paas gutter ka dhakkan khula hai, paani mein dikh nahi raha. Koi gir jayega\",\n \"locality_text\": \"Lalbaug\",\n \"ward_code\": \"F/S\",\n \"lat\": 19.00759,\n \"lon\": 72.839596,\n \"photo_description\": \"Road under brown water up to car wheel arches\",\n \"upvotes\": 2\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"F/S\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Waterlogging reported at Lalbaug (original text in hi-en).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

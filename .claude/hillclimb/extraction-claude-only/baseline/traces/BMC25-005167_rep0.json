@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005167\",\n \"received_at\": \"2025-08-26 14:33\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Pothole\",\n \"description\": \"tardeo road पर मैनहोल खुला है, बहुत खतरनाक है.\",\n \"locality_text\": \"Peddar Road\",\n \"ward_code\": \"D\",\n \"lat\": 18.957391,\n \"lon\": 72.805317,\n \"photo_description\": null,\n \"upvotes\": 25\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"D\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"A manhole is open on Tardeo Road and the citizen says it is very dangerous.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003738\",\n \"received_at\": \"2025-08-03 13:43\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"medical store जवळ रस्त्यावर मोठा खड्डा आहे, Goregaon West. लवकर दुरुस्त करा.\",\n \"locality_text\": \"Goregaon West\",\n \"ward_code\": \"P/S\",\n \"lat\": 19.165336,\n \"lon\": 72.854057,\n \"photo_description\": null,\n \"upvotes\": 27\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"P/S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Road cave-in reported at Goregaon West (original text in mr).\",\n \"extraction_source\": \"citizen\"\n}"
+ }
+]

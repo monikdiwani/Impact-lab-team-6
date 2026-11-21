@@ -109,3 +109,52 @@ All of `outputs/` was rebuilt from the current code, with Claude enabled, in thi
 - **Number formatting:** Claude writes amounts like "Rs 17209448", without Indian digit grouping. M2's prompt could ask for ₹ with commas.
 - **Cache:** `outputs/llm_cache/` now holds 206 cached answers (151 M1, 32 M2, 24 M3, one prompt shared), so the demo runs with no network. The 3 stale entries from the pre-fix pilot were set aside, not committed.
 - **Cost:** about 207 Claude calls in total.
+
+## 8. Paid eval results and the severity question
+
+Sanjay ran the paid evals after re-approving the harness. All runs had 166 cases scored and 0 failed attempts.
+
+| Run | Category | Severity exact | Severity within one | Ward | Claude calls |
+|---|---|---|---|---|---|
+| `app` baseline (and a `v1` re-run, identical) | **100%** | 46.4% | 95.2% | 100% | 5 (the ambiguous cases, all correct) |
+| `claude` ablation (every case through Claude, rules bypassed) | 93.4% | 45.8% | 91.6% | 100% | 166 (median 812 tokens in, 73 out) |
+
+**Claude on its own makes the mistake the router is built to avoid.** All 11 of its misses are Hindi, Marathi or Hinglish complaints from the app or portal (11 of 67 such cases, 0 of 99 elsewhere). In 9 it believed text like "मैनहोल खुला है" (manhole open) over a correct citizen category. In 2 it even overrode a decisive photo, although the prompt puts the photo first. In the real app those cases never reach Claude, so the router scores 100%. The photo weakness only affects photo text Claude hasn't seen before, because all 12 known templates are handled by rules. Fixing it in the prompt would invalidate the 151 cached pipeline answers, so that's left for later.
+
+### Is severity failing?
+
+No. **There is no pass mark for severity, and 46.4% exact is the best any method can score.**
+
+- **The correct answer comes from the work order, not the complaint.** It's the work order's deadline (24 h = 5 … 168 h = 1), and in this synthetic data it depends only on the category. Within a category it's random.
+- **Nothing beats the category lookup.** A cross-validated model (grouped by work order) using 30 features scored worse than the lookup on 4,798 linked complaints. The features covered channel, language, upvotes, hour, weekday, rainfall, tides, ward, low-lying index, flood-hotspot distance, GPS, photo and text length, plus work-order fields the extractor never sees (method, cost, area, road traffic).
+
+  | Method | Exact | Within one |
+  |---|---|---|
+  | **Category lookup (what M1 does)** | **46.6%** | **88.9%** |
+  | Model, category only | 46.5% | 87.1% |
+  | Model, everything the complaint offers | 42.7% | 82.5% |
+  | Model, plus work-order fields | 45.9% | 84.0% |
+- **On these 166 cases**, within one (95.2%) is already the maximum. Exact (77/166) could reach 84 only by switching pothole to 2, waterlogging to 5 and drain to 4. Those values suit this sample but are wrong across all complaints (pothole: 776 at 3 vs 672 at 2; waterlogging: 474 at 4 vs 304 at 5), so changing them would be tuning to the test set.
+- **Category is 100% correct**, so no extraction change can raise severity.
+
+**What was actually wrong was the report.** Nothing showed that 46.4% is the ceiling, so it read as a failure. Fixed:
+
+| # | Change |
+|---|---|
+| 26 | New metric **`severity best`**. A case passes if the severity is the exact truth or the best possible answer for the true category. That's the part extraction controls. The best values come from linked complaints outside the eval set (`evals/build_cases.py`, `severity_best_table`): paver 1, drain 3 (4 is a near-tie, also accepted), manhole 5, pothole 3, cave-in 5, waterlogging 4. They match M1's lookup, and a test checks this. |
+| 27 | The runner now prints the ceiling next to the raw numbers: *"severity ceiling on this set: exact 46.4%, within one 95.2%"*. |
+| 28 | Free self-checks with the new metric: `rules` scores severity best **100%**, exact 46.4% and within one 95.2%, both at the ceiling. Oracle 100%, null 0%, citizen (always 3) 54.8%. |
+
+**How to read severity from now on:**
+- `severity best` should be 100%.
+- `severity =` and `severity ±1` should equal the printed ceiling.
+- Anything below the ceiling means the category was wrong.
+
+**Official re-run with the new metric** (Sanjay re-approved the harness, 166 scored, 0 failed attempts each):
+
+| Run | Category | `severity best` | Severity exact | Severity within one | Ceiling (exact / within one) |
+|---|---|---|---|---|---|
+| `app` | **100%** | **100%** | 46.4% | 95.2% | 46.4% / 95.2% |
+| `claude` ablation | 93.4% | 95.2% | 45.8% | 91.6% | 46.4% / 95.2% |
+
+The app is at the severity ceiling. The Claude-only run loses severity only where it got the category wrong. Earlier runs from before the metric are kept in the `_archive/` folders, with the suffix `-before-severity-metric`.

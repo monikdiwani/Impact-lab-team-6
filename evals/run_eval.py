@@ -307,6 +307,16 @@ def summarize(out: Path, metrics: list[dict]) -> dict:
         print(f"  {head} by tag: " + "  ".join(f"{t} {100 * sum(v) / len(v):.0f}% (n={len(v)})"
                                                for t, v in sorted(by.items())))
     summary["by_tag"] = {t: sum(v) / len(v) for t, v in by.items()}
+    sev_rows = [r for r in ok if isinstance(r["meta"].get("expected"), dict)
+                and r["meta"]["expected"].get("severity_best")]
+    if sev_rows:
+        def best0(r):
+            return r["meta"]["expected"]["severity_best"][0]
+        cx = sum(r["meta"]["expected"]["severity"] == best0(r) for r in sev_rows) / len(sev_rows)
+        c1 = sum(abs(r["meta"]["expected"]["severity"] - best0(r)) <= 1 for r in sev_rows) / len(sev_rows)
+        print(f"  severity ceiling on this set (best possible for any method that sees only the complaint): "
+              f"exact {100 * cx:.1f}%, within one {100 * c1:.1f}%")
+        summary["severity_ceiling"] = {"exact": cx, "within1": c1}
     by_src = defaultdict(list)
     for r in ok:
         out_ = r["meta"].get("output")

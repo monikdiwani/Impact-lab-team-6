@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002387\",\n \"received_at\": \"2025-07-15 14:48\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road related\",\n \"description\": \"Huge crater on Linking Road opposite market. Cars swerving into other lane. Accident waiting to happen.\",\n \"locality_text\": \"Bandra West\",\n \"ward_code\": \"H/W\",\n \"lat\": 19.061128,\n \"lon\": 72.833108,\n \"photo_description\": null,\n \"upvotes\": 20\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"H/W\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Huge crater on Linking Road opposite market. Cars swerving into other lane. Accident waiting to happen.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

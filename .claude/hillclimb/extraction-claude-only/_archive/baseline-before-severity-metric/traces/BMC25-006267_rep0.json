@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-006267\",\n \"received_at\": \"2025-09-29 18:50\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"knee deep pothole near metro station, Anand Nagar. Two wheelers falling daily, please fix urgently.\",\n \"locality_text\": \"Anand\",\n \"ward_code\": \"R/N\",\n \"lat\": 19.244034,\n \"lon\": 72.868134,\n \"photo_description\": null,\n \"upvotes\": 29\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"R/N\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Citizen reports a knee-deep pothole near the metro station in Anand Nagar, where two-wheelers fall daily, and asks for an urgent fix.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

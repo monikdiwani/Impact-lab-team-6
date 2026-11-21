@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001557\",\n \"received_at\": \"2025-07-09 16:51\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"MANDIR के पास सड़क पर बड़ा गड्ढा है, MARVE ROAD. जल्दी ठीक करें.\",\n \"locality_text\": \"Marve Road\",\n \"ward_code\": \"P/N\",\n \"lat\": 19.184643,\n \"lon\": 72.851241,\n \"photo_description\": \"Uncovered manhole with a stick and plastic bag as warning\",\n \"upvotes\": 8\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Citizen reports a big hole in the road near the temple on Marve Road and asks for a quick repair; the photo shows an uncovered manhole marked only with a stick and plastic bag.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

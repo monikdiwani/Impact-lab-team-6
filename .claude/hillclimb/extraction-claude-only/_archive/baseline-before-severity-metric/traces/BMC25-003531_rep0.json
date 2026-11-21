@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003531\",\n \"received_at\": \"2025-07-30 19:32\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"mr\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Caller reports pothole at Anand Nagar, near market on LT Road. \",\n \"locality_text\": \"Anand Nagar\",\n \"ward_code\": \"R/N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"R/N\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Caller reports a pothole near the market on LT Road in Anand Nagar.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

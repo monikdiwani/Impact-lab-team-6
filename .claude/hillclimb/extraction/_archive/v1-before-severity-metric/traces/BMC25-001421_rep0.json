@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001421\",\n \"received_at\": \"2025-07-06 20:52\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Citizen informs waterlogging at Malad East, near vegetable market on Malad Subway. Requests urgent action.\",\n \"locality_text\": \"Malad East\",\n \"ward_code\": \"P/N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Waterlogging reported at Malad East (original text in hi-en).\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

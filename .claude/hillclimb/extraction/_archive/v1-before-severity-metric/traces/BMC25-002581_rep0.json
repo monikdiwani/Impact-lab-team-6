@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002581\",\n \"received_at\": \"2025-07-19 12:50\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Deonar Village Road वर गटाराचे झाकण उघडे आहे, खूप धोकादायक आहे.\",\n \"locality_text\": \"Deonar\",\n \"ward_code\": null,\n \"lat\": 19.058749,\n \"lon\": 72.934568,\n \"photo_description\": \"Wide shot of road with several potholes, auto rickshaw swerving\",\n \"upvotes\": 31\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"M/E\",\n \"ward_source\": \"gps\",\n \"language\": \"mr\",\n \"english_summary\": \"Pothole reported at Deonar (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

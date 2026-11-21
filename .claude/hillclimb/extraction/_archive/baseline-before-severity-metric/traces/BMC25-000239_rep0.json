@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000239\",\n \"received_at\": \"2025-06-11 14:11\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"trombay मध्ये पाणी साचले आहे, गाड्या अडकल्या आहेत. पंप पाठवा.\",\n \"locality_text\": \"Trombay\",\n \"ward_code\": \"M/E\",\n \"lat\": 19.061975,\n \"lon\": 72.926552,\n \"photo_description\": null,\n \"upvotes\": 26\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"M/E\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Waterlogging reported at Trombay (original text in mr).\",\n \"extraction_source\": \"citizen\"\n}"
+ }
+]

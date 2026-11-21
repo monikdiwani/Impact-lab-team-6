@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001984\",\n \"received_at\": \"2025-07-13 14:10\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"mr\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Complainant states broken paver blocks at Lokhandwala, near market on SV Road. Caller agitated.\",\n \"locality_text\": \"Lokhandwala\",\n \"ward_code\": \"K/W\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Broken paver blocks\",\n \"severity_1_5\": 1,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Caller to the 1916 helpline reports broken paver blocks near the market on SV Road in Lokhandwala.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

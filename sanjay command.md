@@ -63,10 +63,10 @@ Numbers to report:
 - **category** (citizen bar 54.8%), **category on `cat_wrong`** (fixing the citizen's mistakes) and **category by evidence source** (photo / text / citizen / claude).
 - **The `ambiguous` slice:** the only cases where Claude decides the category in `app`.
 - **ward recovery on blank-ward cases.**
-- **severity:** read it against the ceiling of about 47% exact / 89% within one, not 100%.
+- **severity:** `severity best` should be 100%. `severity =` and `severity ±1` should equal the ceiling line the runner prints (46.4% / 95.2% on this set); they can't go higher, because within a category the true severity is random.
 - Language is now an input, so it isn't scored.
 
-Your 10-case pilot from before the fixes is kept in `.claude/hillclimb/extraction/_archive/pilot-before-fixes/`.
+Earlier runs are kept in `.claude/hillclimb/extraction/_archive/` (the pre-fix pilot, plus baseline and v1 from before the `severity best` metric) and `.claude/hillclimb/extraction-claude-only/_archive/`. The grader and cases changed again on 21 Nov, so approve once more. Re-runs are free because the Claude answers are cached.
 
 ---
 

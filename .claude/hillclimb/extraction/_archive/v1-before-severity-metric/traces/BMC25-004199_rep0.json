@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004199\",\n \"received_at\": \"2025-08-13 15:07\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"gutter choked near market, vile parle west. dirty water on road, smell is unbearable.\",\n \"locality_text\": \"Vile Parle West\",\n \"ward_code\": \"K/W\",\n \"lat\": 19.117097,\n \"lon\": 72.84521,\n \"photo_description\": \"Garbage blocking storm drain grate, dirty water pooling\",\n \"upvotes\": 29\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"gutter choked near market, vile parle west. dirty water on road, smell is unbearable.\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004656\",\n \"received_at\": \"2025-08-19 11:10\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"hi\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"market के पास सड़क पर बड़ा गड्ढा है, Ghatkopar West. जल्दी ठीक करें.\",\n \"locality_text\": \"Ghatkopar West\",\n \"ward_code\": \"N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": \"Close-up of a crater filled with muddy water, broken asphalt edges\",\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"N\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"There is a large pothole on the road near the market in Ghatkopar West, and the citizen asks for it to be fixed quickly.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

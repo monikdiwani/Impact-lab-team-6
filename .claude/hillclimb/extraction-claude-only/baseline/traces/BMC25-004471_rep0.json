@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004471\",\n \"received_at\": \"2025-08-18 15:19\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Other\",\n \"description\": \"Open manhole on SV Road near vegetable market, Malad East. Covered with water, not visible. Very dangerous!\",\n \"locality_text\": \"Malad East\",\n \"ward_code\": \"P/N\",\n \"lat\": 19.180911,\n \"lon\": 72.845476,\n \"photo_description\": null,\n \"upvotes\": 32\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"An open manhole on SV Road near the vegetable market in Malad East is covered with water and not visible, making it very dangerous.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

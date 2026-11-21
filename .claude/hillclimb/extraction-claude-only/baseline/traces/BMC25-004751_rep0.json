@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004751\",\n \"received_at\": \"2025-08-19 12:58\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi\",\n \"category_reported\": \"Pothole\",\n \"description\": \"As per caller pothole at Bandra East, near mandir on Western Express Highway. \",\n \"locality_text\": \"Bandra East\",\n \"ward_code\": \"H/E\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"H/E\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Caller reports a pothole near the mandir on the Western Express Highway in Bandra East.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

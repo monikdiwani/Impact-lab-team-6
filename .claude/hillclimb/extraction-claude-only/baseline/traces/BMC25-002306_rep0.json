@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002306\",\n \"received_at\": \"2025-07-14 22:26\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Other\",\n \"description\": \"सिग्नल जवळ रस्त्यावर मोठा खड्डा आहे, Parel. लवकर दुरुस्त करा.\",\n \"locality_text\": \"Parel\",\n \"ward_code\": \"F/S\",\n \"lat\": 18.991255,\n \"lon\": 72.841615,\n \"photo_description\": \"Cracked manhole cover sunk below road level\",\n \"upvotes\": 28\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"F/S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Citizen reports a big pit on the road near the signal in Parel and asks for quick repair; the photo shows a cracked manhole cover sunk below road level.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002684\",\n \"received_at\": \"2025-07-21 12:23\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"kitni baar complaint karein? lbs marg kurla west pe wahi gadda phir se khul gaya\",\n \"locality_text\": \"Kurla\",\n \"ward_code\": null,\n \"lat\": 19.070995,\n \"lon\": 72.887809,\n \"photo_description\": \"Close-up of a crater filled with muddy water, broken asphalt edges\",\n \"upvotes\": 10\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"L\",\n \"ward_source\": \"gps\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Citizen complains that the same pothole on LBS Marg, Kurla West has reopened despite repeated complaints.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

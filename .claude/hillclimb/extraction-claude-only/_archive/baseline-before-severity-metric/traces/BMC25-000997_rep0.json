@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000997\",\n \"received_at\": \"2025-06-25 06:16\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"As per caller pothole at Nagpada, near masjid on Dr Babasaheb Ambedkar Road. \",\n \"locality_text\": \"Nagpada\",\n \"ward_code\": \"E\",\n \"lat\": 18.984623,\n \"lon\": 72.842873,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"E\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Caller reports a pothole on Dr Babasaheb Ambedkar Road near the masjid in Nagpada.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

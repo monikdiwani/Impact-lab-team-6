@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005284\",\n \"received_at\": \"2025-09-01 08:36\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"water logged knee deep at signal, vikhroli. vehicles stuck, please send pump.\",\n \"locality_text\": \"Vikhroli\",\n \"ward_code\": null,\n \"lat\": 19.092094,\n \"lon\": 72.904331,\n \"photo_description\": \"Road under brown water up to car wheel arches\",\n \"upvotes\": 18\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"N\",\n \"ward_source\": \"gps\",\n \"language\": \"en\",\n \"english_summary\": \"water logged knee deep at signal, vikhroli. vehicles stuck, please send pump.\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

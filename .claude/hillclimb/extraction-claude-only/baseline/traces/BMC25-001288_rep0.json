@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001288\",\n \"received_at\": \"2025-07-01 20:03\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Caller reports waterlogging at Thakur Village, near metro station on Link Road. Water level rising.\",\n \"locality_text\": \"Thakur Village\",\n \"ward_code\": null,\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"R/S\",\n \"ward_source\": \"locality\",\n \"language\": \"en\",\n \"english_summary\": \"Caller reports waterlogging with a rising water level near the metro station on Link Road, Thakur Village.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

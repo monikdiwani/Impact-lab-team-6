@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002020\",\n \"received_at\": \"2025-07-09 11:44\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"As per caller pothole at Nahur West, near municipal school on Mulund Goregaon Link Road. \",\n \"locality_text\": \"Nahur West\",\n \"ward_code\": \"T\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"T\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Caller reports a pothole on Mulund Goregaon Link Road near the municipal school in Nahur West.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

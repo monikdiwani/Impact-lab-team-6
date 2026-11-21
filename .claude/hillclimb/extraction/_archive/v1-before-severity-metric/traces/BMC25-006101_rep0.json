@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-006101\",\n \"received_at\": \"2025-09-17 19:36\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Thakur Village Road पर मैनहोल खुला है, बहुत खतरनाक है.\",\n \"locality_text\": \"Poisar\",\n \"ward_code\": \"R/S\",\n \"lat\": 19.206765,\n \"lon\": 72.861445,\n \"photo_description\": null,\n \"upvotes\": 40\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"R/S\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Pothole reported at Poisar (original text in hi).\",\n \"extraction_source\": \"citizen\"\n}"
+ }
+]

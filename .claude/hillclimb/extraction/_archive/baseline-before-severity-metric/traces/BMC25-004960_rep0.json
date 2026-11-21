@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004960\",\n \"received_at\": \"2025-08-21 10:23\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Manhole cover broken near masjid. Someone kept a stick and plastic as warning. Fix ASAP.\",\n \"locality_text\": \"Borivali East\",\n \"ward_code\": \"R/C\",\n \"lat\": 19.237665,\n \"lon\": 72.858655,\n \"photo_description\": null,\n \"upvotes\": 17\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"R/C\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Manhole cover broken near masjid. Someone kept a stick and plastic as warning. Fix ASAP.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002437\",\n \"received_at\": \"2025-07-16 11:16\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"Complainant states pothole at Matunga, near church on Sion Trombay Road. Caller agitated.\",\n \"locality_text\": \"Matunga\",\n \"ward_code\": \"F/N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"F/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Caller reports a pothole near the church on Sion Trombay Road in Matunga.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

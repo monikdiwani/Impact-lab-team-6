@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004802\",\n \"received_at\": \"2025-08-20 21:39\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"mr\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"mandir जवळ रस्त्यावर मोठा खड्डा आहे, Poisar. लवकर दुरुस्त करा.\",\n \"locality_text\": \"Poisar\",\n \"ward_code\": \"R/S\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": \"Collapsed road section with barricade tape\",\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"R/S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Citizen reports a big hole in the road near the temple in Poisar and asks for quick repair; the photo shows a collapsed road section with barricade tape.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

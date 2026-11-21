@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004246\",\n \"received_at\": \"2025-08-14 19:24\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"BEST depot समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.\",\n \"locality_text\": \"Sandhurst Road\",\n \"ward_code\": \"B\",\n \"lat\": 18.950049,\n \"lon\": 72.839988,\n \"photo_description\": \"Cracked manhole cover sunk below road level\",\n \"upvotes\": 16\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"B\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Open or broken manhole reported at Sandhurst Road (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

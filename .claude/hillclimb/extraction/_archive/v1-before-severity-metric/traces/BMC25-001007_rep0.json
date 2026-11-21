@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001007\",\n \"received_at\": \"2025-06-25 18:00\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Sion mein mandir ke saamne paani bhar gaya hai ghutne tak, gaadi nahi nikal rahi\",\n \"locality_text\": \"Sion\",\n \"ward_code\": \"F/N\",\n \"lat\": 19.041101,\n \"lon\": 72.861984,\n \"photo_description\": \"Uncovered manhole with a stick and plastic bag as warning\",\n \"upvotes\": 15\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"F/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Open or broken manhole reported at Sion (original text in hi-en).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

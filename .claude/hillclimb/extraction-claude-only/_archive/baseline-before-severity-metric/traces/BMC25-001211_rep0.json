@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001211\",\n \"received_at\": \"2025-06-29 08:44\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Nullah overflowing onto LBS Marg after rain. Garbage blocking the culvert near Ganpati mandal pandal.\",\n \"locality_text\": \"Vikhroli\",\n \"ward_code\": \"N\",\n \"lat\": 19.089787,\n \"lon\": 72.904035,\n \"photo_description\": null,\n \"upvotes\": 6\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"N\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"A nullah is overflowing onto LBS Marg in Vikhroli after rain, with garbage blocking the culvert near the Ganpati mandal pandal.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

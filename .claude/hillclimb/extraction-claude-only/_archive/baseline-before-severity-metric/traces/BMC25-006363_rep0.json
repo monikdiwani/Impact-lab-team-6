@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-006363\",\n \"received_at\": \"2025-09-30 06:19\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Huge crater on Ganpatrao Kadam Marg opposite medical store. Cars swerving into other lane. Accident waiting to happen.\",\n \"locality_text\": \"Worli\",\n \"ward_code\": \"G/S\",\n \"lat\": 19.008194,\n \"lon\": 72.831782,\n \"photo_description\": null,\n \"upvotes\": 2\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"G/S\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"A huge crater on Ganpatrao Kadam Marg opposite a medical store in Worli is causing cars to swerve into the other lane, creating an accident risk.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

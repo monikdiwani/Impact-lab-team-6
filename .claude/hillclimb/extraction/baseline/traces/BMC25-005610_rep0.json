@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005610\",\n \"received_at\": \"2025-09-06 06:04\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"My bike tyre burst because of pothole at church, Anand Nagar. Please repair before someone gets hurt.\",\n \"locality_text\": \"Anand Nagar\",\n \"ward_code\": \"R/N\",\n \"lat\": 19.243643,\n \"lon\": 72.867871,\n \"photo_description\": \"Wide shot of road with several potholes, auto rickshaw swerving\",\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"R/N\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"My bike tyre burst because of pothole at church, Anand Nagar. Please repair before someone gets hurt.\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

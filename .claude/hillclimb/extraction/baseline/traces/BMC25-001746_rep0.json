@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001746\",\n \"received_at\": \"2025-07-09 11:11\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"Manhole cover broken near Ganpati mandal pandal. Someone kept a stick and plastic as warning. Fix ASAP.\",\n \"locality_text\": \"Masjid\",\n \"ward_code\": null,\n \"lat\": 18.965116,\n \"lon\": 72.847357,\n \"photo_description\": \"Cracked manhole cover sunk below road level\",\n \"upvotes\": 4\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"B\",\n \"ward_source\": \"gps\",\n \"language\": \"en\",\n \"english_summary\": \"Manhole cover broken near Ganpati mandal pandal. Someone kept a stick and plastic as warning. Fix ASAP.\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

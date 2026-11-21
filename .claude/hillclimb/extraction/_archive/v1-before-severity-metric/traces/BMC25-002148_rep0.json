@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002148\",\n \"received_at\": \"2025-07-14 21:56\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Broken paver blocks\",\n \"description\": \"Citizen informs broken paver blocks at Vinoba Bhave Nagar, near municipal school on Kurla Andheri Road. Caller agitated.\",\n \"locality_text\": \"Vinoba Bhave Nagar\",\n \"ward_code\": \"L\",\n \"lat\": 19.094385,\n \"lon\": 72.889566,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Broken paver blocks\",\n \"severity_1_5\": 1,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Broken paver blocks reported at Vinoba Bhave Nagar (original text in hi-en).\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

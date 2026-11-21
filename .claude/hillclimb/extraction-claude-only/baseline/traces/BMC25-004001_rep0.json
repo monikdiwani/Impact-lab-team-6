@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004001\",\n \"received_at\": \"2025-08-08 11:27\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Part of Nepean Sea Road has sunk near hospital gate. Pipeline leaking below?\",\n \"locality_text\": \"Marine Lines\",\n \"ward_code\": \"C\",\n \"lat\": 18.957463,\n \"lon\": 72.819861,\n \"photo_description\": \"Collapsed road section with barricade tape\",\n \"upvotes\": 17\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"C\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Citizen reports that part of Nepean Sea Road has sunk near a hospital gate and suspects a leaking pipeline underneath.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

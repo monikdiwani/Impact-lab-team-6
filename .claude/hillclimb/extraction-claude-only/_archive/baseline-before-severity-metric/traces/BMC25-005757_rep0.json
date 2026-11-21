@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005757\",\n \"received_at\": \"2025-09-12 10:38\",\n \"channel\": \"Ward Office Walk-in\",\n \"language\": \"en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Powai Adi Shankaracharya Marg completely flooded, kids unable to go to school. Nahur.\",\n \"locality_text\": \"Nahur\",\n \"ward_code\": null,\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"S\",\n \"ward_source\": \"locality\",\n \"language\": \"en\",\n \"english_summary\": \"The complainant reports that Adi Shankaracharya Marg in Powai is completely flooded and children are unable to go to school (filed from Nahur).\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

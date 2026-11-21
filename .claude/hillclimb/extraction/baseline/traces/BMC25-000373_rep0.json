@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000373\",\n \"received_at\": \"2025-06-17 13:32\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Water logged knee deep at medical store, Kherwadi. Vehicles stuck, please send pump.\",\n \"locality_text\": \"Kherwadi\",\n \"ward_code\": \"H/E\",\n \"lat\": 19.061488,\n \"lon\": 72.866426,\n \"photo_description\": null,\n \"upvotes\": 38\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"H/E\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Water logged knee deep at medical store, Kherwadi. Vehicles stuck, please send pump.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

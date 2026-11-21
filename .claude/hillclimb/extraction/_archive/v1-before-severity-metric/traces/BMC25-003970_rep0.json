@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003970\",\n \"received_at\": \"2025-08-07 20:39\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Link Road वर गटाराचे झाकण उघडे आहे, खूप धोकादायक आहे.\",\n \"locality_text\": \"Thakur Village\",\n \"ward_code\": \"R/S\",\n \"lat\": 19.201138,\n \"lon\": 72.852875,\n \"photo_description\": \"Garbage blocking storm drain grate, dirty water pooling\",\n \"upvotes\": 11\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"R/S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Choked drain / nullah overflow reported at Thakur Village (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

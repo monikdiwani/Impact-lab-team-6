@@ -16,6 +16,11 @@
    "kind": "binary"
   },
   {
+   "id": "severity_best",
+   "label": "severity best",
+   "kind": "binary"
+  },
+  {
    "id": "ward",
    "label": "ward",
    "kind": "binary"
@@ -44,5 +49,5 @@
   "evals/targets.py",
   "evals/cases/extraction.jsonl"
  ],
- "harness_sha": "6bad92e668419edb2eb7776d26021d692d308403d78b070d76b4b82d58b8dace"
+ "harness_sha": "e0bfaff3e4c696483dfdde6373c4604bb3557561a932d80e2f5442320f8abf4e"
 }

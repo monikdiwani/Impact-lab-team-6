@@ -97,6 +97,30 @@ def _csv(name):
     return pd.read_csv(DATA / f"{name}.csv", encoding="utf-8")
 
 
+# ---- best-possible severity -----------------------------------------------------------
+# Truth severity comes from the work order's SLA and, in this data, depends only on the
+# category: within a category it is noise. A cross-validated model on 30 features (time,
+# rain, tides, ward, hotspot distance, road traffic, even work-order cost/method/area)
+# scores 42.7-45.9% exact vs 46.6% for a per-category lookup. So the best any
+# complaint-only method can do is answer the category's most common severity.
+# `severity_best` lists those values per category (canonical first; values within
+# NEAR_TIE of the top count also count, e.g. drain 3 vs 4 is 148 vs 148 overall). It is
+# computed from linked complaints OUTSIDE the eval set, so the test cases don't shape it.
+NEAR_TIE = 0.05
+
+
+def severity_best_table(linked: pd.DataFrame) -> dict[str, list[int]]:
+    out = {}
+    for cat, s in linked.groupby("work_type").severity:
+        counts = s.value_counts()
+        within1 = {v: int(((s - v).abs() <= 1).sum()) for v in range(1, 6)}
+        top = counts.max()
+        tied = [int(v) for v in counts.index if counts[v] >= (1 - NEAR_TIE) * top]
+        # canonical: most exact hits, then most within-one hits, then the lower value
+        out[cat] = sorted(tied, key=lambda v: (-counts[v], -within1[v], v))
+    return out
+
+
 def _clean(v):
     if isinstance(v, (np.integer,)):
         return int(v)
@@ -116,6 +140,7 @@ def build_extraction(per_cell: int = 15, n_blank_ward: int = 30, n_vague: int = 
              .explode("complaint_id"))
     m = c.merge(links[["complaint_id", "work_order_id", "work_type", "sla_hours", "ward_code"]],
                 on="complaint_id", suffixes=("", "_truth"))
+    all_linked = m.assign(severity=m.sla_hours.map(SEVERITY_FROM_SLA))
     m = m[~m.complaint_id.isin(sample200)].copy()
     m["support"] = m.apply(_support, axis=1)
     answerable = m.support.map(bool)
@@ -147,6 +172,9 @@ def build_extraction(per_cell: int = 15, n_blank_ward: int = 30, n_vague: int = 
     ambiguous_ids = set(amb_text.complaint_id) | set(amb_vague.complaint_id)
     df = pd.concat(picked).drop_duplicates("complaint_id")
 
+    best = severity_best_table(all_linked[~all_linked.complaint_id.isin(df.complaint_id)])
+    print("best-possible severity per category (from non-eval complaints):", best)
+
     cases = []
     for r in df.itertuples(index=False):
         row = r._asdict()
@@ -167,6 +195,7 @@ def build_extraction(per_cell: int = 15, n_blank_ward: int = 30, n_vague: int = 
             "expected": {
                 "category": row["work_type"],
                 "severity": SEVERITY_FROM_SLA[int(row["sla_hours"])],
+                "severity_best": best[row["work_type"]],
                 "ward_code": row["ward_code_truth"],
             },
             "meta": {"work_order_id": row["work_order_id"], "support": sorted(row["support"])},

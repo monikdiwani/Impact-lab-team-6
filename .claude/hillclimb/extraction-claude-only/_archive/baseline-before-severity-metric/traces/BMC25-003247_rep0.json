@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003247\",\n \"received_at\": \"2025-07-26 19:29\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Part of Vakola Bridge Road has sunk near BEST depot. Pipeline leaking below?\",\n \"locality_text\": \"Kherwadi\",\n \"ward_code\": \"H/E\",\n \"lat\": 19.065068,\n \"lon\": 72.866713,\n \"photo_description\": \"Large sinkhole on road edge with exposed pipe\",\n \"upvotes\": 33\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"H/E\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Part of Vakola Bridge Road near the BEST depot in Kherwadi has sunk, and the citizen suspects a leaking pipeline below.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

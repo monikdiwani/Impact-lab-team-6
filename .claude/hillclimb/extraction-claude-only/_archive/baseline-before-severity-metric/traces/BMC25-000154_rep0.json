@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000154\",\n \"received_at\": \"2025-06-07 19:39\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Citizen informs waterlogging at Dharavi, near police chowky on 90 Feet Road Dharavi. Requests urgent action.\",\n \"locality_text\": \"Dharavi\",\n \"ward_code\": \"G/N\",\n \"lat\": 19.039245,\n \"lon\": 72.851158,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"G/N\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Citizen reports waterlogging near the police chowky on 90 Feet Road, Dharavi, and requests urgent action.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

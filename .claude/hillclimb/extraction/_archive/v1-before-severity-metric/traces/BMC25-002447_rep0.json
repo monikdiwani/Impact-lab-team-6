@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002447\",\n \"received_at\": \"2025-07-19 07:38\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Ganpati mandal pandal ke paas gutter ka dhakkan khula hai, paani mein dikh nahi raha. Koi gir jayega\",\n \"locality_text\": \"Saki Naka Junction\",\n \"ward_code\": \"L\",\n \"lat\": 19.073341,\n \"lon\": 72.893292,\n \"photo_description\": \"People wading through knee-deep water near shops\",\n \"upvotes\": 23\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Waterlogging reported at Saki Naka Junction (original text in hi-en).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

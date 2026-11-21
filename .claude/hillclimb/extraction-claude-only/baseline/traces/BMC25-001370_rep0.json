@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001370\",\n \"received_at\": \"2025-07-04 09:05\",\n \"channel\": \"Ward Office Walk-in\",\n \"language\": \"hi\",\n \"category_reported\": \"Pothole\",\n \"description\": \"kanjurmarg में पानी भर गया है, एम्बुलेंस नहीं निकल पा रही.\",\n \"locality_text\": \"Kanjurmarg\",\n \"ward_code\": null,\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"S\",\n \"ward_source\": \"locality\",\n \"language\": \"hi\",\n \"english_summary\": \"Water has accumulated on the road in Kanjurmarg, and ambulances are unable to get through.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005050\",\n \"received_at\": \"2025-08-23 12:31\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Pothole\",\n \"description\": \"MG Road Ghatkopar पर मैनहोल खुला है, बहुत खतरनाक है.\",\n \"locality_text\": \"Ghatkopar\",\n \"ward_code\": \"N\",\n \"lat\": 19.098824,\n \"lon\": 72.920736,\n \"photo_description\": \"Wide shot of road with several potholes, auto rickshaw swerving\",\n \"upvotes\": 31\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"N\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Citizen reports an open manhole on MG Road, Ghatkopar, calling it very dangerous, though the attached photo shows several potholes with an auto rickshaw swerving.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]
