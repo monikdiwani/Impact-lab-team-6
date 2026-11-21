@@ -72,6 +72,24 @@ def test_plan_shape(plan):
     assert plan.reason.fillna("").str.len().gt(0).all()
 
 
+def test_score_is_weighted_sum_of_components(road_risk):
+    from pipeline.risk.config import WEIGHTS
+    assert abs(sum(WEIGHTS.values()) - 1) < 1e-9
+    rebuilt = 100 * sum(WEIGHTS[c] * road_risk[c] for c in COMPONENTS)
+    assert (rebuilt - road_risk.risk_score).abs().max() < 0.05
+
+
+def test_ward_risk_covers_every_ward(risk_out):
+    wr = read_output(risk_out, "ward_risk")
+    assert set(wr.ward_code) == set(read_csv("wards").ward_code)
+    assert wr.risk_score.between(0, 100).all()
+
+
+def test_every_road_in_plan_once(plan):
+    assert set(plan.road_id) == set(read_csv("roads").road_id)
+    assert not plan.road_id.duplicated().any()
+
+
 def test_methods_are_on_rate_card(plan):
     methods = set(read_csv("rate_card").repair_method)
     used = set(plan.loc[plan.action == "Repair", "recommended_method"])
