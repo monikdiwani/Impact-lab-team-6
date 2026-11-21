@@ -113,6 +113,7 @@ Our build for the challenge. The sections above are the organisers' brief.
 | `tests/` | Free regression suite: `pytest -q`. Module tests skip until that module exists |
 | `evals/` | Claude evals and the risk backtest: see [evals/README.md](evals/README.md) |
 | [sanjay command.md](sanjay%20command.md) | Copy-paste test and eval commands for M1, M2 and M3 |
+| `outputs/follow_the_rupee.db` | **SQLite database the app reads**: reference data, cleaned outputs and Claude texts, with keys enforced. Schema and example queries: [docs/DATABASE.md](docs/DATABASE.md). Rebuild with `python -m pipeline.db` |
 
 **Modules:** M1 Connect (complaints), M2 Audit (flags and scorecards), M3 Risk and budget, M4 Streamlit app and integration. Each module exposes `run(data_dir, out_dir)` and writes its own parquet files.
 

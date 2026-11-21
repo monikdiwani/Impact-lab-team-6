@@ -138,6 +138,24 @@ Result on 21 Nov: **model spearman 0.650, P@20 0.40, captured@20 0.164**, so it 
 
 ---
 
+## Database (what the app connects to)
+
+```powershell
+python -m pipeline.db            # rebuild outputs/follow_the_rupee.db + docs/DATABASE.md after any pipeline run (~10 s)
+python -m pipeline.db --check    # is the database up to date with data/ and outputs/?
+pytest tests/test_db.py -q       # keys, row counts, views, read-only access, freshness
+```
+
+```python
+from pipeline import db
+db.query("SELECT * FROM v_complaint_trail WHERE complaint_id = ?", ["BMC25-000005"])
+db.query("SELECT * FROM v_next_rupee WHERE ward_code = ? ORDER BY rank", ["F/S"])
+```
+
+Full run order after code changes: M1 `python -c "from pipeline.connect import run; run('data','outputs')"`, then M3 `python -m pipeline.risk`, then M2 `python -c "from pipeline.audit import run; run('data','outputs')"`, then `python -m pipeline.db`.
+
+---
+
 ## Reading results (M1 and M2 evals)
 
 ```

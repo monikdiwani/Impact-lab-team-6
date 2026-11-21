@@ -158,3 +158,26 @@ No. **There is no pass mark for severity, and 46.4% exact is the best any method
 | `claude` ablation | 93.4% | 95.2% | 45.8% | 91.6% | 46.4% / 95.2% |
 
 The app is at the severity ceiling. The Claude-only run loses severity only where it got the category wrong. Earlier runs from before the metric are kept in the `_archive/` folders, with the suffix `-before-severity-metric`.
+
+## 9. SQLite database (what the app connects to)
+
+All cleaned data now lives in one SQLite database, `outputs/follow_the_rupee.db`. The app connects to it through `pipeline.db` instead of reading loose parquet, CSV and JSON files.
+
+| What | Detail |
+|---|---|
+| Build | `python -m pipeline.db` (about 10 s) builds from `data/` and `outputs/` and writes [docs/DATABASE.md](DATABASE.md) |
+| Contents | 28 tables. Reference data (wards, roads, traffic, contractors and their wards, rate card, work orders, facilities, hotspots, accidents, rainfall, tides, social posts, map GeoJSON); `complaints` (raw text merged with M1's cleaned fields); `issues` (all 3,302 duplicate clusters linked to their work order); every M1/M2/M3 output; `narratives` (56 Claude or template texts); `meta` (build time, row counts, input hashes, de-dup metrics, risk report, scoring weights, fairness notes) |
+| Integrity | STRICT column types, primary keys and foreign keys on every table. The build fails on any foreign-key violation, failed integrity check or row-count mismatch |
+| App API | 6 views: `v_complaint_trail` (complaint → issue → work order → contractor, cost, SLA, re-opened, flags), `v_work_orders`, `v_ward_money`, `v_contractor_cards`, `v_next_rupee`, `v_work_order_flags`. `db.query(sql, params)` returns a DataFrame. `db.connect()` is read-only, with foreign keys on |
+| Safety | Built into a temp file and swapped in at the end. The app's connection rejects writes |
+| Freshness | `meta` stores the sha256 of every input. `python -m pipeline.db --check` and `tests/test_db.py` fail if the committed DB is older than its inputs |
+
+**A bug the tests caught while building it:** SQLite divides an integer by an integer as integers. For per-job repair methods the cost and the rate are both whole numbers, so the first version of `v_work_orders` showed a 1.4× bill as ratio 1 and lost 23 of the 114 over-bills. Fixed with `CAST(... AS REAL)`, and a test now checks the view agrees with M2 on all 114.
+
+**Example:** `SELECT * FROM v_complaint_trail WHERE complaint_id = 'BMC25-000005'` returns:
+- the Hinglish complaint, cleaned to "Open or broken manhole";
+- its issue ISS-00001, which groups 5 complaints across the app, the helpline and English text;
+- the work order that fixed it, with the contractor, the cost against the rate card, whether it met the SLA and whether it re-opened;
+- the audit flags on that job.
+
+17 new tests in `tests/test_db.py`.
