@@ -1,12 +1,12 @@
 # Eval cases: review before sign-off
 
-Extraction: 166 cases · Narrative: 29 cases
+Extraction: 150 cases · Extraction routed to Claude: 21 cases · Narrative: 29 cases
 
 ## Extraction
 
 | id | tags | category (truth) | severity | ward | evidence for truth |
 |---|---|---|---|---|---|
-| BMC25-000062 | mr cat_wrong no_photo helpline ambiguous | Open or broken manhole | 4 | R/N | text |
+| BMC25-000062 | mr cat_wrong no_photo helpline | Open or broken manhole | 4 | R/N | text |
 | BMC25-000085 | hi cat_right no_photo helpline | Pothole | 2 | K/E | citizen, text |
 | BMC25-000130 | en cat_right blank_ward photo | Broken paver blocks | 1 | M/E | citizen, photo, text |
 | BMC25-000154 | en cat_right no_photo helpline | Waterlogging | 5 | G/N | citizen, text |
@@ -25,17 +25,15 @@ Extraction: 166 cases · Narrative: 29 cases
 | BMC25-000790 | en cat_right blank_ward no_photo helpline | Choked drain / nullah overflow | 3 | B | citizen, text |
 | BMC25-000997 | en cat_wrong no_photo helpline | Pothole | 2 | E | text |
 | BMC25-001007 | hi-en cat_right photo noisy_text | Open or broken manhole | 4 | F/N | citizen, photo |
-| BMC25-001064 | hi-en cat_wrong no_photo helpline ambiguous | Road cave-in | 5 | G/N | text |
+| BMC25-001064 | hi-en cat_wrong no_photo helpline | Road cave-in | 5 | G/N | text |
 | BMC25-001115 | en cat_right blank_ward photo | Pothole | 3 | M/W | citizen, photo, text |
 | BMC25-001120 | en cat_wrong no_photo helpline | Pothole | 2 | H/W | text |
 | BMC25-001211 | en cat_wrong no_photo | Choked drain / nullah overflow | 3 | N | text |
 | BMC25-001288 | en cat_wrong blank_ward no_photo helpline | Waterlogging | 5 | R/S | text |
-| BMC25-001348 | en cat_wrong no_photo ambiguous | Open or broken manhole | 5 | B | text |
 | BMC25-001368 | mr cat_right photo noisy_text | Pothole | 3 | R/C | citizen, photo |
 | BMC25-001370 | hi cat_right blank_ward no_photo noisy_text | Pothole | 2 | S | citizen |
 | BMC25-001390 | en cat_right blank_ward no_photo helpline | Waterlogging | 4 | E | citizen, text |
 | BMC25-001421 | hi-en cat_right no_photo helpline | Waterlogging | 4 | P/N | citizen, text |
-| BMC25-001555 | en cat_right no_photo ambiguous | Road cave-in | 5 | N | citizen, text |
 | BMC25-001557 | hi cat_right photo noisy_text | Open or broken manhole | 4 | P/N | citizen, photo |
 | BMC25-001569 | en cat_right blank_ward photo | Pothole | 2 | K/W | citizen, photo, text |
 | BMC25-001571 | en cat_wrong photo | Pothole | 2 | K/W | photo, text |
@@ -55,10 +53,7 @@ Extraction: 166 cases · Narrative: 29 cases
 | BMC25-002200 | en cat_wrong no_photo helpline | Choked drain / nullah overflow | 4 | L | text |
 | BMC25-002240 | mr cat_wrong photo noisy_text | Choked drain / nullah overflow | 3 | F/S | photo |
 | BMC25-002252 | en cat_right photo | Pothole | 2 | P/N | citizen, photo, text |
-| BMC25-002267 | en cat_wrong no_photo helpline ambiguous | Pothole | 4 | M/E | text |
-| BMC25-002290 | en cat_wrong no_photo ambiguous | Pothole | 3 | H/E | text |
 | BMC25-002306 | mr cat_wrong photo noisy_text | Open or broken manhole | 5 | F/S | photo |
-| BMC25-002387 | en cat_wrong no_photo ambiguous | Pothole | 2 | H/W | text |
 | BMC25-002393 | en cat_right photo | Open or broken manhole | 5 | F/S | citizen, photo, text |
 | BMC25-002426 | hi cat_right blank_ward photo noisy_text | Pothole | 4 | K/E | citizen, photo |
 | BMC25-002437 | hi-en cat_wrong no_photo helpline | Pothole | 2 | F/N | text |
@@ -75,22 +70,19 @@ Extraction: 166 cases · Narrative: 29 cases
 | BMC25-002827 | mr cat_right photo noisy_text | Pothole | 2 | S | citizen, photo |
 | BMC25-002998 | hi-en cat_right blank_ward no_photo noisy_text | Waterlogging | 4 | P/N | citizen |
 | BMC25-003038 | hi cat_wrong photo noisy_text | Waterlogging | 5 | M/E | photo |
-| BMC25-003076 | en cat_wrong no_photo helpline ambiguous | Waterlogging | 5 | H/W | text |
 | BMC25-003109 | en cat_wrong no_photo helpline | Road cave-in | 5 | K/W | text |
 | BMC25-003215 | en cat_wrong no_photo | Pothole | 4 | K/W | text |
 | BMC25-003221 | hi cat_wrong photo noisy_text | Pothole | 2 | K/E | photo |
 | BMC25-003247 | en cat_right photo | Road cave-in | 5 | H/E | citizen, photo, text |
 | BMC25-003281 | en cat_wrong no_photo | Choked drain / nullah overflow | 2 | N | text |
 | BMC25-003288 | en cat_wrong no_photo helpline | Pothole | 3 | P/S | text |
-| BMC25-003298 | en cat_wrong no_photo ambiguous | Open or broken manhole | 5 | R/S | text |
 | BMC25-003339 | mr cat_right no_photo noisy_text | Pothole | 4 | R/N | citizen |
 | BMC25-003342 | en cat_wrong no_photo helpline | Waterlogging | 3 | F/N | text |
 | BMC25-003531 | mr cat_right no_photo helpline | Pothole | 3 | R/N | citizen, text |
 | BMC25-003540 | hi cat_right blank_ward photo noisy_text | Road cave-in | 5 | K/W | citizen, photo |
 | BMC25-003544 | en cat_right blank_ward no_photo | Road cave-in | 5 | K/W | citizen, text |
 | BMC25-003566 | hi-en cat_right no_photo noisy_text | Choked drain / nullah overflow | 2 | E | citizen |
-| BMC25-003595 | en cat_wrong no_photo ambiguous | Pothole | 2 | E | text |
-| BMC25-003609 | mr cat_wrong no_photo helpline ambiguous | Waterlogging | 4 | L | text |
+| BMC25-003609 | mr cat_wrong no_photo helpline | Waterlogging | 4 | L | text |
 | BMC25-003632 | hi cat_wrong photo noisy_text | Pothole | 1 | M/E | photo |
 | BMC25-003648 | hi-en cat_right no_photo helpline | Pothole | 3 | P/N | citizen, text |
 | BMC25-003714 | en cat_right blank_ward no_photo | Waterlogging | 5 | K/E | citizen, text |
@@ -102,26 +94,23 @@ Extraction: 166 cases · Narrative: 29 cases
 | BMC25-003916 | en cat_right no_photo helpline | Pothole | 3 | H/E | citizen, text |
 | BMC25-003970 | mr cat_wrong photo noisy_text | Choked drain / nullah overflow | 3 | R/S | photo |
 | BMC25-004001 | en cat_right photo | Road cave-in | 5 | C | citizen, photo, text |
-| BMC25-004056 | en cat_wrong no_photo ambiguous | Open or broken manhole | 5 | L | text |
+| BMC25-004056 | en cat_wrong no_photo | Open or broken manhole | 5 | L | text |
 | BMC25-004080 | hi-en cat_wrong no_photo helpline | Pothole | 3 | F/N | text |
 | BMC25-004085 | mr cat_right photo noisy_text | Waterlogging | 3 | E | citizen, photo |
 | BMC25-004144 | en cat_right no_photo | Waterlogging | 5 | P/N | citizen, text |
 | BMC25-004185 | hi-en cat_right photo noisy_text | Pothole | 4 | D | citizen, photo |
-| BMC25-004194 | en cat_wrong no_photo helpline ambiguous | Broken paver blocks | 2 | L | text |
 | BMC25-004199 | en cat_right photo | Choked drain / nullah overflow | 2 | K/W | citizen, photo, text |
 | BMC25-004244 | mr cat_right photo noisy_text | Pothole | 1 | P/N | citizen, photo |
 | BMC25-004246 | mr cat_right photo noisy_text | Open or broken manhole | 4 | B | citizen, photo |
 | BMC25-004249 | hi cat_wrong no_photo helpline | Waterlogging | 4 | E | text |
 | BMC25-004301 | hi-en cat_right photo noisy_text | Choked drain / nullah overflow | 4 | S | citizen, photo |
 | BMC25-004302 | en cat_right blank_ward no_photo helpline | Pothole | 3 | M/E | citizen, text |
-| BMC25-004303 | en cat_right no_photo ambiguous | Pothole | 3 | M/E | citizen, text |
 | BMC25-004379 | hi-en cat_wrong photo noisy_text | Pothole | 3 | G/N | photo |
 | BMC25-004408 | hi cat_right photo noisy_text | Waterlogging | 2 | F/N | citizen, photo |
 | BMC25-004434 | en cat_right blank_ward photo | Waterlogging | 2 | M/W | citizen, photo, text |
 | BMC25-004465 | en cat_right blank_ward photo | Road cave-in | 5 | H/W | citizen, photo, text |
 | BMC25-004470 | hi cat_right photo noisy_text | Pothole | 2 | M/E | citizen, photo |
-| BMC25-004471 | en cat_wrong no_photo ambiguous | Open or broken manhole | 5 | P/N | text |
-| BMC25-004477 | en cat_wrong no_photo helpline ambiguous | Waterlogging | 4 | M/E | text |
+| BMC25-004477 | en cat_wrong no_photo helpline | Waterlogging | 4 | M/E | text |
 | BMC25-004518 | hi-en cat_wrong no_photo helpline | Waterlogging | 5 | L | text |
 | BMC25-004574 | hi cat_wrong photo noisy_text | Broken paver blocks | 2 | C | photo |
 | BMC25-004575 | hi-en cat_right blank_ward no_photo helpline | Pothole | 2 | G/N | citizen, text |
@@ -131,12 +120,10 @@ Extraction: 166 cases · Narrative: 29 cases
 | BMC25-004784 | hi cat_wrong no_photo helpline | Waterlogging | 3 | N | text |
 | BMC25-004799 | mr cat_wrong photo noisy_text | Road cave-in | 5 | R/S | photo |
 | BMC25-004802 | mr cat_wrong photo noisy_text | Road cave-in | 5 | R/S | photo |
-| BMC25-004824 | hi cat_wrong no_photo helpline ambiguous | Pothole | 3 | T | text |
+| BMC25-004824 | hi cat_wrong no_photo helpline | Pothole | 3 | T | text |
 | BMC25-004888 | mr cat_right no_photo noisy_text | Open or broken manhole | 5 | L | citizen |
-| BMC25-004894 | hi cat_wrong no_photo helpline ambiguous | Road cave-in | 5 | M/E | text |
 | BMC25-004899 | hi-en cat_right blank_ward no_photo helpline | Choked drain / nullah overflow | 3 | K/W | citizen, text |
 | BMC25-004960 | en cat_right no_photo | Open or broken manhole | 5 | R/C | citizen, text |
-| BMC25-004962 | en cat_right no_photo ambiguous | Pothole | 3 | D | citizen, text |
 | BMC25-004985 | mr cat_wrong photo noisy_text | Open or broken manhole | 5 | E | photo |
 | BMC25-005020 | hi-en cat_right photo noisy_text | Pothole | 3 | L | citizen, photo |
 | BMC25-005049 | hi-en cat_right no_photo noisy_text | Pothole | 4 | N | citizen |
@@ -155,7 +142,6 @@ Extraction: 166 cases · Narrative: 29 cases
 | BMC25-005610 | en cat_wrong photo | Pothole | 3 | R/N | photo, text |
 | BMC25-005632 | hi cat_wrong photo noisy_text | Choked drain / nullah overflow | 4 | F/N | photo |
 | BMC25-005664 | mr cat_wrong no_photo helpline | Pothole | 2 | L | text |
-| BMC25-005755 | en cat_wrong no_photo ambiguous | Pothole | 3 | P/S | text |
 | BMC25-005757 | en cat_wrong blank_ward no_photo | Waterlogging | 5 | S | text |
 | BMC25-005772 | en cat_right photo | Broken paver blocks | 1 | E | citizen, photo, text |
 | BMC25-005821 | mr cat_right blank_ward no_photo helpline | Pothole | 2 | K/W | citizen, text |
@@ -165,17 +151,15 @@ Extraction: 166 cases · Narrative: 29 cases
 | BMC25-006101 | hi cat_right no_photo noisy_text | Pothole | 2 | R/S | citizen |
 | BMC25-006107 | hi cat_wrong photo noisy_text | Choked drain / nullah overflow | 4 | N | photo |
 | BMC25-006139 | hi-en cat_wrong photo noisy_text | Pothole | 4 | L | photo |
-| BMC25-006195 | mr cat_wrong no_photo helpline ambiguous | Road cave-in | 5 | F/S | text |
-| BMC25-006230 | hi cat_wrong no_photo helpline ambiguous | Waterlogging | 4 | L | text |
-| BMC25-006240 | en cat_right no_photo ambiguous | Pothole | 2 | G/S | citizen |
-| BMC25-006267 | en cat_right no_photo ambiguous | Pothole | 3 | R/N | citizen, text |
+| BMC25-006195 | mr cat_wrong no_photo helpline | Road cave-in | 5 | F/S | text |
+| BMC25-006230 | hi cat_wrong no_photo helpline | Waterlogging | 4 | L | text |
 | BMC25-006353 | hi-en cat_right blank_ward no_photo helpline | Pothole | 1 | R/N | citizen, text |
 | BMC25-006363 | en cat_wrong no_photo | Pothole | 3 | G/S | text |
 | BMC25-006366 | hi-en cat_right photo noisy_text | Waterlogging | 3 | K/E | citizen, photo |
 
 ### Inputs
 
-**BMC25-000062** (mr · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Road related*, truth *Open or broken manhole*
+**BMC25-000062** (mr · cat_wrong · no_photo · helpline) — 1916 Helpline, citizen picked *Road related*, truth *Open or broken manhole*
 ````
 Citizen informs open or broken manhole at Anand Nagar, near masjid on LT Road. 
 ````
@@ -270,7 +254,7 @@ As per caller pothole at Nagpada, near masjid on Dr Babasaheb Ambedkar Road.
 Sion mein mandir ke saamne paani bhar gaya hai ghutne tak, gaadi nahi nikal rahi
 ````
 
-**BMC25-001064** (hi-en · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Road related*, truth *Road cave-in*
+**BMC25-001064** (hi-en · cat_wrong · no_photo · helpline) — 1916 Helpline, citizen picked *Road related*, truth *Road cave-in*
 ````
 Complainant states road cave-in at Mahim, near church on Senapati Bapat Marg. Repeat caller.
 ````
@@ -295,11 +279,6 @@ Nullah overflowing onto LBS Marg after rain. Garbage blocking the culvert near G
 Caller reports waterlogging at Thakur Village, near metro station on Link Road. Water level rising.
 ````
 
-**BMC25-001348** (en · cat_wrong · no_photo · ambiguous) — MyBMC Web Portal, citizen picked *Road related*, truth *Open or broken manhole*
-````
-Manhole cover broken near police chowky. Someone kept a stick and plastic as warning. Fix ASAP.
-````
-
 **BMC25-001368** (mr · cat_right · photo · noisy_text) — MyBMC Web Portal, citizen picked *Pothole*, truth *Pothole* · photo: *Close-up of a crater filled with muddy water, broken asphalt edges*
 ````
 पेट्रोल पंप समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.
@@ -318,11 +297,6 @@ Citizen informs waterlogging at Madanpura, near hospital gate on Bellasis Road. 
 **BMC25-001421** (hi-en · cat_right · no_photo · helpline) — 1916 Helpline, citizen picked *Waterlogging*, truth *Waterlogging*
 ````
 Citizen informs waterlogging at Malad East, near vegetable market on Malad Subway. Requests urgent action.
-````
-
-**BMC25-001555** (en · cat_right · no_photo · ambiguous) — MyBMC App, citizen picked *Road cave-in*, truth *Road cave-in*
-````
-Road has caved in near signal, Ghatkopar East. Big hole about knee deep. Barricade needed immediately.
 ````
 
 **BMC25-001557** (hi · cat_right · photo · noisy_text) — MyBMC App, citizen picked *Open or broken manhole*, truth *Open or broken manhole* · photo: *Uncovered manhole with a stick and plastic bag as warning*
@@ -420,24 +394,9 @@ masjid समोर खड्डे बुजवले होते पण प�
 Huge crater on SV Road opposite medical store. Cars swerving into other lane. Accident waiting to happen.
 ````
 
-**BMC25-002267** (en · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Other*, truth *Pothole*
-````
-Caller reports pothole at Govandi, near signal on Sion Trombay Road. Says vehicles getting damaged.
-````
-
-**BMC25-002290** (en · cat_wrong · no_photo · ambiguous) — MyBMC App, citizen picked *Other*, truth *Pothole*
-````
-MY BIKE TYRE BURST BECAUSE OF POTHOLE AT BUS STOP, BANDRA EAST. PLEASE REPAIR BEFORE SOMEONE GETS HURT.
-````
-
 **BMC25-002306** (mr · cat_wrong · photo · noisy_text) — MyBMC App, citizen picked *Other*, truth *Open or broken manhole* · photo: *Cracked manhole cover sunk below road level*
 ````
 सिग्नल जवळ रस्त्यावर मोठा खड्डा आहे, Parel. लवकर दुरुस्त करा.
-````
-
-**BMC25-002387** (en · cat_wrong · no_photo · ambiguous) — MyBMC App, citizen picked *Road related*, truth *Pothole*
-````
-Huge crater on Linking Road opposite market. Cars swerving into other lane. Accident waiting to happen.
 ````
 
 **BMC25-002393** (en · cat_right · photo) — MyBMC App, citizen picked *Open or broken manhole*, truth *Open or broken manhole* · photo: *Uncovered manhole with a stick and plastic bag as warning*
@@ -520,11 +479,6 @@ Malad West station road pe itna paani hai ki bus band hai. BMC kab aayegi?
 Deonar Village Road पर मैनहोल खुला है, बहुत खतरनाक है.
 ````
 
-**BMC25-003076** (en · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Other*, truth *Waterlogging*
-````
-As per caller waterlogging at Linking Road, near flyover on Milan Subway Road. Says vehicles getting damaged.
-````
-
 **BMC25-003109** (en · cat_wrong · no_photo · helpline) — 1916 Helpline, citizen picked *Open or broken manhole*, truth *Road cave-in*
 ````
 Caller reports road cave-in at Juhu, near petrol pump on Link Road. Repeat caller.
@@ -553,11 +507,6 @@ Nullah overflowing onto LBS Marg after rain. Garbage blocking the culvert near m
 **BMC25-003288** (en · cat_wrong · no_photo · helpline) — 1916 Helpline, citizen picked *Waterlogging*, truth *Pothole*
 ````
 Citizen informs pothole at Goregaon West, near BEST depot on SV Road. Repeat caller.
-````
-
-**BMC25-003298** (en · cat_wrong · no_photo · ambiguous) — MyBMC App, citizen picked *Other*, truth *Open or broken manhole*
-````
-Manhole cover broken near Shiv Sena shakha. Someone kept a stick and plastic as warning. Fix ASAP.
 ````
 
 **BMC25-003339** (mr · cat_right · no_photo · noisy_text) — MyBMC App, citizen picked *Pothole*, truth *Pothole*
@@ -590,12 +539,7 @@ Part of SV Road has sunk near masjid. Pipeline leaking below?
 Kitni baar complaint karein? Bellasis Road Byculla pe wahi gadda phir se khul gaya
 ````
 
-**BMC25-003595** (en · cat_wrong · no_photo · ambiguous) — MyBMC App, citizen picked *Other*, truth *Pothole*
-````
-Huge crater on Clare Road opposite railway station. Cars swerving into other lane. Accident waiting to happen.
-````
-
-**BMC25-003609** (mr · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Other*, truth *Waterlogging*
+**BMC25-003609** (mr · cat_wrong · no_photo · helpline) — 1916 Helpline, citizen picked *Other*, truth *Waterlogging*
 ````
 Caller reports waterlogging at Vinoba Bhave Nagar, near chawl gate on Kurla Andheri Road. Requests urgent action.
 ````
@@ -655,7 +599,7 @@ Link Road वर गटाराचे झाकण उघडे आहे, ख�
 Part of Nepean Sea Road has sunk near hospital gate. Pipeline leaking below?
 ````
 
-**BMC25-004056** (en · cat_wrong · no_photo · ambiguous) — MyBMC App, citizen picked *Road related*, truth *Open or broken manhole*
+**BMC25-004056** (en · cat_wrong · no_photo) — MyBMC App, citizen picked *Road related*, truth *Open or broken manhole*
 ````
 Manhole cover broken near BEST depot. Someone kept a stick and plastic as warning. Fix ASAP.
 ````
@@ -678,11 +622,6 @@ HEAVY WATERLOGGING NEAR SIGNAL. AMBULANCE COULD NOT PASS. URGENT.
 **BMC25-004185** (hi-en · cat_right · photo · noisy_text) — MyBMC App, citizen picked *Pothole*, truth *Pothole* · photo: *Close-up of a crater filled with muddy water, broken asphalt edges*
 ````
 Ganpati mandal pandal ke paas gutter ka dhakkan khula hai, paani mein dikh nahi raha. Koi gir jayega
-````
-
-**BMC25-004194** (en · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Other*, truth *Broken paver blocks*
-````
-Caller reports broken paver blocks at Kurla East, near railway station on Kurla Andheri Road. Requests urgent action.
 ````
 
 **BMC25-004199** (en · cat_right · photo) — MyBMC App, citizen picked *Choked drain / nullah overflow*, truth *Choked drain / nullah overflow* · photo: *Garbage blocking storm drain grate, dirty water pooling*
@@ -715,11 +654,6 @@ Nahur mein hospital gate ke saamne paani bhar gaya hai ghutne tak, gaadi nahi ni
 As per caller pothole at Shivaji Nagar, near signal on Ghatkopar Mankhurd Link Road. Water level rising.
 ````
 
-**BMC25-004303** (en · cat_right · no_photo · ambiguous) — MyBMC App, citizen picked *Pothole*, truth *Pothole*
-````
-knee deep pothole near hospital gate, Shivaji Nagar. Two wheelers falling daily, please fix urgently.
-````
-
 **BMC25-004379** (hi-en · cat_wrong · photo · noisy_text) — MyBMC App, citizen picked *Broken paver blocks*, truth *Pothole* · photo: *Close-up of a crater filled with muddy water, broken asphalt edges*
 ````
 Shiv Sena shakha ke paas gutter ka dhakkan khula hai, paani mein dikh nahi raha. Koi gir jayega
@@ -745,12 +679,7 @@ Road has caved in near chawl gate, Bandra West. Big hole about dangerous. Barric
 municipal school के पास सड़क पर बड़ा गड्ढा है, Trombay. जल्दी ठीक करें.
 ````
 
-**BMC25-004471** (en · cat_wrong · no_photo · ambiguous) — MyBMC App, citizen picked *Other*, truth *Open or broken manhole*
-````
-Open manhole on SV Road near vegetable market, Malad East. Covered with water, not visible. Very dangerous!
-````
-
-**BMC25-004477** (en · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Road related*, truth *Waterlogging*
+**BMC25-004477** (en · cat_wrong · no_photo · helpline) — 1916 Helpline, citizen picked *Road related*, truth *Waterlogging*
 ````
 As per caller waterlogging at Deonar, near signal on Deonar Village Road. 
 ````
@@ -800,7 +729,7 @@ As per caller waterlogging at Vikhroli, near chawl gate on LBS Marg. Water level
 mandir जवळ रस्त्यावर मोठा खड्डा आहे, Poisar. लवकर दुरुस्त करा.
 ````
 
-**BMC25-004824** (hi · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Road related*, truth *Pothole*
+**BMC25-004824** (hi · cat_wrong · no_photo · helpline) — 1916 Helpline, citizen picked *Road related*, truth *Pothole*
 ````
 As per caller pothole at Nahur West, near railway station on Mulund Goregaon Link Road. Repeat caller.
 ````
@@ -808,11 +737,6 @@ As per caller pothole at Nahur West, near railway station on Mulund Goregaon Lin
 **BMC25-004888** (mr · cat_right · no_photo · noisy_text) — Ward Office Walk-in, citizen picked *Open or broken manhole*, truth *Open or broken manhole*
 ````
 Kamani Junction Road वर गटाराचे झाकण उघडे आहे, खूप धोकादायक आहे.
-````
-
-**BMC25-004894** (hi · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Road related*, truth *Road cave-in*
-````
-Complainant states road cave-in at Trombay, near police chowky on Ghatkopar Mankhurd Link Road. Caller agitated.
 ````
 
 **BMC25-004899** (hi-en · cat_right · blank_ward · no_photo · helpline) — 1916 Helpline, citizen picked *Choked drain / nullah overflow*, truth *Choked drain / nullah overflow*
@@ -823,11 +747,6 @@ As per caller choked drain / nullah overflow at Vile Parle West, near flyover on
 **BMC25-004960** (en · cat_right · no_photo) — MyBMC App, citizen picked *Open or broken manhole*, truth *Open or broken manhole*
 ````
 Manhole cover broken near masjid. Someone kept a stick and plastic as warning. Fix ASAP.
-````
-
-**BMC25-004962** (en · cat_right · no_photo · ambiguous) — MyBMC App, citizen picked *Pothole*, truth *Pothole*
-````
-knee deep pothole near church, Grant Road. Two wheelers falling daily, please fix urgently.
 ````
 
 **BMC25-004985** (mr · cat_wrong · photo · noisy_text) — MyBMC App, citizen picked *Other*, truth *Open or broken manhole* · photo: *Uncovered manhole with a stick and plastic bag as warning*
@@ -920,11 +839,6 @@ Road No 24 Sion पर मैनहोल खुला है, बहुत ख�
 Complainant states pothole at Vinoba Bhave Nagar, near medical store on Kurla Andheri Road. Says vehicles getting damaged.
 ````
 
-**BMC25-005755** (en · cat_wrong · no_photo · ambiguous) — MyBMC App, citizen picked *Road related*, truth *Pothole*
-````
-huge crater on sv road opposite signal. cars swerving into other lane. accident waiting to happen.
-````
-
 **BMC25-005757** (en · cat_wrong · blank_ward · no_photo) — Ward Office Walk-in, citizen picked *Pothole*, truth *Waterlogging*
 ````
 Powai Adi Shankaracharya Marg completely flooded, kids unable to go to school. Nahur.
@@ -970,24 +884,14 @@ MG Road Ghatkopar पर मैनहोल खुला है, बहुत �
 Kurla West station road pe itna paani hai ki bus band hai. BMC kab aayegi?
 ````
 
-**BMC25-006195** (mr · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Road related*, truth *Road cave-in*
+**BMC25-006195** (mr · cat_wrong · no_photo · helpline) — 1916 Helpline, citizen picked *Road related*, truth *Road cave-in*
 ````
 As per caller road cave-in at Parel, near municipal school on Dr Babasaheb Ambedkar Road. 
 ````
 
-**BMC25-006230** (hi · cat_wrong · no_photo · helpline · ambiguous) — 1916 Helpline, citizen picked *Other*, truth *Waterlogging*
+**BMC25-006230** (hi · cat_wrong · no_photo · helpline) — 1916 Helpline, citizen picked *Other*, truth *Waterlogging*
 ````
 As per caller waterlogging at Vinoba Bhave Nagar, near post office on Kurla Andheri Road. Caller agitated.
-````
-
-**BMC25-006240** (en · cat_right · no_photo · ambiguous) — MyBMC App, citizen picked *Pothole*, truth *Pothole*
-````
-Pot-hole reopened after last week's patch work on Dr Annie Besant Road, Prabhadevi. Same spot again.
-````
-
-**BMC25-006267** (en · cat_right · no_photo · ambiguous) — MyBMC App, citizen picked *Pothole*, truth *Pothole*
-````
-knee deep pothole near metro station, Anand Nagar. Two wheelers falling daily, please fix urgently.
 ````
 
 **BMC25-006353** (hi-en · cat_right · blank_ward · no_photo · helpline) — 1916 Helpline, citizen picked *Pothole*, truth *Pothole*
@@ -1003,6 +907,139 @@ Huge crater on Ganpatrao Kadam Marg opposite medical store. Cars swerving into o
 **BMC25-006366** (hi-en · cat_right · photo · noisy_text) — MyBMC App, citizen picked *Waterlogging*, truth *Waterlogging* · photo: *Road under brown water up to car wheel arches*
 ````
 Kitni baar complaint karein? Western Express Highway Andheri East pe wahi gadda phir se khul gaya
+````
+
+## Extraction, routed to Claude (suite `extraction_routed`)
+
+The linked complaints the app sends to Claude. None has reliable evidence (no photo, non-English app text, vague citizen category), so this suite shows whether Claude beats the rules fallback on its real traffic. Kept out of the main suite's headline.
+
+| id | tags | category (truth) | citizen picked |
+|---|---|---|---|
+| BMC25-000338 | hi-en no_reliable_evidence no_photo | Road cave-in | Other |
+| BMC25-000347 | hi no_reliable_evidence no_photo | Waterlogging | Other |
+| BMC25-000396 | hi-en no_reliable_evidence no_photo | Road cave-in | Other |
+| BMC25-000414 | hi no_reliable_evidence no_photo | Waterlogging | Road related |
+| BMC25-000552 | hi-en no_reliable_evidence no_photo | Open or broken manhole | Other |
+| BMC25-001233 | hi-en no_reliable_evidence no_photo | Pothole | Road related |
+| BMC25-001316 | hi no_reliable_evidence no_photo | Pothole | Road related |
+| BMC25-002352 | mr no_reliable_evidence no_photo | Waterlogging | Other |
+| BMC25-002361 | hi-en no_reliable_evidence no_photo | Waterlogging | Road related |
+| BMC25-003524 | hi-en no_reliable_evidence no_photo | Choked drain / nullah overflow | Other |
+| BMC25-003932 | hi-en no_reliable_evidence no_photo | Waterlogging | Other |
+| BMC25-004426 | mr no_reliable_evidence no_photo | Waterlogging | Other |
+| BMC25-005111 | mr no_reliable_evidence no_photo | Waterlogging | Road related |
+| BMC25-005395 | mr no_reliable_evidence no_photo | Choked drain / nullah overflow | Other |
+| BMC25-005766 | mr no_reliable_evidence no_photo | Pothole | Road related |
+| BMC25-005847 | mr no_reliable_evidence no_photo | Waterlogging | Road related |
+| BMC25-006044 | mr no_reliable_evidence no_photo | Waterlogging | Road related |
+| BMC25-006050 | hi no_reliable_evidence no_photo | Pothole | Road related |
+| BMC25-006133 | mr no_reliable_evidence no_photo | Waterlogging | Road related |
+| BMC25-006187 | hi no_reliable_evidence no_photo | Pothole | Road related |
+| BMC25-006217 | hi-en no_reliable_evidence no_photo | Pothole | Other |
+
+**BMC25-000338** (MyBMC Web Portal)
+````
+Shiv Sena shakha ke paas gutter ka dhakkan khula hai, paani mein dikh nahi raha. Koi gir jayega
+````
+
+**BMC25-000347** (MyBMC App)
+````
+Santacruz West में पानी भर गया है, एम्बुलेंस नहीं निकल पा रही.
+````
+
+**BMC25-000396** (Ward Office Walk-in)
+````
+Bhai LBS Marg pe chawl gate ke paas bahut bada khadda hai, roz koi na koi girta hai. Please jaldi theek karo
+````
+
+**BMC25-000414** (MyBMC App)
+````
+Borivali East में पानी भर गया है, एम्बुलेंस नहीं निकल पा रही.
+````
+
+**BMC25-000552** (MyBMC App)
+````
+Kitni baar complaint karein? Linking Road Santacruz West pe wahi gadda phir se khul gaya
+````
+
+**BMC25-001233** (MyBMC App)
+````
+Vile Parle West station road pe itna paani hai ki bus band hai. BMC kab aayegi?
+````
+
+**BMC25-001316** (MyBMC App)
+````
+Pandita Ramabai Road पर मैनहोल खुला है, बहुत खतरनाक है.
+````
+
+**BMC25-002352** (MyBMC App)
+````
+सिग्नल जवळ रस्त्यावर मोठा खड्डा आहे, Vinoba Bhave Nagar. लवकर दुरुस्त करा.
+````
+
+**BMC25-002361** (MyBMC App)
+````
+Bhai LBS Marg pe BEST depot ke paas bahut bada khadda hai, roz koi na koi girta hai. Please jaldi theek karo
+````
+
+**BMC25-003524** (MyBMC App)
+````
+Kitni baar complaint karein? SV Road Gorai pe wahi gadda phir se khul gaya
+````
+
+**BMC25-003932** (MyBMC App)
+````
+Oshiwara mein Ganpati mandal pandal ke saamne paani bhar gaya hai ghutne tak, gaadi nahi nikal rahi
+````
+
+**BMC25-004426** (MyBMC App)
+````
+मार्केट जवळ रस्त्यावर मोठा खड्डा आहे, Vile Parle West. लवकर दुरुस्त करा.
+````
+
+**BMC25-005111** (MyBMC App)
+````
+BEST depot समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.
+````
+
+**BMC25-005395** (MyBMC Web Portal)
+````
+BEST depot जवळ रस्त्यावर मोठा खड्डा आहे, Santacruz West. लवकर दुरुस्त करा.
+````
+
+**BMC25-005766** (MyBMC Web Portal)
+````
+Kurla West मध्ये पाणी साचले आहे, गाड्या अडकल्या आहेत. पंप पाठवा.
+````
+
+**BMC25-005847** (MyBMC App)
+````
+post office समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.
+````
+
+**BMC25-006044** (Ward Office Walk-in)
+````
+सिग्नल समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.
+````
+
+**BMC25-006050** (MyBMC App)
+````
+ghatkopar mankhurd link road पर मैनहोल खुला है, बहुत खतरनाक है.
+````
+
+**BMC25-006133** (MyBMC App)
+````
+RCF Colony मध्ये पाणी साचले आहे, गाड्या अडकल्या आहेत. पंप पाठवा.
+````
+
+**BMC25-006187** (Ward Office Walk-in)
+````
+Goregaon West में पानी भर गया है, एम्बुलेंस नहीं निकल पा रही.
+````
+
+**BMC25-006217** (MyBMC Web Portal)
+````
+petrol pump ke paas gutter ka dhakkan khula hai, paani mein dikh nahi raha. koi gir jayega
 ````
 
 ## Narrative

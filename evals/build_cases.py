@@ -1,7 +1,8 @@
 """Build the fixed eval case sets from data/. Deterministic (seeded); re-running
 produces the same files. Run:  python -m evals.build_cases
 
-  evals/cases/extraction.jsonl   150 complaints with ground truth from the linked work order
+  evals/cases/extraction.jsonl          answerable complaints with ground truth from the linked work order
+  evals/cases/extraction_routed.jsonl   the linked complaints the app actually sends to Claude
   evals/cases/narrative.jsonl    facts packets for contractor / ward / flag text
   evals/cases/REVIEW.md          human-readable copy of both, for the sign-off read
 """
@@ -35,14 +36,22 @@ HELPLINE = "1916 Helpline"
 #   - the photo description: the data has 12 fixed photo templates and each maps to
 #     exactly one work_type (100% pure), so a photo is decisive;
 #   - the free text, but only where text is measurably reliable: English text and helpline
-#     operator notes (keywords right 90-98%). Hindi / Marathi / Hinglish text from the app
+#     operator notes (a single keyword match is right 100% of the time on linked complaints).
+#     Hindi / Marathi / Hinglish text from the app
 #     or portal is statistically independent of the true category in this synthetic data
 #     (every keyword row has the base-rate mix), so a keyword match there is chance;
 #   - the citizen's selected category.
-# Cases with none of these are unanswerable by any system and only add constant error.
-# This is policy-neutral: contradictory cases (e.g. Hindi text says "manhole", citizen and
-# truth say "pothole") are KEPT, because they are realistic and separate good systems
-# from ones that over-trust the text.
+# Honest limits of this guard (from the independent review):
+#   - It uses the same three evidence sources as M1's router, and in this data photos and
+#     single-hit reliable text are never wrong, so on the kept cases M1's rules score 100%
+#     BY CONSTRUCTION. The main suite is therefore a regression check (does extraction still
+#     get every answerable complaint right?), not a measure of room for improvement.
+#   - The dropped rows are not "constant error": they are rows with no reliable evidence,
+#     where any method is guessing. They are measured separately: the linked rows the app
+#     sends to Claude form the `extraction_routed` suite (see build_routed), and
+#     `python -m evals.measure_routing` reports rules vs base rate on all held-out rows.
+# Contradictory cases (e.g. Hindi text says "manhole", citizen and truth say "pothole") are
+# kept: they are realistic and catch a system that over-trusts unreliable text.
 PHOTO_TRUTH = {
     "wide shot of road with several potholes": "Pothole",
     "crater filled with muddy water": "Pothole",
@@ -131,15 +140,53 @@ def _clean(v):
 
 # ---- extraction -----------------------------------------------------------------
 
-def build_extraction(per_cell: int = 15, n_blank_ward: int = 30, n_vague: int = 15,
-                     n_ambiguous_text: int = 10) -> list[dict]:
+def _linked() -> pd.DataFrame:
     wo, c = _csv("work_orders"), _csv("complaints")
-    sample200 = set(_csv("complaints_sample_200").complaint_id)   # prompt-dev set: keep out
     links = (wo.dropna(subset=["linked_complaint_ids"])
              .assign(complaint_id=lambda d: d.linked_complaint_ids.str.split("|"))
              .explode("complaint_id"))
-    m = c.merge(links[["complaint_id", "work_order_id", "work_type", "sla_hours", "ward_code"]],
-                on="complaint_id", suffixes=("", "_truth"))
+    return c.merge(links[["complaint_id", "work_order_id", "work_type", "sla_hours", "ward_code"]],
+                   on="complaint_id", suffixes=("", "_truth"))
+
+
+def _case(row: dict, tags: list[str], best: dict) -> dict:
+    return {
+        "id": row["complaint_id"],
+        "tags": tags,
+        "input": {k: _clean(row[k]) for k in INPUT_FIELDS},
+        "expected": {
+            "category": row["work_type"],
+            "severity": SEVERITY_FROM_SLA[int(row["sla_hours"])],
+            "severity_best": best[row["work_type"]],
+            "ward_code": row["ward_code_truth"],
+        },
+        "meta": {"work_order_id": row["work_order_id"], "support": sorted(row.get("support") or [])},
+    }
+
+
+def build_routed() -> list[dict]:
+    """The linked complaints M1's router sends to Claude (route() == 'claude'). In this data
+    none has reliable evidence (no photo, non-English app text, vague citizen category), so
+    this suite shows whether Claude beats the fallback on its real traffic. Defined with
+    M1's own router on purpose: rebuild the cases if the routing rules change."""
+    from pipeline.connect.extract import route
+    m = _linked().assign(severity=lambda d: d.sla_hours.map(SEVERITY_FROM_SLA))
+    m["support"] = m.apply(_support, axis=1)
+    routed = m[[route(r.description, r.photo_description, r.category_reported, r.language, r.channel)[1]
+                == "claude" for r in m.itertuples()]]
+    best = severity_best_table(m[~m.complaint_id.isin(routed.complaint_id)])
+    cases = []
+    for r in routed.itertuples(index=False):
+        row = r._asdict()
+        tags = [row["language"], "no_reliable_evidence" if not row["support"] else "has_evidence",
+                "photo" if isinstance(row["photo_description"], str) else "no_photo"]
+        cases.append(_case(row, tags, best))
+    return sorted(cases, key=lambda x: x["id"])
+
+
+def build_extraction(per_cell: int = 15, n_blank_ward: int = 30) -> list[dict]:
+    sample200 = set(_csv("complaints_sample_200").complaint_id)   # prompt-dev set: keep out
+    m = _linked()
     all_linked = m.assign(severity=m.sla_hours.map(SEVERITY_FROM_SLA))
     m = m[~m.complaint_id.isin(sample200)].copy()
     m["support"] = m.apply(_support, axis=1)
@@ -158,18 +205,6 @@ def build_extraction(per_cell: int = 15, n_blank_ward: int = 30, n_vague: int = 
         for wrong in (True, False):
             cell = rest[(rest.language == lang) & (rest.cat_wrong == wrong)]
             picked.append(cell.sample(min(per_cell, len(cell)), random_state=int(rng.integers(1e9))))
-    # Ambiguous slice: no photo, and either a vague citizen category or reliable text that
-    # names zero or several categories. Only a handful of answerable complaints look like
-    # this, which is where a reader (Claude) can add something over fixed rules.
-    no_photo = m.photo_description.isna()
-    vague = m.category_reported.isin(["Other", "Road related"])
-    n_hits = m.description.map(lambda t: len(_text_hits(t)))
-    reliable = (m.channel == HELPLINE) | (m.language == "en")
-    amb_text = m[no_photo & reliable & (n_hits != 1)]
-    amb_vague = m[no_photo & vague & ~m.complaint_id.isin(amb_text.complaint_id)]
-    picked.append(amb_text.sample(min(n_ambiguous_text, len(amb_text)), random_state=SEED))
-    picked.append(amb_vague.sample(min(n_vague, len(amb_vague)), random_state=SEED))
-    ambiguous_ids = set(amb_text.complaint_id) | set(amb_vague.complaint_id)
     df = pd.concat(picked).drop_duplicates("complaint_id")
 
     best = severity_best_table(all_linked[~all_linked.complaint_id.isin(df.complaint_id)])
@@ -186,20 +221,7 @@ def build_extraction(per_cell: int = 15, n_blank_ward: int = 30, n_vague: int = 
             tags.append("helpline")
         elif row["language"] != "en":
             tags.append("noisy_text")
-        if row["complaint_id"] in ambiguous_ids:
-            tags.append("ambiguous")
-        cases.append({
-            "id": row["complaint_id"],
-            "tags": tags,
-            "input": {k: _clean(row[k]) for k in INPUT_FIELDS},
-            "expected": {
-                "category": row["work_type"],
-                "severity": SEVERITY_FROM_SLA[int(row["sla_hours"])],
-                "severity_best": best[row["work_type"]],
-                "ward_code": row["ward_code_truth"],
-            },
-            "meta": {"work_order_id": row["work_order_id"], "support": sorted(row["support"])},
-        })
+        cases.append(_case(row, tags, best))
     return sorted(cases, key=lambda x: x["id"])
 
 
@@ -342,11 +364,12 @@ def build_narrative() -> list[dict]:
     return cases
 
 
-def write_review(extraction, narrative):
+def write_review(extraction, narrative, routed=()):
     def fence(s):
         return f"````\n{s}\n````"
     out = ["# Eval cases: review before sign-off", "",
-           f"Extraction: {len(extraction)} cases · Narrative: {len(narrative)} cases", "",
+           f"Extraction: {len(extraction)} cases · Extraction routed to Claude: {len(routed)} cases · "
+           f"Narrative: {len(narrative)} cases", "",
            "## Extraction", "", "| id | tags | category (truth) | severity | ward | evidence for truth |",
            "|---|---|---|---|---|---|"]
     for c in extraction:
@@ -360,6 +383,18 @@ def write_review(extraction, narrative):
         out += [f"**{c['id']}** ({' · '.join(c['tags'])}) — {i['channel']}, citizen picked "
                 f"*{i['category_reported']}*, truth *{c['expected']['category']}*{photo}",
                 fence(i["description"]), ""]
+    if routed:
+        out += ["## Extraction, routed to Claude (suite `extraction_routed`)", "",
+                "The linked complaints the app sends to Claude. None has reliable evidence (no photo, "
+                "non-English app text, vague citizen category), so this suite shows whether Claude beats the "
+                "rules fallback on its real traffic. Kept out of the main suite's headline.", "",
+                "| id | tags | category (truth) | citizen picked |", "|---|---|---|---|"]
+        for c in routed:
+            out.append(f"| {c['id']} | {' '.join(c['tags'])} | {c['expected']['category']} | "
+                       f"{c['input']['category_reported']} |")
+        out += [""]
+        for c in routed:
+            out += [f"**{c['id']}** ({c['input']['channel']})", fence(c["input"]["description"]), ""]
     out += ["## Narrative", ""]
     for c in narrative:
         out += [f"### {c['id']} ({' · '.join(c['tags'])})",
@@ -370,15 +405,17 @@ def write_review(extraction, narrative):
 
 def main():
     CASES.mkdir(exist_ok=True)
-    ex, nar = build_extraction(), build_narrative()
-    for name, rows in (("extraction", ex), ("narrative", nar)):
+    ex, nar, routed = build_extraction(), build_narrative(), build_routed()
+    for name, rows in (("extraction", ex), ("narrative", nar), ("extraction_routed", routed)):
         with open(CASES / f"{name}.jsonl", "w", encoding="utf-8") as f:
             for r in rows:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
-    write_review(ex, nar)
+    write_review(ex, nar, routed)
     tags = pd.Series([t for c in ex for t in c["tags"]]).value_counts().to_dict()
     print(f"extraction: {len(ex)} cases {tags}")
     print(f"narrative: {len(nar)} cases {pd.Series([c['tags'][0] for c in nar]).value_counts().to_dict()}")
+    print(f"extraction_routed: {len(routed)} cases (the linked complaints the app sends to Claude) "
+          f"{pd.Series([t for c in routed for t in c['tags']]).value_counts().to_dict()}")
 
 
 if __name__ == "__main__":

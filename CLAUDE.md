@@ -58,7 +58,7 @@ The team plan (stack, module ownership, output schemas, audit rules with expecte
 - **Kept in step automatically.** Every M1, M2 or M3 `run()` that writes into `outputs/` ends with `pipeline.db.sync.after_run()`, which rebuilds the DB (about 10 s). Runs into other folders (tests, backtest, scratch) never touch it, so `pytest` doesn't change the committed DB. A new module that writes to `outputs/` must call `after_run` too.
 - **Full run:** `python -m pipeline` runs M1, then M3, then M2, then builds the DB once (auto-sync is paused between steps). `--no-llm` makes no new Claude calls and reuses cached answers (`LLM_OFFLINE=1`), so an offline re-run reproduces the committed outputs exactly. `--only m3` runs one step.
 - **Manual:** `python -m pipeline.db` to rebuild, or `python -m pipeline.db --check` to check freshness. `tests/test_db.py` fails if the committed DB is older than its inputs.
-- `LLM_DISABLE=1` (tests, eval `rules` target) skips Claude and the cache. `LLM_OFFLINE=1` uses the cache but never calls the API. Don't use `LLM_DISABLE` for pipeline runs into `outputs/`, because it replaces the cached Claude texts with templates.
+- `LLM_CACHE_READ=0` skips cache reads (eval `--fresh`). `LLM_DISABLE=1` (tests, eval `rules` target) skips Claude and the cache. `LLM_OFFLINE=1` uses the cache but never calls the API. Don't use `LLM_DISABLE` for pipeline runs into `outputs/`, because it replaces the cached Claude texts with templates.
 - SQLite divides an INTEGER by an INTEGER as integers, so `CAST(... AS REAL)` before dividing money columns (`cost_inr` and `standard_rate_inr` are both integers).
 
 ## Tests and evals
@@ -67,11 +67,11 @@ The team plan (stack, module ownership, output schemas, audit rules with expecte
 - `tests/test_audit.py` pins the expected flag counts (114 / 45 / 493 / 1259 / 611) and plants anomalies via `tests/planted.py`. Change thresholds there in the same PR as any audit rule change.
 - `python -m evals.run_eval --suite extraction|narrative --target app|claude|rules|oracle|null|citizen|template`: see [evals/README.md](evals/README.md). `rules` runs the real app code with Claude off (free). `app` and `claude` are paid and gated. `--approve-harness` is a human step; don't pass it on the user's behalf.
 - `python -m evals.backtest_risk`: checks whether the road risk ranking predicts August–September trouble from June–July data, compared with a naive baseline.
-- `python -m evals.build_cases` regenerates `evals/cases/` deterministically.
+- `python -m evals.build_cases` regenerates `evals/cases/` deterministically: `extraction` (150 answerable, a regression check), `extraction_routed` (the 21 complaints the app sends to Claude) and `narrative`. Each suite has its own harness approval.
 - [sanjay command.md](sanjay%20command.md) has copy-paste test and eval commands per module. [docs/sanjay fixes.md](docs/sanjay%20fixes.md) records what was fixed on 21 Nov and why.
 - Eval contract (keep signatures stable, see `evals/targets.py`): `pipeline.connect.extract.extract_complaint(record, force_claude=False)` (M1), `pipeline.audit.explain.{contractor_scorecard_text,ward_summary_text,flag_explanation}` (M2), and `pipeline.common.llm.{reset_last_meta,get_last_meta}`.
 
 ## Claude calls
 
 - All Claude calls go through `pipeline/common/llm.py` `ask()`, which never raises. Responses are cached in `outputs/llm_cache/` (or `LLM_CACHE_DIR`). `LLM_DISABLE=1` returns the fallback with no network. Failures are recorded in `get_last_meta()["error"]`, not swallowed.
-- M1 extraction calls Claude only for unclear complaints, about 150 of 6,501. Category comes from the photo template, then English or helpline text, then the citizen's category. Severity is a per-category lookup. The reasons and measurements are in the `pipeline/connect/extract.py` docstring. In this synthetic data, Hindi, Marathi and Hinglish app/portal text is unrelated to the true category, so don't route category decisions through it.
+- M1 extraction calls Claude only for unclear complaints (144 of 6,501). Category comes from the photo template, then English or helpline text, then the citizen's category. 120 junk or non-road complaints (no road keyword in reliable text) become `Not road-related`: they stay in `complaints_clean` but have no issue, no severity, and never reach M3. Severity is a per-category lookup. Run `python -m evals.measure_routing` to recompute the figures quoted in `extract.py`.

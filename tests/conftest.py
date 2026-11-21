@@ -18,6 +18,9 @@ import shutil
 from pathlib import Path
 
 os.environ["LLM_DISABLE"] = "1"
+# belt and braces: even if a code path skipped the LLM_DISABLE check, it could only reach an
+# empty scratch cache, never the committed Claude answers in outputs/llm_cache
+os.environ["LLM_CACHE_DIR"] = __import__("tempfile").mkdtemp(prefix="pytest-llm-cache-")
 
 import pandas as pd
 import pytest

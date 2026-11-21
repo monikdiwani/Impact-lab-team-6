@@ -10,14 +10,16 @@ Results for --target app go to .claude/hillclimb/<suite>/<variant>/ (results.jso
 traces/, errors.jsonl) in the layout the hillclimb report builder reads. Other targets
 write to .claude/hillclimb/_selfcheck/ instead so they never mix with real variants.
 
-Properties: rows written as each case finishes; resume keyed on (case, rep), and a run
-directory refuses to resume under different eval files (run_info.json); hard per-case
+Properties: rows written as each case finishes; free targets always run from scratch;
+paid runs resume keyed on (case, rep), and a run directory refuses to resume if the eval
+files, the app code or the judge setting changed (run_info.json); hard per-case
 wall-clock ceiling; jittered backoff on rate limits with retry counts recorded; failed
 attempts (timeouts, harness errors, failed Claude calls the app fell back from) go to
 errors.jsonl with a failure class, never into results.jsonl; served-model check;
 harness-integrity gate for --target app, hashed with line endings normalised so the
 approval survives a checkout on another OS. App Claude responses are cached under
-.claude/hillclimb/<suite>/_llm_cache (not the demo cache); --fresh bypasses it.
+.claude/hillclimb/<suite>/_llm_cache (not the demo cache); --fresh skips cache reads so every
+call, including every rep, is a new sample.
 """
 from __future__ import annotations
 
@@ -44,6 +46,9 @@ CASES = Path(__file__).resolve().parent / "cases"
 HC = ROOT / ".claude" / "hillclimb"
 RETRYABLE = ("RateLimit", "Overloaded", "InternalServer", "APIConnection", "APITimeout", "ServiceUnavailable")
 MAX_RETRIES = 4
+# suite -> how it is graded. extraction_routed holds the linked complaints the app sends to
+# Claude (no reliable evidence); it is graded like extraction but kept out of its headline.
+SUITES = {"extraction": "extraction", "extraction_routed": "extraction", "narrative": "narrative"}
 
 
 # ---- env -----------------------------------------------------------------------------
@@ -53,7 +58,13 @@ def load_env(path: Path = ROOT / ".env") -> None:
     already set in the shell, and without needing python-dotenv. Empty values skipped."""
     if not path.exists():
         return
-    for line in path.read_text(encoding="utf-8").splitlines():
+    raw = path.read_bytes()
+    try:   # PowerShell writes UTF-16 (5.1 '>') or UTF-8 with BOM; both must work
+        text = raw.decode("utf-16") if raw[:2] in (b"\xff\xfe", b"\xfe\xff") else raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        print(f"warning: could not read {path.name} (save it as UTF-8); ignoring it", file=sys.stderr)
+        return
+    for line in text.splitlines():
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
@@ -67,6 +78,13 @@ load_env()
 
 
 # ---- io ------------------------------------------------------------------------------
+
+def _rel(p: Path) -> str:
+    try:
+        return str(p.relative_to(ROOT))
+    except ValueError:
+        return str(p)
+
 
 def load_cases(suite: str) -> list[dict]:
     with open(CASES / f"{suite}.jsonl", encoding="utf-8") as f:
@@ -119,22 +137,43 @@ def harness_sha(paths: list[str]) -> str:
     return h.hexdigest()
 
 
-def check_run_dir(out: Path, sha: str, target: str, wipe_stale: bool) -> None:
-    """A run directory belongs to one version of the eval files. Resuming into it with a
-    different version would mix rows graded under different rules."""
+# The code the app targets run. Not part of the approval gate (a prompt change must not
+# need re-approval), but part of a paid run's identity: resuming a run after the app code
+# changed would mix answers from two versions of the app.
+APP_CODE = ["pipeline/connect/*.py", "pipeline/common/*.py", "pipeline/audit/explain.py",
+            "pipeline/audit/config.py"]
+
+
+def app_sha() -> str:
+    h = hashlib.sha256()
+    for pattern in APP_CODE:
+        for f in sorted(ROOT.glob(pattern)):
+            h.update(f.relative_to(ROOT).as_posix().encode())
+            h.update(file_digest(f))
+    return h.hexdigest()
+
+
+def check_run_dir(out: Path, identity, target: str, wipe_stale: bool) -> None:
+    """A run directory belongs to one version of the eval files (and, for paid runs, of
+    the app code and the judge setting). Resuming into it with a different version would
+    mix rows graded under different rules or produced by a different app."""
+    if isinstance(identity, str):
+        identity = {"harness_sha": identity}
     info_p = out / "run_info.json"
     info = json.loads(info_p.read_text(encoding="utf-8")) if info_p.exists() else None
     has_rows = (out / "results.jsonl").exists() or (out / "errors.jsonl").exists()
-    if info and info.get("harness_sha") == sha:
+    changed = [k for k, v in identity.items() if not info or info.get(k) != v]
+    if info and not changed:
         return
     if has_rows:
         if not wipe_stale:
-            why = "was made with different eval files" if info else "has no run_info.json (made before it existed)"
-            sys.exit(f"{out.relative_to(ROOT)} {why}.\nUse a new --variant (v1, v2, ...) or move that folder "
+            why = (f"was made with a different {', '.join(changed)}" if info
+                   else "has no run_info.json (made before it existed)")
+            sys.exit(f"{_rel(out)} {why}.\nUse a new --variant (v1, v2, ...) or move that folder "
                      f"away (e.g. into .claude/hillclimb/<suite>/_archive/) before running.")
         shutil.rmtree(out)
     out.mkdir(parents=True, exist_ok=True)
-    info_p.write_text(json.dumps({"harness_sha": sha, "target": target}, indent=1), encoding="utf-8")
+    info_p.write_text(json.dumps({**identity, "target": target}, indent=1), encoding="utf-8")
 
 
 def gate(state_path: Path, state: dict, approve: bool):
@@ -156,8 +195,9 @@ def ensure_state(suite: str, judge: bool) -> tuple[Path, dict]:
     d.mkdir(parents=True, exist_ok=True)
     p = d / "_state.json"
     state = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
-    metrics = graders.EXTRACTION_METRICS if suite == "extraction" else graders.NARRATIVE_METRICS
-    if judge:
+    metrics = graders.EXTRACTION_METRICS if SUITES[suite] == "extraction" else graders.NARRATIVE_METRICS
+    had_judge = any(m["id"].startswith("judge_") for m in state.get("metrics", []))
+    if judge or had_judge:   # keep judge columns once a judged variant exists
         metrics = metrics + graders.JUDGE_METRICS
     state["metrics"] = metrics
     state.setdefault("perf_fields", [{"id": "latency_s", "label": "latency", "unit": "s"},
@@ -198,7 +238,8 @@ def call_with_retries(fn, timeout_s):
 
 def run_attempt(case, rep, suite, target, fn, args, sink, judge_client):
     paid = target in ("app", "claude")
-    prompt = case["input"] if suite == "extraction" else case["facts"]
+    kind = SUITES[suite]
+    prompt = case["input"] if kind == "extraction" else case["facts"]
     base = {"prompt_id": case["id"], "rep": rep, "target": target}
     t0 = time.monotonic()
 
@@ -222,6 +263,12 @@ def run_attempt(case, rep, suite, target, fn, args, sink, judge_client):
     served = meta.get("model")
     err = meta.get("error")
     stop = meta.get("stop_reason")
+    if stop == "refusal" and target == "claude":
+        # the ablation asks how good Claude is on its own; a refusal returned the rules
+        # fallback, which must not be scored as Claude's answer
+        sink.error({**base, "failure_class": "refusal", "detail": "Claude refused; app fell back to rules",
+                    "model": served, "usage": meta.get("usage")})
+        return
     if err and stop not in ("refusal", "max_tokens"):
         # the app called Claude, the call failed, and the app returned its fallback: that is
         # an infrastructure failure, not the model's answer, so it must not be scored
@@ -233,7 +280,7 @@ def run_attempt(case, rep, suite, target, fn, args, sink, judge_client):
                     "model": served, "usage": meta.get("usage")})
         return
 
-    if suite == "extraction":
+    if kind == "extraction":
         grade, expl = graders.grade_extraction(output, case["expected"])
     else:
         grade, expl = graders.grade_narrative(output, case)
@@ -259,7 +306,7 @@ def run_attempt(case, rep, suite, target, fn, args, sink, judge_client):
                  "expected": case.get("expected"), "failure_class": "refusal" if stop == "refusal" else None,
                  "llm_called": bool(meta) and not meta.get("disabled"), "llm_cache_hit": meta.get("cache"),
                  "used_template": (output == targets.template_for(case))
-                 if paid and suite == "narrative" else None,
+                 if paid and kind == "narrative" else None,
                  **extra},
     }
     if extra.get("judge_model"):
@@ -289,15 +336,21 @@ def summarize(out: Path, metrics: list[dict]) -> dict:
     ok = [r for r in rows if r["status"] == "ok"]
     errs = sum(1 for _ in open(out / "errors.jsonl", encoding="utf-8")) if (out / "errors.jsonl").exists() else 0
     trunc = len(rows) - len(ok)
-    print(f"\n{out.relative_to(ROOT)}  —  {len(ok)} scored, {trunc} truncated, {errs} failed attempts")
+    print(f"\n{_rel(out)}  —  {len(ok)} scored, {trunc} truncated, {errs} failed attempts")
     summary = {"n_scored": len(ok), "n_truncated": trunc, "n_errors": errs, "metrics": {}, "by_tag": {}}
+    refusals = sum(1 for r in ok if r["meta"].get("failure_class") == "refusal")
+    if refusals:
+        print(f"  note: {refusals} scored rows are refusals answered by the app's fallback")
+        summary["n_refusals_scored"] = refusals
     for m in metrics:
-        vals = [r["grade"].get(m["id"], 0) for r in ok]
+        vals = [r["grade"][m["id"]] for r in ok if m["id"] in r["grade"]]   # never count missing as 0
         k, n = sum(vals), len(vals)
         lo, hi = wilson(k, n)
         summary["metrics"][m["id"]] = {"mean": k / n if n else None, "ci95": [lo, hi], "n": n}
         if n:
             print(f"  {m['label']:<15} {100 * k / n:6.1f}%   (95% CI {100 * lo:.0f}–{100 * hi:.0f}, n={n})")
+        else:
+            print(f"  {m['label']:<15}    n/a   (no row was graded on it)")
     head = metrics[0]["id"]
     by = defaultdict(list)
     for r in ok:
@@ -348,7 +401,7 @@ def summarize(out: Path, metrics: list[dict]) -> dict:
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--suite", required=True, choices=["extraction", "narrative"])
+    ap.add_argument("--suite", required=True, choices=list(SUITES))
     ap.add_argument("--target", default="app",
                     choices=["app", "claude", "rules", "oracle", "null", "citizen", "template"])
     ap.add_argument("--variant", default="baseline", help="baseline | v1 | v2 … (only for --target app)")
@@ -359,7 +412,7 @@ def main(argv=None):
     ap.add_argument("--judge", action="store_true", help="narrative only: add the LLM judge (paid)")
     ap.add_argument("--expect-model", default="claude-opus-5-5")
     ap.add_argument("--fresh", action="store_true",
-                    help="app only: bypass the eval's Claude response cache (needed for --reps > 1 to mean anything)")
+                    help="paid targets: skip cache reads so every call (and every rep) is a new sample")
     ap.add_argument("--approve-harness", action="store_true", help="human-only: record the reviewed harness sha")
     args = ap.parse_args(argv)
 
@@ -368,12 +421,17 @@ def main(argv=None):
         sys.exit("--variant only applies to --target app / claude")
     if not re.fullmatch(r"baseline|v\d+", args.variant):
         sys.exit("--variant must be 'baseline' or v<N> (the report builder ignores other names)")
-    if args.judge and args.suite != "narrative":
+    kind = SUITES[args.suite]
+    if args.judge and kind != "narrative":
         sys.exit("--judge only applies to --suite narrative")
+    if args.target == "claude" and kind != "extraction":
+        sys.exit("--target claude only applies to the extraction suites "
+                 "(the narrative app already asks Claude for every text)")
 
     state_path, state = ensure_state(args.suite, args.judge)
-    if paid:
+    if paid or args.judge:   # the judge is paid too, so it needs the approved harness
         gate(state_path, state, args.approve_harness)
+    if paid:
         flow = HC / (args.suite if args.target == "app" else f"{args.suite}-claude-only")
         if flow != HC / args.suite:   # the report builder needs metrics next to the variants
             flow.mkdir(parents=True, exist_ok=True)
@@ -383,23 +441,31 @@ def main(argv=None):
         out = flow / args.variant
     else:
         out = HC / "_selfcheck" / f"{args.suite}-{args.target}"
-    check_run_dir(out, harness_sha(state["harness_paths"]), args.target, wipe_stale=not paid)
+        shutil.rmtree(out, ignore_errors=True)   # free targets are quick and deterministic: never resume
+    identity = {"harness_sha": harness_sha(state["harness_paths"]), "judge": bool(args.judge)}
+    if paid:
+        identity["app_sha"] = app_sha()
+    check_run_dir(out, identity, args.target, wipe_stale=not paid)
 
     # The app reads these when it first calls Claude, so set them before resolving it.
     if args.target == "rules":
         os.environ["LLM_DISABLE"] = "1"
+        os.environ["LLM_CACHE_DIR"] = tempfile.mkdtemp(prefix="eval-llm-rules-")   # never the demo cache
     elif paid:
         os.environ.pop("LLM_DISABLE", None)
-        os.environ["LLM_CACHE_DIR"] = (tempfile.mkdtemp(prefix="eval-llm-") if args.fresh
-                                       else str(HC / args.suite / "_llm_cache"))
-        if args.reps > 1 and not args.fresh:
-            print("note: --reps > 1 without --fresh replays cached answers, so reps will be identical")
+        os.environ.pop("LLM_OFFLINE", None)
+        os.environ["LLM_CACHE_DIR"] = str(HC / args.suite / "_llm_cache")
+        if args.fresh:
+            os.environ["LLM_CACHE_READ"] = "0"   # answers are still written, never read back
+        elif args.reps > 1:
+            print("note: --reps > 1 without --fresh can replay cached answers across reps; add --fresh "
+                  "for independent samples")
 
     cases = load_cases(args.suite)
     if args.limit:
         cases = cases[: args.limit]
     try:
-        fn = targets.resolve(args.suite, args.target)
+        fn = targets.resolve(kind, args.target)
     except (ImportError, AttributeError) as e:
         sys.exit(f"target '{args.target}' needs app code that is not implemented yet: {e}\n"
                  "See evals/targets.py for the contract.")
@@ -414,7 +480,7 @@ def main(argv=None):
     sink = Sink(out)
     done = sink.done()
     todo = [(c, r) for c in cases for r in range(args.reps) if (c["id"], r) not in done]
-    print(f"{args.suite}/{args.target}: {len(todo)} attempts to run ({len(done)} already done) -> {out.relative_to(ROOT)}")
+    print(f"{args.suite}/{args.target}: {len(todo)} attempts to run ({len(done)} already done) -> {_rel(out)}")
     with cf.ThreadPoolExecutor(max_workers=args.concurrency) as pool:
         futs = [pool.submit(run_attempt, c, r, args.suite, args.target, fn, args, sink, judge_client) for c, r in todo]
         for i, f in enumerate(cf.as_completed(futs), 1):

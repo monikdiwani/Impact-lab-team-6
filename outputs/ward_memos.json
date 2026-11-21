@@ -1,6 +1,6 @@
 {
  "A": {
-  "memo": "**Ward A Budget Memo** *(synthetic data)*\n\n**Budget status:** Ward A's budget was ₹1,600,000. Billing has reached ₹1,655,330, leaving the ward ₹55,330 over budget. No new repairs are funded (0 repairs, ₹0 repair cost).\n\n**Context:** The ward has a low-lying index of 0.35, 14 flood days and 9 open complaints. 3 roads are under the defect liability period (DLP).\n\n**Priority roads:**\n- **RD0002 (Invoke DLP):** The original contractor completes the hot mix patch at ₹0 to BMC. 1 road-condition accident; 3,889 vehicles/peak hour; 20 bus routes.\n- **RD0009 (Monitor):** Needs excavation, pipeline repair and PQC patch. No new spend while over budget. 1 road-condition accident. Entry road for Municipal Secondary School Colaba No 8.\n- **RD0004 (Monitor):** Needs hot mix patch. No new spend. 4,015 vehicles/peak hour; 14 bus routes. Entry road for BMC Marathi Medium School Girgaon No 4.\n\n**Recommendation:** Invoke DLP on RD0002 now. Seek budget reallocation for RD0009 and RD0004.",
+  "memo": "**Ward A: Road Budget Memo** *(synthetic data)*\n\n**Budget position**\nBudget: ₹1,600,000. Billed: ₹1,655,330. Remaining: –₹55,330 (over budget).\n\n**Ward context**\nLow-lying index 0.35, 14 flood days, 8 open complaints.\n\n**Plan**\n0 paid repairs planned (₹0). 3 roads are under defect liability (DLP).\n\n**Priority roads**\n- **RD0002: Invoke DLP** (hot mix patch, ₹0 to BMC). The original contractor repairs free under defect liability. 1 road-condition accident; 3,889 vehicles/peak hour; 20 bus routes.\n- **RD0009: Monitor** (excavation, pipeline repair, PQC patch; ₹0). 1 road-condition accident; entry road for Municipal Secondary School Colaba No 8.\n- **RD0004: Monitor** (hot mix patch; ₹0). 4,015 vehicles/peak hour; 14 bus routes; entry road for BMC Marathi Medium School Girgaon No 4.\n\n**Recommendation**\nNo new spend while the ward is ₹55,330 over budget. Reallocate within existing funds, and use DLP to recover repair costs where available.",
   "source": "claude",
   "facts": {
    "ward_code": "A",
@@ -9,7 +9,7 @@
    "remaining_budget_inr": -55330.0,
    "low_lying_index": 0.35,
    "flood_days": 14,
-   "open_complaints": 9,
+   "open_complaints": 8,
    "n_repairs": 0,
    "repair_cost_inr": 0.0,
    "n_dlp_roads": 3,
@@ -117,7 +117,7 @@
   }
  },
  "D": {
-  "memo": "**Ward D: Road Budget Memo**\n\n**Budget position**\nWard D has a budget of ₹1,600,000. Billed spending is ₹1,272,300, leaving ₹327,700.\n\n**Planned repairs**\n3 repairs are planned at a total estimated cost of ₹62,920, which fits within the remaining budget. 4 roads fall under DLP.\n\n**Priority roads**\n- **RD0041 (Repair, hot mix patch, ₹15,730):** 4 open complaints, 5,210 vehicles/peak hour, 25 bus routes.\n- **RD0037 (Repair, hot mix patch, ₹31,460):** 3 open complaints, 2,252 vehicles/peak hour, 16 bus routes.\n- **RD0039 (Monitor, ₹0):** No open complaints and lower risk. It carries 3,865 vehicles/peak hour and 20 bus routes. 3 of 10 past repairs re-opened.\n\n**Points to note**\n- The ward has 12 open complaints in total.\n- The area recorded 14 flood days and has a low-lying index of 0.4.\n- Hot mix patches show a 23% re-open rate, so follow-up checks on repaired roads are advised.",
+  "memo": "**Ward D: Road Maintenance Budget Memo** *(synthetic data)*\n\n**Budget position**\n- Budget: INR 1,600,000\n- Billed to date: INR 1,272,300\n- Remaining: INR 327,700\n- Planned repairs: 3, estimated at INR 62,920, within the remaining budget.\n\n**Ward conditions**\n- Low-lying index: 0.4\n- Flood days: 14\n- Open complaints: 11\n- Roads under defect liability period (DLP): 4. Check these with contractors before using ward funds.\n\n**Priority roads**\n- **RD0041: Repair** (hot mix patch, INR 15,730). 3 open complaints, 5,210 vehicles/peak hour, 25 bus routes.\n- **RD0037: Repair** (hot mix patch, INR 31,460). 3 open complaints, 2,252 vehicles/peak hour, 16 bus routes.\n- **RD0039: Monitor** (INR 0). No open complaints and lower risk. 3,865 vehicles/peak hour, 20 bus routes. 3 of 10 past repairs re-opened.\n\n**Note:** Hot mix patches have a 23% re-open rate. Follow-up inspections of repaired roads are advised.",
   "source": "claude",
   "facts": {
    "ward_code": "D",
@@ -126,7 +126,7 @@
    "remaining_budget_inr": 327700.0,
    "low_lying_index": 0.4,
    "flood_days": 14,
-   "open_complaints": 12,
+   "open_complaints": 11,
    "n_repairs": 3,
    "repair_cost_inr": 62920.0,
    "n_dlp_roads": 4,
@@ -150,7 +150,7 @@
      "action": "Repair",
      "method": "Hot mix patch",
      "est_cost_inr": 15730.0,
-     "reason": "4 open complaints; 5,210 vehicles/peak hour, 25 bus routes. Hot mix patch: 23% re-open rate"
+     "reason": "3 open complaints; 5,210 vehicles/peak hour, 25 bus routes. Hot mix patch: 23% re-open rate"
     }
    ]
   }
@@ -195,7 +195,7 @@
   }
  },
  "F/S": {
-  "memo": "**Ward F/S: Road Budget Memo** *(synthetic data)*\n\n**Budget position**\n- Budget: INR 9,800,000\n- Billed: INR 8,026,151\n- Remaining: INR 1,773,849\n\n**Ward context**\n- Low-lying index: 0.85\n- Flood days: 19\n- Open complaints: 83\n\n**Proposed plan**\n- 12 repairs, estimated at INR 1,298,840. This is within the remaining budget.\n- 2 roads are under defect liability period (DLP). Contractor obligations should be checked before ward funds are used.\n\n**Top priorities**\n1. **RD0058**: Desilting and garbage removal, INR 210,000. This is the ambulance route to KEM Hospital and has 18 open complaints. Method re-open rate: 22%.\n2. **RD0093**: Hot mix patch, INR 47,190. It has 11 open complaints, and 4 of 19 past repairs re-opened. Method re-open rate: 23%.\n3. **RD0063**: Paver blocks relaid, INR 123,000. It has 5 open complaints, and 3 of 13 past repairs re-opened. Method re-open rate: 22%.\n\n**Note:** Re-open rates of 22–23% suggest post-repair quality checks on these roads.",
+  "memo": "**Ward F/S: Road Repair Budget Memo** *(synthetic data)*\n\n**Budget position:** ₹98,00,000 allocated; ₹80,26,151 billed; ₹17,73,849 remaining.\n\n**Ward conditions:** Low-lying index 0.85, 19 flood days and 80 open complaints.\n\n**Proposed works:** 12 repairs at an estimated ₹12,98,840, which is within the remaining budget. 2 roads are under defect liability period (DLP) and should be referred to the original contractor rather than funded from the ward budget.\n\n**Priority roads:**\n1. **RD0058:** Desilting and garbage removal, ₹2,10,000. Ambulance route to KEM Hospital, 16 open complaints. Method re-open rate is 22%.\n2. **RD0093:** Hot mix patch, ₹47,190. 11 open complaints; 4 of 19 past repairs re-opened. Method re-open rate is 23%.\n3. **RD0063:** Paver blocks relaid, ₹1,23,000. 5 open complaints; 3 of 13 past repairs re-opened. Method re-open rate is 22%.\n\n**Recommendation:** Approve the 12 repairs, starting with RD0058, and monitor re-opened work on all three priority roads.",
   "source": "claude",
   "facts": {
    "ward_code": "F/S",
@@ -204,7 +204,7 @@
    "remaining_budget_inr": 1773849.0,
    "low_lying_index": 0.85,
    "flood_days": 19,
-   "open_complaints": 83,
+   "open_complaints": 80,
    "n_repairs": 12,
    "repair_cost_inr": 1298840.0,
    "n_dlp_roads": 2,
@@ -214,7 +214,7 @@
      "action": "Repair",
      "method": "Desilting and garbage removal",
      "est_cost_inr": 210000.0,
-     "reason": "Ambulance route to KEM Hospital; 18 open complaints. Desilting and garbage removal: 22% re-open rate"
+     "reason": "Ambulance route to KEM Hospital; 16 open complaints. Desilting and garbage removal: 22% re-open rate"
     },
     {
      "road_id": "RD0093",
@@ -234,7 +234,7 @@
   }
  },
  "F/N": {
-  "memo": "**Ward F/N: Road Budget Memo** *(synthetic data)*\n\n**Budget position:** Of ₹10,500,000 budgeted, ₹9,412,574 has been billed, leaving ₹1,087,426. The 10 planned repairs cost ₹833,030, which fits within the remaining budget.\n\n**Ward context:** Low-lying index is 0.9, with 20 flood days and 84 open complaints. Four roads are under defect liability (DLP).\n\n**Priority roads:**\n1. **RD0077:** Repair with dewatering pump, ₹180,000. It has had 2 road-condition accidents (3 in all) and has 14 open complaints. This method has a 16% re-open rate.\n2. **RD0076:** Invoke DLP (hot mix patch), ₹0 to BMC, because the original contractor repairs free. It is an ambulance route to LTMG Sion Hospital and has 5 open complaints.\n3. **RD0071:** Repair with dewatering pump, ₹120,000. It has 5 open complaints, and 2 of 17 past repairs re-opened. This method has a 16% re-open rate.\n\n**Recommendation:** Approve the 10 repairs, invoke DLP on the 4 eligible roads, and monitor re-opens on pump-based repairs.",
+  "memo": "**Ward Budget Memo: Ward F/N** *(synthetic data)*\n\n**Budget position:** Budget ₹10,500,000; billed ₹9,412,574; remaining ₹1,087,426. The 10 proposed repairs cost ₹817,300, which is within the remaining budget.\n\n**Risk context:** Low-lying index 0.9; 20 flood days; 79 open complaints. 4 roads are under defect liability (DLP).\n\n**Priority roads:**\n1. **RD0077:** Repair with dewatering pump, ₹180,000. 2 road-condition accidents (3 in all); 11 open complaints. This method has a 16% re-open rate.\n2. **RD0076:** Invoke DLP (hot mix patch), ₹0 to BMC. The original contractor repairs it free. Ambulance route to LTMG Sion Hospital; 5 open complaints.\n3. **RD0071:** Repair with dewatering pump, ₹120,000. 5 open complaints; 2 of 17 past repairs re-opened. This method has a 16% re-open rate.\n\n**Recommendation:** Approve the 10 repairs. Issue DLP notices for the 4 eligible roads, starting with RD0076 because it is an ambulance route.",
   "source": "claude",
   "facts": {
    "ward_code": "F/N",
@@ -243,9 +243,9 @@
    "remaining_budget_inr": 1087426.0,
    "low_lying_index": 0.9,
    "flood_days": 20,
-   "open_complaints": 84,
+   "open_complaints": 79,
    "n_repairs": 10,
-   "repair_cost_inr": 833030.0,
+   "repair_cost_inr": 817300.0,
    "n_dlp_roads": 4,
    "top_roads": [
     {
@@ -253,7 +253,7 @@
      "action": "Repair",
      "method": "Dewatering pump deployed",
      "est_cost_inr": 180000.0,
-     "reason": "2 road-condition accidents (3 in all); 14 open complaints. Dewatering pump deployed: 16% re-open rate"
+     "reason": "2 road-condition accidents (3 in all); 11 open complaints. Dewatering pump deployed: 16% re-open rate"
     },
     {
      "road_id": "RD0076",
@@ -273,7 +273,7 @@
   }
  },
  "G/S": {
-  "memo": "**Ward G/S: Road Budget Memo** *(synthetic data)*\n\n**Budget position**\n- Allocated: ₹3,200,000\n- Billed: ₹2,821,986\n- Remaining: ₹378,014\n\n**Ward conditions**\nLow-lying index 0.6, 16 flood days and 45 open complaints.\n\n**Proposed plan**\nCarry out 6 repairs at an estimated ₹373,260, which fits within the remaining budget. 2 roads are under defect liability (DLP) and cost ₹0 to BMC.\n\n**Priority roads**\n- **RD0084:** Repair with hot mix patch, ₹47,190. 9 open complaints; 2 of 10 past repairs re-opened.\n- **RD0088:** Repair with hot mix patch, ₹47,190. 9 open complaints; 4,132 vehicles/peak hour; 24 bus routes.\n- **RD0083:** Invoke DLP, ₹0. The original contractor repairs free of charge. 7 open complaints; 3 of 15 past repairs re-opened.\n\n**Note**\nHot mix patch has a 23% re-open rate. We suggest monitoring these repairs after the next flood period.\n\n**Action requested**\nApprove the 6 repairs and issue DLP notices for the 2 eligible roads.",
+  "memo": "**Ward G/S: Road Repair Budget Memo** *(synthetic data)*\n\n**Budget position**\n- Budget: ₹3,200,000\n- Billed to date: ₹2,821,986\n- Remaining: ₹378,014\n\n**Ward conditions**\n- Low-lying index: 0.6\n- Flood days: 16\n- Open complaints: 42\n\n**Proposed works**\n- 7 repairs, estimated at ₹327,490, which is within the remaining budget.\n- 2 roads are under the defect liability period (DLP).\n\n**Priority roads**\n1. **RD0084:** Repair with hot mix patch, ₹47,190. 8 open complaints; 2 of 10 past repairs re-opened.\n2. **RD0088:** Repair with hot mix patch, ₹47,190. 8 open complaints; 4,132 vehicles/peak hour; 24 bus routes.\n3. **RD0083:** Invoke DLP, ₹0 to BMC. The original contractor repairs at no cost. 7 open complaints; 3 of 15 past repairs re-opened.\n\n**Note:** Hot mix patch has a 23% re-open rate. Follow-up checks are advised.\n\n**Recommendation:** Approve the 7 repairs and issue DLP notices for the 2 eligible roads.",
   "source": "claude",
   "facts": {
    "ward_code": "G/S",
@@ -282,9 +282,9 @@
    "remaining_budget_inr": 378014.0,
    "low_lying_index": 0.6,
    "flood_days": 16,
-   "open_complaints": 45,
-   "n_repairs": 6,
-   "repair_cost_inr": 373260.0,
+   "open_complaints": 42,
+   "n_repairs": 7,
+   "repair_cost_inr": 327490.0,
    "n_dlp_roads": 2,
    "top_roads": [
     {
@@ -292,14 +292,14 @@
      "action": "Repair",
      "method": "Hot mix patch",
      "est_cost_inr": 47190.0,
-     "reason": "9 open complaints; 2 of 10 past repairs re-opened. Hot mix patch: 23% re-open rate"
+     "reason": "8 open complaints; 2 of 10 past repairs re-opened. Hot mix patch: 23% re-open rate"
     },
     {
      "road_id": "RD0088",
      "action": "Repair",
      "method": "Hot mix patch",
      "est_cost_inr": 47190.0,
-     "reason": "9 open complaints; 4,132 vehicles/peak hour, 24 bus routes. Hot mix patch: 23% re-open rate"
+     "reason": "8 open complaints; 4,132 vehicles/peak hour, 24 bus routes. Hot mix patch: 23% re-open rate"
     },
     {
      "road_id": "RD0083",
@@ -312,7 +312,7 @@
   }
  },
  "G/N": {
-  "memo": "**Ward G/N: Road Repair Budget Memo** *(synthetic data)*\n\n**Budget position**\nBudget: ₹8,400,000. Billed to date: ₹6,755,738. Remaining: ₹1,644,262.\n\n**Ward conditions**\nLow-lying index 0.8, 15 flood days, and 113 open complaints.\n\n**Proposed plan**\n9 repairs at an estimated ₹567,410, which is within the remaining budget. 2 roads are under defect liability (DLP).\n\n**Priority roads**\n- **RD0101:** Invoke DLP (hot mix patch), ₹0 to BMC. The original contractor repairs free under defect liability. 18 open complaints; 7 of 16 past repairs re-opened.\n- **RD0094:** Repair (hot mix patch), ₹15,730. Ambulance route to Mahim Fever Hospital; 2 open complaints.\n- **RD0102:** Repair (hot mix patch), ₹47,190. 25 open complaints; 5 of 24 past repairs re-opened.\n\n**Note**\nHot mix patch has a 23% re-open rate. Follow-up inspection of patched roads is advised.",
+  "memo": "**Ward G/N: Road Repair Budget Memo** *(synthetic data)*\n\n**Budget position:** ₹84,00,000 allocated, ₹67,55,738 billed, ₹16,44,262 remaining.\n\n**Ward conditions:** Low-lying index 0.8, 15 flood days and 111 open complaints.\n\n**Proposed plan:** 9 repairs at an estimated ₹5,83,140, which fits within the remaining budget. 2 roads are under defect liability (DLP).\n\n**Priority roads:**\n1. **RD0101: Invoke DLP** (hot mix patch, ₹0). The original contractor repairs at no cost to BMC. 16 open complaints; 7 of 16 past repairs re-opened.\n2. **RD0094: Repair** (hot mix patch, ₹31,460). Ambulance route to Mahim Fever Hospital; 5 open complaints.\n3. **RD0102: Repair** (hot mix patch, ₹47,190). 27 open complaints; 5 of 24 past repairs re-opened.\n\n**Note:** Hot mix patch has a 23% re-open rate.\n\n**Recommendation:** Approve the 9 repairs, notify contractors on both DLP roads, and monitor re-opened repairs.",
   "source": "claude",
   "facts": {
    "ward_code": "G/N",
@@ -321,9 +321,9 @@
    "remaining_budget_inr": 1644262.0,
    "low_lying_index": 0.8,
    "flood_days": 15,
-   "open_complaints": 113,
+   "open_complaints": 111,
    "n_repairs": 9,
-   "repair_cost_inr": 567410.0,
+   "repair_cost_inr": 583140.0,
    "n_dlp_roads": 2,
    "top_roads": [
     {
@@ -331,27 +331,27 @@
      "action": "Invoke DLP",
      "method": "Hot mix patch",
      "est_cost_inr": 0.0,
-     "reason": "Under defect liability: original contractor repairs free, ₹0 to BMC. 18 open complaints; 7 of 16 past repairs re-opened"
+     "reason": "Under defect liability: original contractor repairs free, ₹0 to BMC. 16 open complaints; 7 of 16 past repairs re-opened"
     },
     {
      "road_id": "RD0094",
      "action": "Repair",
      "method": "Hot mix patch",
-     "est_cost_inr": 15730.0,
-     "reason": "Ambulance route to Mahim Fever Hospital (synthetic); 2 open complaints. Hot mix patch: 23% re-open rate"
+     "est_cost_inr": 31460.0,
+     "reason": "Ambulance route to Mahim Fever Hospital (synthetic); 5 open complaints. Hot mix patch: 23% re-open rate"
     },
     {
      "road_id": "RD0102",
      "action": "Repair",
      "method": "Hot mix patch",
      "est_cost_inr": 47190.0,
-     "reason": "25 open complaints; 5 of 24 past repairs re-opened. Hot mix patch: 23% re-open rate"
+     "reason": "27 open complaints; 5 of 24 past repairs re-opened. Hot mix patch: 23% re-open rate"
     }
    ]
   }
  },
  "H/E": {
-  "memo": "**Ward H/E: Road Budget Memo** *(synthetic data)*\n\n**Budget position**\n- Budget: ₹8,200,000\n- Billed: ₹6,145,533\n- Remaining: ₹2,054,467\n\n**Ward conditions**\nLow-lying index 0.75, 16 flood days, 93 open complaints.\n\n**Proposed works**\n6 repairs costing ₹353,030 in total, which fits within the remaining budget. 2 roads qualify for Defect Liability Period (DLP) claims.\n\n**Priority roads**\n1. **RD0110**: Repair with hot mix patch, ₹47,190. 43 open complaints; 10 of 29 past repairs re-opened. This method has a 23% re-open rate.\n2. **RD0115**: Repair with a dewatering pump, ₹180,000. 16 open complaints; 1 road-condition accident (2 in all). This method has a 16% re-open rate.\n3. **RD0107**: Invoke DLP (hot mix patch), ₹0 to BMC. The original contractor repairs it free. 3 road-condition accidents (4 in all); 7 open complaints.\n\n**Recommendation**\nApprove the 6 repairs and issue DLP notices for the 2 eligible roads.",
+  "memo": "**Ward H/E: Road Repair Budget Memo**\n\n**Budget position:** Of ₹8,200,000 allocated, ₹6,145,533 has been billed, leaving ₹2,054,467.\n\n**Ward context:** Low-lying index 0.75, 16 flood days recorded, and 89 open complaints.\n\n**Proposed plan:** 6 repairs at an estimated ₹353,030, which is within the remaining budget. 2 roads are under the defect liability period (DLP).\n\n**Priority roads:**\n- **RD0110:** Repair by hot mix patch, est. ₹47,190. 41 open complaints. 10 of 29 past repairs re-opened. Hot mix patch has a 23% re-open rate.\n- **RD0115:** Repair with dewatering pump, est. ₹180,000. 14 open complaints. 1 road-condition accident (2 in total). This method has a 16% re-open rate.\n- **RD0107:** Invoke DLP (hot mix patch), ₹0 to BMC. The original contractor carries out the repair. 3 road-condition accidents (4 in total). 7 open complaints.\n\n**Action requested:** Approve the listed repairs and issue a DLP notice for RD0107.\n\n*Note: Data is synthetic.*",
   "source": "claude",
   "facts": {
    "ward_code": "H/E",
@@ -360,7 +360,7 @@
    "remaining_budget_inr": 2054467.0,
    "low_lying_index": 0.75,
    "flood_days": 16,
-   "open_complaints": 93,
+   "open_complaints": 89,
    "n_repairs": 6,
    "repair_cost_inr": 353030.0,
    "n_dlp_roads": 2,
@@ -370,14 +370,14 @@
      "action": "Repair",
      "method": "Hot mix patch",
      "est_cost_inr": 47190.0,
-     "reason": "43 open complaints; 10 of 29 past repairs re-opened. Hot mix patch: 23% re-open rate"
+     "reason": "41 open complaints; 10 of 29 past repairs re-opened. Hot mix patch: 23% re-open rate"
     },
     {
      "road_id": "RD0115",
      "action": "Repair",
      "method": "Dewatering pump deployed",
      "est_cost_inr": 180000.0,
-     "reason": "16 open complaints; 1 road-condition accident (2 in all). Dewatering pump deployed: 16% re-open rate"
+     "reason": "14 open complaints; 1 road-condition accident (2 in all). Dewatering pump deployed: 16% re-open rate"
     },
     {
      "road_id": "RD0107",
@@ -390,7 +390,7 @@
   }
  },
  "H/W": {
-  "memo": "**Ward H/W: Road Budget Memo** *(synthetic data)*\n\n**Budget position**\nBudget ₹43,00,000; billed ₹42,45,242; remaining ₹54,758. No paid repairs are proposed this cycle (0 repairs, ₹0).\n\n**Ward conditions**\nLow-lying index 0.55; 17 flood days; 16 open complaints. 3 roads are under the defect liability period (DLP).\n\n**Priority roads**\n1. **RD0119: Invoke DLP** (desilting and garbage removal). The original contractor repairs free of charge, at ₹0 to BMC. 6 open complaints; 4 of 23 past repairs re-opened.\n2. **RD0121: Monitor** (desilting and garbage removal). Ambulance route to KB Bhabha Hospital, Bandra; 1 road-condition accident. Deferred because not enough budget is left this cycle.\n3. **RD0120: Monitor** (paver blocks relaid). 2 road-condition accidents; 4 open complaints. Deferred because not enough budget is left this cycle.\n\n**Next step**\nIssue the DLP notice for RD0119. Keep RD0121 and RD0120 under watch for the next budget cycle.",
+  "memo": "**Ward H/W: Road Budget Memo** *(synthetic data)*\n\n**Budget position**\n- Allocated: ₹4,300,000\n- Billed: ₹4,245,242\n- Remaining: ₹54,758\n\n**Ward conditions**\n- Low-lying index: 0.55\n- Flood days: 17\n- Open complaints: 16\n- Paid repairs this cycle: 0 (₹0)\n- Roads under defect liability period (DLP): 3\n\n**Priority roads**\n1. **RD0119: Invoke DLP.** The original contractor repairs at no cost to BMC (₹0). A dewatering pump has been deployed. There are 6 open complaints, and 4 of 23 past repairs were re-opened.\n2. **RD0121: Monitor.** Not enough budget is left this cycle. This is the ambulance route to KB Bhabha Hospital, Bandra, with 1 road-condition accident. Planned method: desilting and garbage removal.\n3. **RD0120: Monitor.** Not enough budget is left this cycle. There have been 2 road-condition accidents, and 4 complaints are open. Planned method: manhole cover replacement plus grating.\n\n**Next steps**\nIssue the DLP notice for RD0119. Keep RD0121 and RD0120 under watch, and consider them first when funds become available.",
   "source": "claude",
   "facts": {
    "ward_code": "H/W",
@@ -407,7 +407,7 @@
     {
      "road_id": "RD0119",
      "action": "Invoke DLP",
-     "method": "Desilting and garbage removal",
+     "method": "Dewatering pump deployed",
      "est_cost_inr": 0.0,
      "reason": "Under defect liability: original contractor repairs free, ₹0 to BMC. 6 open complaints; 4 of 23 past repairs re-opened"
     },
@@ -421,7 +421,7 @@
     {
      "road_id": "RD0120",
      "action": "Monitor",
-     "method": "Paver blocks relaid",
+     "method": "Manhole cover replaced + grating",
      "est_cost_inr": 0.0,
      "reason": "Not enough budget left this cycle. 2 road-condition accidents (2 in all); 4 open complaints"
     }
@@ -429,7 +429,7 @@
   }
  },
  "K/E": {
-  "memo": "**Ward K/E: Budget Memo** *(synthetic data)*\n\n**Budget position**\n- Budget: ₹9,100,000\n- Billed to date: ₹8,264,048\n- Remaining: ₹835,952\n\n**Ward conditions**\n- Low-lying index: 0.65\n- Flood days: 16\n- Open complaints: 94\n\n**Proposal**\n8 repairs at an estimated ₹825,840, which fits within the remaining budget. 1 road is under its defect liability period (DLP). Defects on that road should go to the original contractor and not be paid from ward funds.\n\n**Priority roads**\n- **RD0136**: Desilting and garbage removal, ₹210,000. 20 open complaints. 7 of 29 past repairs re-opened. Method re-open rate: 22%.\n- **RD0146**: Hot mix patch, ₹31,460. 7 open complaints. 4 road-condition accidents (6 in all). Method re-open rate: 23%.\n- **RD0139**: Desilting and garbage removal, ₹70,000. 3 road-condition accidents (5 in all). 2 open complaints. Method re-open rate: 22%.\n\n**Recommendation**\nApprove the 8 repairs. Track re-opens closely on RD0136 given its repair history.",
+  "memo": "**Ward K/E: Road Repair Budget Memo**\n\n**Budget position:** ₹91,00,000 allocated; ₹82,64,048 billed; ₹8,35,952 remaining.\n\n**Ward context:** Low-lying index 0.65; 16 flood days; 87 open complaints.\n\n**Proposal:** 11 repairs at an estimated ₹8,33,220, within the remaining budget. 1 road is under its defect liability period (DLP) and should be checked with the contractor before ward funds are used.\n\n**Priority roads:**\n1. **RD0136**: Desilting and garbage removal, ₹2,10,000. 20 open complaints; 7 of 29 past repairs re-opened. Method re-open rate: 22%.\n2. **RD0146**: Hot mix patch, ₹31,460. 7 open complaints; 4 road-condition accidents (6 in all). Method re-open rate: 23%.\n3. **RD0139**: Desilting and garbage removal, ₹70,000. 3 road-condition accidents (5 in all); 2 open complaints. Method re-open rate: 22%.\n\n**Recommendation:** Approve the 11 repairs. Given re-open rates of 22–23%, schedule follow-up inspections after works.\n\n*Data is synthetic.*",
   "source": "claude",
   "facts": {
    "ward_code": "K/E",
@@ -438,9 +438,9 @@
    "remaining_budget_inr": 835952.0,
    "low_lying_index": 0.65,
    "flood_days": 16,
-   "open_complaints": 94,
-   "n_repairs": 8,
-   "repair_cost_inr": 825840.0,
+   "open_complaints": 87,
+   "n_repairs": 11,
+   "repair_cost_inr": 833220.0,
    "n_dlp_roads": 1,
    "top_roads": [
     {
@@ -468,7 +468,7 @@
   }
  },
  "K/W": {
-  "memo": "**Ward K/W: Road Budget Memo** *(synthetic data)*\n\n**Budget position:** INR 7,845,240 of the INR 8,900,000 budget has been billed, leaving INR 1,054,760.\n\n**Ward conditions:** Low-lying index 0.7, 20 flood days and 81 open complaints.\n\n**Proposed works:** 10 repairs at an estimated INR 670,220, within the remaining budget. 3 roads are under defect liability period (DLP). Please confirm contractor obligations for these before funding work on them.\n\n**Priority roads:**\n- **RD0148:** Manhole cover replaced + grating, INR 90,000. 6 open complaints. 7 of 22 past repairs re-opened. Method re-open rate: 18%.\n- **RD0143:** Hot mix patch, INR 31,460. 4 road-condition accidents and 7 open complaints. Method re-open rate: 23%.\n- **RD0156:** Desilting and garbage removal, INR 210,000. 5 open complaints. 1 road-condition accident (3 in all). Method re-open rate: 22%.\n\n**Recommendation:** Approve the 10 repairs and track re-open rates after completion.",
+  "memo": "**Ward K/W: Budget Memo**\n\n**Budget position**\n- Budget: ₹8,900,000\n- Billed to date: ₹7,845,240\n- Remaining: ₹1,054,760\n\n**Ward conditions**\n- Low-lying index: 0.7\n- Flood days: 20\n- Open complaints: 81\n\n**Proposed works**\n10 repairs are proposed at a total estimated cost of ₹433,140, which is within the remaining budget. 3 roads are listed as DLP roads. Please check whether any proposed repairs fall on these roads, so that any repair obligations under DLP terms can be confirmed first.\n\n**Priority roads**\n1. **RD0148**: Manhole cover replaced + grating (₹90,000). 6 open complaints. 7 of 22 past repairs re-opened. This method has an 18% re-open rate.\n2. **RD0143**: Hot mix patch (₹31,460). 4 road-condition accidents (4 in all). 7 open complaints. This method has a 23% re-open rate.\n3. **RD0156**: Hot mix patch (₹47,190). 7 open complaints. 1 road-condition accident (3 in all). This method has a 23% re-open rate.\n\n**Recommendation:** Approve the priority repairs and monitor re-open rates.",
   "source": "claude",
   "facts": {
    "ward_code": "K/W",
@@ -479,7 +479,7 @@
    "flood_days": 20,
    "open_complaints": 81,
    "n_repairs": 10,
-   "repair_cost_inr": 670220.0,
+   "repair_cost_inr": 433140.0,
    "n_dlp_roads": 3,
    "top_roads": [
     {
@@ -499,15 +499,15 @@
     {
      "road_id": "RD0156",
      "action": "Repair",
-     "method": "Desilting and garbage removal",
-     "est_cost_inr": 210000.0,
-     "reason": "5 open complaints; 1 road-condition accident (3 in all). Desilting and garbage removal: 22% re-open rate"
+     "method": "Hot mix patch",
+     "est_cost_inr": 47190.0,
+     "reason": "7 open complaints; 1 road-condition accident (3 in all). Hot mix patch: 23% re-open rate"
     }
    ]
   }
  },
  "P/S": {
-  "memo": "**Ward P/S: Road Budget Memo** *(synthetic data)*\n\n**Budget position:** ₹4,800,000 allocated, ₹4,349,997 billed, ₹450,003 remaining.\n\n**Ward conditions:** Low-lying index 0.5, 15 flood days, 39 open complaints.\n\n**Plan:** 6 repairs at an estimated ₹357,190, which fits within the remaining budget. 5 roads are under defect liability (DLP), so the original contractors should repair them at no cost to BMC.\n\n**Priority roads:**\n1. **RD0169: Repair** (dewatering pump), ₹180,000. Ambulance route to Siddharth Hospital Goregaon. 5 open complaints, 16% re-open rate.\n2. **RD0166: Repair** (desilting and garbage removal), ₹70,000. Entry road for Municipal Secondary School Aarey Road No 2. 3 open complaints, 22% re-open rate.\n3. **RD0162: Invoke DLP** (hot mix patch), ₹0 to BMC. 15 open complaints, 2,454 vehicles/peak hour, 12 bus routes.\n\n**Recommendation:** Approve the 6 repairs, issue DLP notices for the 5 covered roads, and track re-open rates after the work is done.",
+  "memo": "**Ward P/S: Road Budget Memo** *(synthetic data)*\n\n**Budget status**\n- Allocated: ₹4,800,000\n- Billed: ₹4,349,997\n- Remaining: ₹450,003\n\n**Ward conditions**\nLow-lying index 0.5, 15 flood days and 40 open complaints.\n\n**Proposed plan**\n6 repairs are estimated at ₹357,190, within the remaining budget. 5 roads are under the defect liability period (DLP), so the original contractors should repair them at no cost to BMC.\n\n**Priority roads**\n1. **RD0169**: Repair (dewatering pump), ₹180,000. Ambulance route to Siddharth Hospital Goregaon; 4 open complaints; 16% re-open rate.\n2. **RD0166**: Repair (desilting and garbage removal), ₹70,000. Entry road for Municipal Secondary School Aarey Road No 2; 3 open complaints; 22% re-open rate.\n3. **RD0162**: Invoke DLP (hot mix patch), ₹0 to BMC. 15 open complaints; 2,454 vehicles/peak hour; 12 bus routes.\n\n**Recommendation**\nApprove the 6 repairs, issue DLP notices for the 5 eligible roads, and track re-open rates.",
   "source": "claude",
   "facts": {
    "ward_code": "P/S",
@@ -516,7 +516,7 @@
    "remaining_budget_inr": 450003.0,
    "low_lying_index": 0.5,
    "flood_days": 15,
-   "open_complaints": 39,
+   "open_complaints": 40,
    "n_repairs": 6,
    "repair_cost_inr": 357190.0,
    "n_dlp_roads": 5,
@@ -526,7 +526,7 @@
      "action": "Repair",
      "method": "Dewatering pump deployed",
      "est_cost_inr": 180000.0,
-     "reason": "Ambulance route to Siddharth Hospital Goregaon; 5 open complaints. Dewatering pump deployed: 16% re-open rate"
+     "reason": "Ambulance route to Siddharth Hospital Goregaon; 4 open complaints. Dewatering pump deployed: 16% re-open rate"
     },
     {
      "road_id": "RD0166",
@@ -546,7 +546,7 @@
   }
  },
  "P/N": {
-  "memo": "**Ward P/N – Budget Memo**\n\n**Budget position:** Of the ₹77,00,000 budget, ₹70,06,462 has been billed, leaving ₹6,93,538.\n\n**Ward conditions:** The ward has a low-lying index of 0.6, 17 flood days and 103 open complaints. One road is under the defect liability period (DLP).\n\n**Proposed works:** We propose 6 repairs at a total estimated cost of ₹5,38,760, which fits within the remaining budget.\n\n**Top priorities:**\n1. **RD0180:** Hot mix patch, ₹47,190. 8 of 34 past repairs re-opened, and there are 25 open complaints. This method has a 23% re-open rate.\n2. **RD0175:** Desilting and garbage removal, ₹2,10,000. 4 of 30 past repairs re-opened, and there are 21 open complaints. This method has a 22% re-open rate.\n3. **RD0174:** Hot mix patch, ₹47,190. There were 5 road-condition accidents (7 in all) and there are 14 open complaints. This method has a 23% re-open rate.\n\n**Recommendation:** Approve the repairs above. Check the DLP road with the contractor before spending ward funds on it.",
+  "memo": "**Ward P/N: Budget Memo** *(synthetic data)*\n\n**Budget position**\n- Budget: ₹7,700,000\n- Billed to date: ₹7,006,462\n- Remaining: ₹693,538\n\n**Ward conditions**\n- Low-lying index: 0.6\n- Flood days: 17\n- Open complaints: 100\n\n**Proposal**\n6 repairs, estimated at ₹538,760, fit within the remaining budget. 1 road is under its defect liability period. Please confirm whether the original contractor should carry out work on that road before spending ward funds.\n\n**Priority roads**\n1. **RD0180**: Hot mix patch, ₹47,190. 8 of 34 past repairs re-opened. 24 open complaints.\n2. **RD0175**: Desilting and garbage removal, ₹210,000. 4 of 30 past repairs re-opened. 20 open complaints.\n3. **RD0174**: Hot mix patch, ₹47,190. 5 road-condition accidents (7 in all). 13 open complaints.\n\n**Note:** Past re-open rates are 23% for hot mix patch and 22% for desilting. Follow-up checks after the work are advised.",
   "source": "claude",
   "facts": {
    "ward_code": "P/N",
@@ -555,7 +555,7 @@
    "remaining_budget_inr": 693538.0,
    "low_lying_index": 0.6,
    "flood_days": 17,
-   "open_complaints": 103,
+   "open_complaints": 100,
    "n_repairs": 6,
    "repair_cost_inr": 538760.0,
    "n_dlp_roads": 1,
@@ -565,27 +565,27 @@
      "action": "Repair",
      "method": "Hot mix patch",
      "est_cost_inr": 47190.0,
-     "reason": "8 of 34 past repairs re-opened; 25 open complaints. Hot mix patch: 23% re-open rate"
+     "reason": "8 of 34 past repairs re-opened; 24 open complaints. Hot mix patch: 23% re-open rate"
     },
     {
      "road_id": "RD0175",
      "action": "Repair",
      "method": "Desilting and garbage removal",
      "est_cost_inr": 210000.0,
-     "reason": "4 of 30 past repairs re-opened; 21 open complaints. Desilting and garbage removal: 22% re-open rate"
+     "reason": "4 of 30 past repairs re-opened; 20 open complaints. Desilting and garbage removal: 22% re-open rate"
     },
     {
      "road_id": "RD0174",
      "action": "Repair",
      "method": "Hot mix patch",
      "est_cost_inr": 47190.0,
-     "reason": "5 road-condition accidents (7 in all); 14 open complaints. Hot mix patch: 23% re-open rate"
+     "reason": "5 road-condition accidents (7 in all); 13 open complaints. Hot mix patch: 23% re-open rate"
     }
    ]
   }
  },
  "R/S": {
-  "memo": "**Ward R/S – Budget Memo** *(synthetic data)*\n\n**Budget position:** Allocated ₹6,600,000; billed ₹6,642,234. The ward is ₹42,234 over budget, so no new repair spend is proposed (0 repairs, ₹0).\n\n**Ward conditions:** Low-lying index 0.5, 16 flood days and 69 open complaints. 1 road is within its defect liability period (DLP).\n\n**Priority roads** (all: Monitor; planned method: hot mix patch; est. cost ₹0):\n- **RD0195:** 8 open complaints; 2 road-condition accidents (3 in all).\n- **RD0183:** 9 open complaints; 3 of 24 past repairs re-opened.\n- **RD0186:** 5 open complaints; 4 of 10 past repairs re-opened.\n\n**Recommendation:** Reallocate within existing funds rather than add new spend. Keep all three roads under monitoring. Review the re-opened repairs on RD0183 and RD0186. Check whether the DLP road's repairs can be handled by the contractor at no cost to the ward.",
+  "memo": "**Ward R/S: Budget Memo** *(synthetic data)*\n\n**Budget status:** Allocation ₹6,600,000; billed ₹6,642,234. The ward is **₹42,234 over budget**. No repairs are proposed (0 repairs, ₹0 cost).\n\n**Conditions:** Low-lying index 0.5; 16 flood days; 60 open complaints. 1 road is under defect liability period (DLP).\n\n**Priority roads** (all \"Monitor\", ₹0 estimated cost):\n- **RD0195:** Hot mix patch. 8 open complaints; 2 road-condition accidents (3 in all).\n- **RD0183:** Dewatering pump deployed. 6 open complaints; 3 of 24 past repairs re-opened.\n- **RD0186:** Hot mix patch. 5 open complaints; 4 of 10 past repairs re-opened.\n\n**Recommendation:** Reallocate existing resources and approve no new spend while the ward remains over budget. For the road under DLP, request contractor rectification at no cost to the ward. Review the re-opened repairs on RD0183 and RD0186 to understand the repeat work.",
   "source": "claude",
   "facts": {
    "ward_code": "R/S",
@@ -594,7 +594,7 @@
    "remaining_budget_inr": -42234.0,
    "low_lying_index": 0.5,
    "flood_days": 16,
-   "open_complaints": 69,
+   "open_complaints": 60,
    "n_repairs": 0,
    "repair_cost_inr": 0.0,
    "n_dlp_roads": 1,
@@ -609,9 +609,9 @@
     {
      "road_id": "RD0183",
      "action": "Monitor",
-     "method": "Hot mix patch",
+     "method": "Dewatering pump deployed",
      "est_cost_inr": 0.0,
-     "reason": "Ward already ₹42,234 over budget: reallocate, no new spend. 9 open complaints; 3 of 24 past repairs re-opened"
+     "reason": "Ward already ₹42,234 over budget: reallocate, no new spend. 6 open complaints; 3 of 24 past repairs re-opened"
     },
     {
      "road_id": "RD0186",
@@ -624,7 +624,7 @@
   }
  },
  "R/C": {
-  "memo": "**Ward R/C: Budget Memo** *(synthetic data)*\n\n**Budget position**\n- Allocated: ₹29,00,000\n- Billed: ₹33,12,447\n- Balance: –₹4,12,447 (over budget)\n\n**Ward conditions**\n- Low-lying index: 0.4; flood days: 16\n- Open complaints: 56\n- Roads under defect liability period (DLP): 4\n- New repairs proposed: 0 (cost ₹0)\n\n**Priority roads: all set to Monitor, no new spend**\n1. **RD0204** (excavation, pipeline repair, PQC patch): 13 open complaints; 1 of 8 past repairs re-opened.\n2. **RD0208** (hot mix patch): 5 open complaints; 3 road-condition accidents (4 in all).\n3. **RD0203** (hot mix patch): ambulance route to Bhagwati Hospital Borivali; 1 road-condition accident (1 in all).\n\n**Recommendation**\nThe ward is ₹4.12 L over budget, so existing funds should be reallocated rather than new spending added. We also suggest checking whether the 4 DLP roads can be repaired by the original contractors under their liability terms.",
+  "memo": "**Ward R/C: Budget Memo** *(synthetic data)*\n\n**Budget position:** Allocation ₹29,00,000; billed ₹33,12,447. The ward is **₹4,12,447 over budget**. No new repairs are proposed (0 repairs, ₹0 cost).\n\n**Ward context:** Low-lying index 0.4; 16 flood days; 53 open complaints. 4 roads are under the defect liability period (DLP).\n\n**Priority roads** (all \"Monitor\", ₹0 new spend, reallocate existing funds):\n- **RD0204**: Excavation, pipeline repair, PQC patch. 13 open complaints; 1 of 8 past repairs re-opened.\n- **RD0208**: Hot mix patch. 5 open complaints; 3 road-condition accidents (4 in all).\n- **RD0203**: Hot mix patch. Ambulance route to Bhagwati Hospital Borivali; 1 road-condition accident (1 in all).\n\n**Recommendation:** Hold new spending and reallocate within existing funds. Check whether any of the 4 DLP roads can be repaired under existing contractor obligations.",
   "source": "claude",
   "facts": {
    "ward_code": "R/C",
@@ -633,7 +633,7 @@
    "remaining_budget_inr": -412447.0,
    "low_lying_index": 0.4,
    "flood_days": 16,
-   "open_complaints": 56,
+   "open_complaints": 53,
    "n_repairs": 0,
    "repair_cost_inr": 0.0,
    "n_dlp_roads": 4,
@@ -702,7 +702,7 @@
   }
  },
  "L": {
-  "memo": "**Ward L: Road Budget Memo** *(synthetic data)*\n\n**Budget position:** The ward budget is ₹1,19,00,000 and billed spend is ₹1,30,43,418. The ward is **₹11,43,418 over budget**. No new repairs are proposed (0 repairs, ₹0 cost).\n\n**Context:** The low-lying index is 0.85, with 16 flood days and 146 open complaints. 2 roads are under the defect liability period (DLP).\n\n**Priority roads:**\n1. **RD0220: Invoke DLP.** The original contractor will do the excavation, pipeline repair and PQC patch at ₹0 to BMC. 6 of 35 past repairs re-opened. 22 open complaints.\n2. **RD0216: Monitor** (hot mix patch). This is the ambulance route to KB Bhabha Hospital, Kurla. 5 of 35 past repairs re-opened.\n3. **RD0219: Monitor** (hot mix patch). 3 of 22 past repairs re-opened. 20 open complaints.\n\n**Recommendation:** Issue the DLP notice for RD0220. Reallocate existing funds rather than add new spend, and give RD0216 priority because it is an ambulance route.",
+  "memo": "**Ward L Budget Memo** *(synthetic data)*\n\n**Budget position:** Budget ₹1,19,00,000; billed ₹1,30,43,418; remaining −₹11,43,418. The ward is over budget, so no new spend is proposed. Planned repairs: 0, at a cost of ₹0.\n\n**Risk context:** Low-lying index 0.85, 16 flood days, 141 open complaints. 2 roads are under the defect liability period (DLP).\n\n**Priority roads:**\n- **RD0220: Invoke DLP.** The original contractor carries out excavation, pipeline repair and PQC patch at ₹0 to BMC. 6 of 35 past repairs re-opened; 19 open complaints.\n- **RD0216: Monitor.** Hot mix patch, estimated ₹0; reallocate, no new spend. This is an ambulance route to KB Bhabha Hospital Kurla. 5 of 35 past repairs re-opened.\n- **RD0219: Monitor.** Hot mix patch, estimated ₹0; reallocate, no new spend. 3 of 22 past repairs re-opened; 19 open complaints.\n\n**Recommendation:** Use DLP and reallocate within existing funds. Track RD0216 closely because it is an ambulance route.",
   "source": "claude",
   "facts": {
    "ward_code": "L",
@@ -711,7 +711,7 @@
    "remaining_budget_inr": -1143418.0,
    "low_lying_index": 0.85,
    "flood_days": 16,
-   "open_complaints": 146,
+   "open_complaints": 141,
    "n_repairs": 0,
    "repair_cost_inr": 0.0,
    "n_dlp_roads": 2,
@@ -721,7 +721,7 @@
      "action": "Invoke DLP",
      "method": "Excavation, pipeline repair, PQC patch",
      "est_cost_inr": 0.0,
-     "reason": "Under defect liability: original contractor repairs free, ₹0 to BMC. 6 of 35 past repairs re-opened; 22 open complaints"
+     "reason": "Under defect liability: original contractor repairs free, ₹0 to BMC. 6 of 35 past repairs re-opened; 19 open complaints"
     },
     {
      "road_id": "RD0216",
@@ -735,13 +735,13 @@
      "action": "Monitor",
      "method": "Hot mix patch",
      "est_cost_inr": 0.0,
-     "reason": "Ward already ₹11.43 L over budget: reallocate, no new spend. 3 of 22 past repairs re-opened; 20 open complaints"
+     "reason": "Ward already ₹11.43 L over budget: reallocate, no new spend. 3 of 22 past repairs re-opened; 19 open complaints"
     }
    ]
   }
  },
  "M/E": {
-  "memo": "**Ward M/E: Road Budget Memo** *(synthetic data)*\n\n**Budget position:** Of ₹91,00,000 allocated, ₹72,35,685 has been billed, leaving ₹18,64,315.\n\n**Ward conditions:** Low-lying index 0.75. 15 flood days. 78 open complaints.\n\n**Plan:** 8 repairs at an estimated ₹6,28,760, within the remaining budget. 2 roads are under the defect liability period (DLP) and will be repaired by the original contractor at no cost to BMC.\n\n**Priority roads:**\n- **RD0231:** Repair (hot mix patch), ₹47,190. 5 road-condition accidents (6 in all). Ambulance route to Shatabdi Hospital Govandi.\n- **RD0237:** Repair (hot mix patch), ₹47,190. 2 road-condition accidents (6 in all). 24 open complaints.\n- **RD0235:** Invoke DLP (hot mix patch), ₹0. 5 road-condition accidents (10 in all). 7 open complaints.\n\n**Note:** Hot mix patches have a 23% re-open rate. A follow-up inspection after the work is recommended.",
+  "memo": "**Ward M/E: Road Budget Memo** *(synthetic data)*\n\n**Budget position**\n- Allocated: ₹91,00,000\n- Billed: ₹72,35,685\n- Remaining: ₹18,64,315\n\n**Ward conditions**\n- Low-lying index: 0.75\n- Flood days: 15\n- Open complaints: 73\n\n**Proposed plan**\n- 8 repairs, costing ₹4,98,760 in total, which fits within the remaining budget.\n- 2 roads are under defect liability (DLP).\n\n**Priority roads**\n1. **RD0231**: Repair (hot mix patch), ₹47,190. 5 road-condition accidents (6 in all). Ambulance route to Shatabdi Hospital, Govandi.\n2. **RD0237**: Repair (hot mix patch), ₹47,190. 2 road-condition accidents (6 in all). 20 open complaints.\n3. **RD0235**: Invoke DLP. The original contractor repairs it free, at ₹0 to BMC. 5 road-condition accidents (10 in all). 7 open complaints.\n\n**Note:** Hot mix patch has a 23% re-open rate, so follow-up inspection of patched roads is advised.\n\n**Recommendation:** Approve the 8 repairs and issue DLP notices for the 2 eligible roads.",
   "source": "claude",
   "facts": {
    "ward_code": "M/E",
@@ -750,9 +750,9 @@
    "remaining_budget_inr": 1864315.0,
    "low_lying_index": 0.75,
    "flood_days": 15,
-   "open_complaints": 78,
+   "open_complaints": 73,
    "n_repairs": 8,
-   "repair_cost_inr": 628760.0,
+   "repair_cost_inr": 498760.0,
    "n_dlp_roads": 2,
    "top_roads": [
     {
@@ -767,7 +767,7 @@
      "action": "Repair",
      "method": "Hot mix patch",
      "est_cost_inr": 47190.0,
-     "reason": "2 road-condition accidents (6 in all); 24 open complaints. Hot mix patch: 23% re-open rate"
+     "reason": "2 road-condition accidents (6 in all); 20 open complaints. Hot mix patch: 23% re-open rate"
     },
     {
      "road_id": "RD0235",
@@ -780,7 +780,7 @@
   }
  },
  "M/W": {
-  "memo": "**Ward M/W Budget Memo** *(synthetic data)*\n\n**Budget position:** Budget ₹44,00,000; billed ₹46,89,823; remaining ₹-2,89,823 (over budget). No new repairs are proposed (0 repairs, ₹0 cost).\n\n**Ward conditions:** Low-lying index 0.6; 16 flood days; 45 open complaints; 3 roads under defect liability period (DLP).\n\n**Priority roads:**\n- **RD0243: Invoke DLP.** Dewatering pump deployed. The original contractor repairs at ₹0 cost to BMC. 3 open complaints; 4 of 16 past repairs re-opened.\n- **RD0244: Monitor.** Dewatering pump deployed. No new spend; reallocate existing funds. 8 open complaints; 5 of 17 past repairs re-opened.\n- **RD0248: Monitor.** Hot mix patch. No new spend; reallocate existing funds. 5 open complaints; 2 road-condition accidents (4 in all).\n\n**Recommendation:** Hold new spending. Use DLP claims where available, reallocate within existing funds, and track repeat repairs closely.",
+  "memo": "**Ward M/W: Road Budget Memo** *(synthetic data)*\n\n**Budget position:** Budget ₹4,400,000; billed ₹4,689,823; remaining budget −₹289,823. The ward is over budget, so no new repair spend is proposed (0 repairs, ₹0).\n\n**Context:** Low-lying index 0.6; 16 flood days; 42 open complaints. 3 roads are under defect liability (DLP).\n\n**Priority roads:**\n- **RD0243:** Invoke DLP; dewatering pump deployed; ₹0 cost. The original contractor repairs free, at ₹0 to BMC. 3 open complaints; 4 of 16 past repairs re-opened.\n- **RD0244:** Monitor; dewatering pump deployed; ₹0 cost. 7 open complaints; 5 of 17 past repairs re-opened.\n- **RD0248:** Monitor; hot mix patch; ₹0 cost. 5 open complaints; 2 road-condition accidents (4 in all).\n\n**Recommendation:** Reallocate within existing funds rather than add new spend. Pursue the DLP claim on RD0243. Track complaints and re-opened repairs on RD0244 and RD0248.",
   "source": "claude",
   "facts": {
    "ward_code": "M/W",
@@ -789,7 +789,7 @@
    "remaining_budget_inr": -289823.0,
    "low_lying_index": 0.6,
    "flood_days": 16,
-   "open_complaints": 45,
+   "open_complaints": 42,
    "n_repairs": 0,
    "repair_cost_inr": 0.0,
    "n_dlp_roads": 3,
@@ -806,7 +806,7 @@
      "action": "Monitor",
      "method": "Dewatering pump deployed",
      "est_cost_inr": 0.0,
-     "reason": "Ward already ₹2.90 L over budget: reallocate, no new spend. 8 open complaints; 5 of 17 past repairs re-opened"
+     "reason": "Ward already ₹2.90 L over budget: reallocate, no new spend. 7 open complaints; 5 of 17 past repairs re-opened"
     },
     {
      "road_id": "RD0248",
@@ -819,7 +819,7 @@
   }
  },
  "N": {
-  "memo": "**Ward N: Road Budget Memo** *(synthetic data)*\n\n**Budget status:** Of the INR 6,200,000 budget, INR 5,999,557 has been billed, leaving INR 200,443.\n\n**Ward conditions:** Low-lying index is 0.55, with 16 flood days and 72 open complaints.\n\n**Plan:** 2 repairs are proposed at a combined cost of INR 195,730, within the remaining budget. 2 roads are flagged as DLP roads.\n\n**Priority roads:**\n- **RD0251 (Repair):** Dewatering pump, estimated INR 180,000. This is the ambulance route to Rajawadi Hospital and has 8 open complaints. The method has a 16% re-open rate.\n- **RD0252 (Monitor):** Dewatering pump. Not enough budget left this cycle. It has 2 open complaints, and 1 of 17 past repairs re-opened.\n- **RD0254 (Monitor):** Hot mix patch. Not enough budget left this cycle. It has 8 open complaints, and 3 of 11 past repairs re-opened.\n\n**Note:** The second proposed repair is not listed among the top roads. Details are to be confirmed.",
+  "memo": "**Ward N – Budget Memo** *(synthetic data)*\n\n**Budget position:** Of INR 6,200,000 allocated, INR 5,999,557 has been billed. INR 200,443 remains.\n\n**Ward conditions:** The low-lying index is 0.55, with 16 flood days and 65 open complaints. 2 roads are under defect liability period (DLP).\n\n**Planned spend:** 2 repairs totalling INR 195,730, within the remaining budget.\n\n**Priority roads:**\n- **RD0251 – Repair** (dewatering pump), est. INR 180,000. This is the ambulance route to Rajawadi Hospital and has 7 open complaints. The method has a 16% re-open rate.\n- **RD0252 – Monitor** (dewatering pump). It has 2 open complaints, and 1 of 17 past repairs re-opened. Deferred because the budget is insufficient this cycle.\n- **RD0260 – Monitor** (hot mix patch). It has 6 open complaints, and 3 of 7 past repairs re-opened. Deferred because the budget is insufficient this cycle.\n\n**Recommendation:**\n- Approve the RD0251 repair.\n- Review the repair method for RD0260 given its re-open history.\n- Carry RD0252 and RD0260 forward to the next cycle.",
   "source": "claude",
   "facts": {
    "ward_code": "N",
@@ -828,7 +828,7 @@
    "remaining_budget_inr": 200443.0,
    "low_lying_index": 0.55,
    "flood_days": 16,
-   "open_complaints": 72,
+   "open_complaints": 65,
    "n_repairs": 2,
    "repair_cost_inr": 195730.0,
    "n_dlp_roads": 2,
@@ -838,7 +838,7 @@
      "action": "Repair",
      "method": "Dewatering pump deployed",
      "est_cost_inr": 180000.0,
-     "reason": "Ambulance route to Rajawadi Hospital; 8 open complaints. Dewatering pump deployed: 16% re-open rate"
+     "reason": "Ambulance route to Rajawadi Hospital; 7 open complaints. Dewatering pump deployed: 16% re-open rate"
     },
     {
      "road_id": "RD0252",
@@ -848,17 +848,17 @@
      "reason": "Not enough budget left this cycle. 2 open complaints; 1 of 17 past repairs re-opened"
     },
     {
-     "road_id": "RD0254",
+     "road_id": "RD0260",
      "action": "Monitor",
      "method": "Hot mix patch",
      "est_cost_inr": 0.0,
-     "reason": "Not enough budget left this cycle. 8 open complaints; 3 of 11 past repairs re-opened"
+     "reason": "Not enough budget left this cycle. 6 open complaints; 3 of 7 past repairs re-opened"
     }
    ]
   }
  },
  "S": {
-  "memo": "**Ward S: Road Repair Budget Memo**\n\n**Budget position**\n- Budget: ₹9,500,000\n- Billed to date: ₹7,489,270\n- Remaining: ₹2,010,730\n\n**Ward conditions**\nLow-lying index is 0.55, with 17 flood days and 73 open complaints.\n\n**Proposed works**\n11 repairs at an estimated ₹658,870, which fits within the remaining budget. 2 roads fall under the defect liability period (DLP) and should be checked for contractor-covered repair.\n\n**Priority roads**\n1. **RD0273**: Hot mix patch, ₹15,730. Ambulance route to Bhandup Maternity Home, with 2 open complaints. This method has a 23% re-open rate.\n2. **RD0268**: Dewatering pump, ₹180,000. 14 open complaints, and 3 of 13 past repairs re-opened. This method has a 16% re-open rate.\n3. **RD0274**: Hot mix patch, ₹31,460. 6 open complaints, 3,732 vehicles per peak hour and 25 bus routes. This method has a 23% re-open rate.\n\n**Recommendation**\nApprove the priority works and track re-opening on hot mix patch sites.",
+  "memo": "**Ward S: Road Budget Memo** *(synthetic data)*\n\n**Budget position:** ₹2,010,730 remains of the ₹9,500,000 allocation. ₹7,489,270 has been billed to date.\n\n**Ward conditions:** The low-lying index is 0.55, with 17 flood days recorded and 71 complaints open.\n\n**Proposed works:** 11 repairs are estimated at ₹526,060, within the remaining budget. 2 roads are within their Defect Liability Period, so their repairs may be claimable from the original contractors.\n\n**Priority roads:**\n1. **RD0273:** Hot mix patch, ₹15,730. This is the ambulance route to Bhandup Maternity Home, with 2 open complaints. The method's re-open rate is 23%.\n2. **RD0268:** Dewatering pump, ₹180,000. It has 14 open complaints, and 3 of 13 past repairs re-opened. The method's re-open rate is 16%.\n3. **RD0274:** Hot mix patch, ₹31,460. It has 6 open complaints and carries 3,732 vehicles per peak hour on 25 bus routes. The method's re-open rate is 23%.\n\n**Recommendation:** Approve the 11 repairs, starting with the three roads above. Verify contractor liability on the 2 roads in their Defect Liability Period.",
   "source": "claude",
   "facts": {
    "ward_code": "S",
@@ -867,9 +867,9 @@
    "remaining_budget_inr": 2010730.0,
    "low_lying_index": 0.55,
    "flood_days": 17,
-   "open_complaints": 73,
+   "open_complaints": 71,
    "n_repairs": 11,
-   "repair_cost_inr": 658870.0,
+   "repair_cost_inr": 526060.0,
    "n_dlp_roads": 2,
    "top_roads": [
     {
@@ -897,7 +897,7 @@
   }
  },
  "T": {
-  "memo": "**Ward T Budget Memo**\n\n**Budget position**\n- Budget: ₹5,100,000\n- Billed: ₹3,953,564\n- Remaining: ₹1,146,436\n\n**Ward conditions**\n- Low-lying index: 0.45\n- Flood days: 17\n- Open complaints: 46\n\n**Proposed works**\n- 9 repairs costing ₹472,340, within the remaining budget.\n- 2 roads under defect liability (DLP), repaired by the original contractor at no cost to BMC.\n\n**Priority roads**\n1. **RD0291: Repair (dewatering pump), ₹180,000.** Ambulance route to MT Agarwal Hospital Mulund. 12 open complaints. Method re-open rate: 16%.\n2. **RD0283: Repair (hot mix patch), ₹47,190.** 8 open complaints, 9,410 vehicles per peak hour and 27 bus routes. Method re-open rate: 23%.\n3. **RD0280: Invoke DLP (hot mix patch), ₹0.** 10 open complaints, 3,627 vehicles per peak hour and 25 bus routes.\n\n**Recommendation**\nApprove the repairs and notify DLP contractors. Monitor RD0283 because of its higher re-open rate.",
+  "memo": "**Ward T: Road Repair Budget Memo** *(synthetic data)*\n\n**Budget position:** The ward budget is ₹5,100,000. Of this, ₹3,953,564 has been billed, leaving ₹1,146,436.\n\n**Conditions:** Low-lying index 0.45, 17 flood days and 45 open complaints.\n\n**Proposed plan:** 9 repairs costing ₹472,340, which fits within the remaining budget. 2 roads fall under the defect liability period (DLP), so the original contractor will repair them at no cost to BMC.\n\n**Priority roads:**\n1. **RD0291:** Repair by dewatering pump, ₹180,000. This is the ambulance route to MT Agarwal Hospital Mulund and has 12 open complaints. The method has a 16% re-open rate.\n2. **RD0283:** Repair by hot mix patch, ₹47,190. It has 6 open complaints, 9,410 vehicles per peak hour and 27 bus routes. The method has a 23% re-open rate.\n3. **RD0280:** Invoke DLP (hot mix patch), ₹0 to BMC. It has 10 open complaints, 3,627 vehicles per peak hour and 25 bus routes.\n\n**Recommendation:** Approve the 9 repairs, issue DLP notices for the 2 eligible roads, and monitor RD0283 given its re-open rate.",
   "source": "claude",
   "facts": {
    "ward_code": "T",
@@ -906,7 +906,7 @@
    "remaining_budget_inr": 1146436.0,
    "low_lying_index": 0.45,
    "flood_days": 17,
-   "open_complaints": 46,
+   "open_complaints": 45,
    "n_repairs": 9,
    "repair_cost_inr": 472340.0,
    "n_dlp_roads": 2,
@@ -923,7 +923,7 @@
      "action": "Repair",
      "method": "Hot mix patch",
      "est_cost_inr": 47190.0,
-     "reason": "8 open complaints; 9,410 vehicles/peak hour, 27 bus routes. Hot mix patch: 23% re-open rate"
+     "reason": "6 open complaints; 9,410 vehicles/peak hour, 27 bus routes. Hot mix patch: 23% re-open rate"
     },
     {
      "road_id": "RD0280",
