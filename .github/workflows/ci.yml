@@ -100,3 +100,29 @@ jobs:
             .claude/hillclimb/_selfcheck/*/summary.json
             .claude/hillclimb/risk_backtest/app.json
           retention-days: 14
+
+  claude-smoke:
+    # Real Claude calls through the app's own code (3 short calls, about 2 US cents).
+    # Only on pushes to main and manual runs (never on PRs or Dependabot, which get no
+    # secrets anyway), only after the free checks pass. Non-blocking: if the key or the
+    # credit fails, this job shows red but CI and the data release still go through.
+    name: Real Claude calls (smoke)
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    needs: [test, eval-gates]
+    runs-on: ubuntu-latest
+    environment: paid-evals           # sees repo secrets and paid-evals environment secrets
+    continue-on-error: true
+    timeout-minutes: 10
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      LLM_OFFLINE: "0"                # this job is the one place CI talks to Claude
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - name: Three live calls (M1 non-road, M1 Claude-only read, M2 scorecard text)
+        run: python -m evals.claude_smoke

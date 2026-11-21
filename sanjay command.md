@@ -151,7 +151,10 @@ python -m ruff check --select E9,F63,F7,F82 .   # lint (pip install ruff once)
 python -m pipeline.db --check                  # database matches outputs
 python -m pytest -q                            # tests (~1.5 min)
 python -m evals.ci_check                       # free eval gates (~35 s): harness, M1/M2 with Claude off, M3 backtest
+python -m evals.claude_smoke                   # 3 REAL Claude calls (~2 cents): is the key working and does the app read the answers?
 ```
+
+On GitHub, the same smoke test runs as the CI job "Real Claude calls (smoke)" on every push to `main`, using the `ANTHROPIC_API_KEY` repo secret. It's non-blocking: a credit or key problem shows red there without failing CI.
 
 CI runs these on every push and PR (Actions tab). The paid evals and a pipeline re-run can also be started from the Actions tab (see `docs/CI_CD.md`).
 

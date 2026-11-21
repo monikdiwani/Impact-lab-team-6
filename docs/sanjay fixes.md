@@ -322,3 +322,18 @@ The earlier 166-case runs are archived with the suffix `-166-cases-before-review
 Until then, paid evals will record each call as a `serving_error` instead of scoring it.
 
 **Tests:** 150 → **157**, all passing; all 17 eval gates pass.
+
+## 14. Real Claude calls in CI
+
+The `ANTHROPIC_API_KEY` repo secret is now used by a new CI job, **"Real Claude calls (smoke)"**, alongside the two manual paid workflows.
+
+| | |
+|---|---|
+| Runs | `python -m evals.claude_smoke`: 3 live calls through the app's own code, with no cache (`LLM_CACHE_READ=0`, scratch cache) |
+| Checks | (1) M1 sends "Street light not working near building" to Claude and gets back "Not road-related"; (2) M1 with the rules bypassed reads a pothole photo and text and gets back "Pothole"; (3) M2's contractor text passes the eval's checks (numbers grounded, IDs valid, word limit, no accusation), and it reports whether Claude's text or the template was used |
+| When | Pushes to `main` and manual runs, after the tests and eval gates pass. Never on PRs or Dependabot, which get no secrets |
+| Cost | 3 short calls, about 2 US cents per push to `main` |
+| If it fails | **Non-blocking** (`continue-on-error`): the job shows red with the API's reason in the summary table, but CI stays green and the data release still publishes |
+| Tests | `tests/test_claude_smoke.py` checks the script with a fake client: a success, an out-of-credit error, and a wrong answer |
+
+**Local run on 21 Nov:** all 3 calls failed with *"Your credit balance is too low"*, so the key in `.env` belongs to an account with no credit. The first CI run will show whether the GitHub secret works.

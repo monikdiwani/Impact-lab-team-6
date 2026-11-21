@@ -47,7 +47,7 @@ The team plan (stack, module ownership, output schemas, audit rules with expecte
 
 ## CI / CD
 
-- `.github/workflows/`: **CI** (`ci.yml`) runs lint, a DB freshness check, `pytest` on Python 3.12 and 3.14, and `python -m evals.ci_check` (the free eval gates) on every push and PR to main/dev. It never calls Claude. **CD:** `cd-data-release.yml` publishes the `data-latest` release after CI passes on main. `regenerate-outputs.yml` (manual) re-runs the pipeline and opens a PR. `paid-evals.yml` (manual) runs paid evals with the `ANTHROPIC_API_KEY` secret. Setup and branch protection are in [docs/CI_CD.md](docs/CI_CD.md).
+- `.github/workflows/`: **CI** (`ci.yml`) runs lint, a DB freshness check, `pytest` on Python 3.12 and 3.14, and `python -m evals.ci_check` (the free eval gates) on every push and PR to main/dev. It never calls Claude. **CD:** `cd-data-release.yml` publishes the `data-latest` release after CI passes on main. `regenerate-outputs.yml` (manual) re-runs the pipeline and opens a PR. `paid-evals.yml` (manual) runs paid evals with the `ANTHROPIC_API_KEY` secret. The `claude-smoke` job in `ci.yml` makes 3 real Claude calls (`python -m evals.claude_smoke`) on pushes to main only; it's non-blocking (`continue-on-error`). Setup and branch protection are in [docs/CI_CD.md](docs/CI_CD.md).
 - Before pushing, run the same checks locally: `python -m ruff check --select E9,F63,F7,F82 .`, `python -m pipeline.db --check`, `python -m pytest -q`, `python -m evals.ci_check`. Code must stay Python 3.12-compatible.
 - New dependencies go in `requirements.txt` (CI installs only that). M1's de-dup needs `scikit-learn` and `scipy`; without them it silently falls back to weaker rules.
 
