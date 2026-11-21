@@ -85,6 +85,27 @@ These were measured on the linked complaints, where the truth is the category of
 ## 6. Not done yet / your steps
 
 1. **Paid evals.** `--approve-harness` is your step. The cases and runner changed, so review [evals/cases/REVIEW.md](../evals/cases/REVIEW.md), then run the pilot, the full `app` run and the `claude` ablation (commands in [sanjay command.md](../sanjay%20command.md)). Your `.env` key is picked up automatically.
-2. **Committed outputs are stale.** `outputs/complaints_clean.parquet`, `open_issues.parquet` and `wo_trail.parquet` were built by the old extraction code. M3's committed outputs were built from its own stand-in for open issues (`open_issues_source: M3-fallback` in `risk_report.json`), not from M1's. Regenerating them means one M1 run with Claude (about 151 calls, under $1) and one M3 run.
+2. **Committed outputs: regenerated (done, see section 7).**
 3. **Independent review in progress.** A multi-agent review of these changes, with every finding checked by a separate skeptic, was still running at commit time. Confirmed findings will be fixed and added here in a follow-up commit.
-4. **Teammates' notes:** `docs/ganesh m1 result.md` still has the old numbers. `outputs/llm_cache/` has 3 entries from the old pilot that the new prompt will never hit; they aren't committed.
+4. **Teammates' notes:** `docs/ganesh m1 result.md` still has the old numbers.
+
+## 7. Regenerated outputs (Claude on)
+
+All of `outputs/` was rebuilt from the current code, with Claude enabled, in this order: M1 (`pipeline.connect.run`), M3 (`pipeline.risk.run`), M2 (`pipeline.audit.run`). The CSV copies in `outputs/csv/` were rewritten from the new parquet files. All 9 contract files pass `contracts.schemas.validate`.
+
+| Output | Before (committed) | After |
+|---|---|---|
+| Extraction sources (6,501 complaints) | rules 6,501 (no key) | text 2,862 · photo 2,838 · citizen 650 · **Claude 151** (0 fallbacks, so every call succeeded) |
+| Complaints whose category differs from the citizen's pick | 0 | 1,055 |
+| De-dup precision / recall / F1 | 0.713 / 0.684 / 0.698 | 0.732 / 0.782 / 0.756 |
+| Open issues (M1) | 687 | 658 |
+| M3 open-issue source | `M3-fallback` (455, its own stand-in) | **`M1`** (658) |
+| M3 plan | 124 repairs, ₹82.5 L | 119 repairs, ₹85.7 L (61 "Invoke DLP" unchanged) |
+| M3 ward memos | 24 templates | 24 Claude-written |
+| M2 audit flags | 114 / 45 / 493 / 1259 / 611 | **identical** (M2 doesn't depend on M1) |
+| M2 contractor and ward summaries | 32 templates | 30 Claude-written, 2 templates |
+
+- **Why 2 M2 summaries are templates:** Claude's text ran over the 120 or 150-word limit, so M2's own guard kept its template. That's working as designed.
+- **Number formatting:** Claude writes amounts like "Rs 17209448", without Indian digit grouping. M2's prompt could ask for ₹ with commas.
+- **Cache:** `outputs/llm_cache/` now holds 206 cached answers (151 M1, 32 M2, 24 M3, one prompt shared), so the demo runs with no network. The 3 stale entries from the pre-fix pilot were set aside, not committed.
+- **Cost:** about 207 Claude calls in total.

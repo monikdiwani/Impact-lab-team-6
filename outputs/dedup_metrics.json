@@ -1,11 +1,14 @@
 {
-  "precision": 0.7131,
-  "recall": 0.6843,
-  "f1": 0.6984,
+  "precision": 0.7317,
+  "recall": 0.7818,
+  "f1": 0.7559,
   "n_truth_pairs": 3868,
-  "n_pred_pairs": 3712,
+  "n_pred_pairs": 4133,
   "extraction_source_counts": {
-    "rules": 6501
+    "text": 2862,
+    "photo": 2838,
+    "citizen": 650,
+    "claude": 151
   },
   "ward_source_counts": {
     "given": 6044,
