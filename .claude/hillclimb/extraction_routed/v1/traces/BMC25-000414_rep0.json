@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000414\",\n \"received_at\": \"2025-06-16 22:19\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Road related\",\n \"description\": \"Borivali East में पानी भर गया है, एम्बुलेंस नहीं निकल पा रही.\",\n \"locality_text\": \"Borivali East\",\n \"ward_code\": \"R/C\",\n \"lat\": 19.236042,\n \"lon\": 72.857821,\n \"photo_description\": null,\n \"upvotes\": 14\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"R/C\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Complaint at Borivali East (text in hi, not translated); classified as Pothole from no reliable evidence (most common category; needs a field check).\",\n \"extraction_source\": \"no_evidence\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-006050\",\n \"received_at\": \"2025-09-19 08:16\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Road related\",\n \"description\": \"ghatkopar mankhurd link road पर मैनहोल खुला है, बहुत खतरनाक है.\",\n \"locality_text\": \"Trombay\",\n \"ward_code\": null,\n \"lat\": 19.05932,\n \"lon\": 72.925643,\n \"photo_description\": null,\n \"upvotes\": 12\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"M/E\",\n \"ward_source\": \"gps\",\n \"language\": \"hi\",\n \"english_summary\": \"An open manhole on Ghatkopar Mankhurd Link Road is posing a serious danger.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

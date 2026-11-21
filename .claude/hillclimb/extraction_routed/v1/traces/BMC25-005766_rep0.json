@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005766\",\n \"received_at\": \"2025-09-12 20:21\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"mr\",\n \"category_reported\": \"Road related\",\n \"description\": \"Kurla West मध्ये पाणी साचले आहे, गाड्या अडकल्या आहेत. पंप पाठवा.\",\n \"locality_text\": \"Kurla West\",\n \"ward_code\": \"L\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Complaint at Kurla West (text in mr, not translated); classified as Pothole from no reliable evidence (most common category; needs a field check).\",\n \"extraction_source\": \"no_evidence\"\n}"
+ }
+]

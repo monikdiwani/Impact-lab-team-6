@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004426\",\n \"received_at\": \"2025-08-17 20:51\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Other\",\n \"description\": \"मार्केट जवळ रस्त्यावर मोठा खड्डा आहे, Vile Parle West. लवकर दुरुस्त करा.\",\n \"locality_text\": \"Vile Parle West\",\n \"ward_code\": \"K/W\",\n \"lat\": 19.119753,\n \"lon\": 72.843626,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Citizen reports a large pothole on the road near the market in Vile Parle West and asks for quick repair.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

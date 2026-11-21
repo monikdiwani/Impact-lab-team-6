@@ -77,9 +77,9 @@ SELECT complaint_id, channel, language, description FROM complaints WHERE issue_
 | `tides` | 244 | date, high_tide_time | data/tides.csv | Two high tides per day; big_tide_flag Y if >= 4.5 m. |
 | `social_posts` | 650 | post_id | data/social_posts.csv | X / WhatsApp / Instagram posts in mixed languages (not cleaned). |
 | `geo_layers` | 2 | name | data/wards.geojson, data/roads.geojson | GeoJSON for the ward polygons and road segments, for maps. |
-| `issues` | 3,204 | issue_id | outputs/complaints_clean.parquet | Every issue (duplicate cluster) from M1: complaints that describe the same problem. work_order_id is the job that fixed it (if any); road_id comes from M1's open-issue matching or that job. |
+| `issues` | 3,195 | issue_id | outputs/complaints_clean.parquet | Every issue (duplicate cluster) from M1: complaints that describe the same problem. work_order_id is the job that fixed it (if any); road_id comes from M1's open-issue matching or that job. |
 | `complaints` | 6,501 | complaint_id | data/complaints.csv + outputs/complaints_clean.parquet | All 6,501 complaints: raw fields (description, photo, citizen's category and ward) plus M1's cleaned fields (category_clean, severity_1_5, english_summary, recovered ward_code, issue_id). |
-| `open_issues` | 617 | issue_id | outputs/open_issues.parquet | M1: open / in-progress issues matched to a road; demand for M3's planner. |
+| `open_issues` | 614 | issue_id | outputs/open_issues.parquet | M1: open / in-progress issues matched to a road; demand for M3's planner. |
 | `wo_trail` | 2,499 | work_order_id | outputs/wo_trail.parquet | M1: per work order - complaints linked, first complaint, channels, hours to complete. |
 | `audit_flags` | 2,522 | flag_id | outputs/audit_flags.parquet | M2: audit flags (OVERBILL, DOUBLE_BILL, DLP_PAID, SLA_MISS, REPEAT_REPAIR) with evidence and amount at risk. |
 | `contractor_scorecard` | 8 | contractor_id | outputs/contractor_scorecard.parquet | M2: contractor scorecard (SLA, durability, billing, grade, summary). |

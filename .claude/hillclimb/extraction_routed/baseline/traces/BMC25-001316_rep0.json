@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001316\",\n \"received_at\": \"2025-07-01 13:38\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Road related\",\n \"description\": \"Pandita Ramabai Road पर मैनहोल खुला है, बहुत खतरनाक है.\",\n \"locality_text\": \"Nana Chowk\",\n \"ward_code\": \"D\",\n \"lat\": 18.960274,\n \"lon\": 72.813478,\n \"photo_description\": null,\n \"upvotes\": 20\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"D\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"A manhole is open on Pandita Ramabai Road near Nana Chowk and is very dangerous.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

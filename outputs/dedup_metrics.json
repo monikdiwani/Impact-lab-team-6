@@ -1,14 +1,15 @@
 {
-  "precision": 0.7341,
-  "recall": 0.7839,
-  "f1": 0.7582,
+  "precision": 0.732,
+  "recall": 0.7818,
+  "f1": 0.7561,
   "n_truth_pairs": 3868,
-  "n_pred_pairs": 4130,
+  "n_pred_pairs": 4131,
   "extraction_source_counts": {
     "text": 2869,
     "photo": 2838,
     "citizen": 650,
-    "claude": 144
+    "claude": 120,
+    "no_evidence": 24
   },
   "not_road_complaints": 120,
   "ward_source_counts": {

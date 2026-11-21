@@ -197,3 +197,71 @@ def test_full_run_order_and_single_build(monkeypatch, tmp_path):
     calls.clear()
     assert run_all.main(["--no-llm", "--only", "m2,m1"]) == 0
     assert calls == ["m1", "m2", "db"]          # always dependency order, whatever was typed
+
+
+
+# ---- the web app's data comes from the database --------------------------------------------
+
+def _export_module():
+    import importlib.util
+    from pipeline.db import ROOT
+    spec = importlib.util.spec_from_file_location("app_export_data", ROOT / "app" / "export_data.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_app_export_reads_only_the_database(built, tmp_path, monkeypatch):
+    """With parquet/CSV reads disabled, the export still works: it reads the DB alone."""
+    exp = _export_module()
+
+    def no_files(*a, **k):
+        raise AssertionError("the app export must read the database, not files")
+    monkeypatch.setattr(pd, "read_parquet", no_files)
+    monkeypatch.setattr(pd, "read_csv", no_files)
+    dest = exp.main(built, tmp_path / "app_data")
+    names = {p.name for p in dest.glob("*.json")}
+    assert {"summary.json", "flags.json", "complaints.json", "plan.json", "manifest.json"} <= names
+    import json
+    flags = json.loads((dest / "flags.json").read_text(encoding="utf-8"))
+    assert len(flags) == q(built, "SELECT COUNT(*) n FROM audit_flags").n[0]
+
+
+def test_committed_app_data_matches_the_committed_database():
+    """app/public/data/manifest.json must name the build of outputs/follow_the_rupee.db.
+    It refreshes on every pipeline run; by hand: python app/export_data.py"""
+    import json
+    from pipeline.db import ROOT
+    manifest = ROOT / "app" / "public" / "data" / "manifest.json"
+    if not manifest.exists() or not DEFAULT_DB.exists():
+        pytest.skip("no committed app data / database")
+    exp = _export_module()
+    got = json.loads(manifest.read_text(encoding="utf-8"))["db_build_id"]
+    assert got == exp.Source(DEFAULT_DB).build_id(), \
+        "app data is older than the database; run: python app/export_data.py"
+
+
+def test_app_export_only_follows_the_real_database(tmp_path):
+    from pipeline.db.sync import export_app_data
+    assert export_app_data(tmp_path / "scratch.db") is None      # tests and scratch DBs never touch the app
+
+
+def test_csv_copies_come_from_the_database(built, tmp_path):
+    from pipeline.db.sync import CSV_EXPORTS, export_csv
+    dest = export_csv(built, tmp_path / "csv")
+    for name in CSV_EXPORTS:
+        assert (dest / f"{name}.csv").exists(), name
+    flags = pd.read_csv(dest / "billing_anomalies.csv", encoding="utf-8-sig")
+    assert flags.flag_type.value_counts().to_dict() == {"DLP_PAID": 493, "OVERBILL": 114, "DOUBLE_BILL": 45}
+    assert len(pd.read_csv(dest / "audit_flags.csv", encoding="utf-8-sig")) == \
+        q(built, "SELECT COUNT(*) n FROM audit_flags").n[0]
+
+
+def test_committed_csv_copies_match_the_committed_database():
+    from pipeline.db import ROOT
+    readme = ROOT / "outputs" / "csv" / "README.txt"
+    if not readme.exists() or not DEFAULT_DB.exists():
+        pytest.skip("no committed CSV copies / database")
+    built_at = db.query("SELECT value_json FROM meta WHERE key = 'built_at_utc'").value_json[0].strip('"')
+    assert built_at in readme.read_text(encoding="utf-8"), \
+        "outputs/csv is older than the database; run: python -m pipeline.db"

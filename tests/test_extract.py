@@ -47,7 +47,6 @@ def test_non_english_app_text_defers_to_the_citizen_category():
 @pytest.mark.parametrize("desc,photo,reported,lang,ch", [
     ("Drain overflowing and a deep pothole near the station", None, "Waterlogging", "en", APP),  # 2 categories
     ("Please send someone, very bad condition near station.", None, "Pothole", "en", APP),          # 0 categories
-    ("कृपया लवकर दुरुस्त करा", None, "Other", "mr", APP),                                            # vague + unreliable
     ("Something on the road", "A strange new photo text", "Pothole", "en", APP),                     # unknown photo
 ])
 def test_unclear_cases_go_to_claude(desc, photo, reported, lang, ch):
@@ -57,7 +56,7 @@ def test_unclear_cases_go_to_claude(desc, photo, reported, lang, ch):
 def test_claude_fallback_without_key_is_visible():
     r = X.classify("Drain overflowing and a deep pothole near the station", None, "Pothole", "en", APP)
     assert r["source"] == "claude_fallback" and r["category"] == "Pothole"
-    r = X.classify("कृपया लवकर दुरुस्त करा", None, "Other", "mr", APP)
+    r = X.classify("Something on the road", "A strange new photo text", "Other", "hi-en", APP)
     assert r["source"] == "claude_fallback" and r["category"] == X.DEFAULT_CATEGORY
 
 
@@ -149,9 +148,25 @@ def test_keyword_fixes_from_review():
 
 
 def test_fallback_ignores_keywords_in_unreliable_text():
-    # vague category + Hinglish app text that names a category: that text is near-random here
-    r = X.classify("gutter ka dhakkan khula hai", None, "Other", "hi-en", APP)
-    assert r["source"] == "claude_fallback" and r["category"] == X.DEFAULT_CATEGORY
+    # unknown photo + vague category + Hinglish text that names a category (near-random here)
+    assert X._fallback("gutter ka dhakkan khula hai", "a new photo text", "Other", "hi-en", APP) == \
+        (X.DEFAULT_CATEGORY, "claude_fallback")
+    assert X._fallback("Drain overflowing and a pothole", None, "Other", "en", APP) == \
+        ("Choked drain / nullah overflow", "claude_fallback")      # reliable text: first keyword
+
+
+@pytest.mark.parametrize("text", ["कृपया लवकर दुरुस्त करा", "gutter ka dhakkan khula hai",
+                                  "मैनहोल खुला है, बहुत खतरनाक है"])
+def test_no_evidence_rows_take_the_most_common_category_without_claude(text, monkeypatch):
+    """Unreliable text + vague category + no photo: Claude measured 19% vs 28.6% for the
+    most common category on such linked complaints, so no Claude call is made."""
+    calls = []
+    monkeypatch.setattr(X.llm, "ask", lambda *a, **k: calls.append(a) or None)
+    for lang in ("hi", "hi-en", "mr"):
+        r = X.classify(text, None, "Other", lang, APP, "Dadar")
+        assert (r["category"], r["source"]) == (X.DEFAULT_CATEGORY, "no_evidence")
+        assert "field check" in r["english_summary"]
+    assert calls == []
 
 
 def test_summaries_are_honest_about_their_source():

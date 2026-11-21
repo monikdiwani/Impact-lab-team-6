@@ -1,6 +1,6 @@
 # Eval cases: review before sign-off
 
-Extraction: 150 cases · Extraction routed to Claude: 21 cases · Narrative: 29 cases
+Extraction: 150 cases · No reliable evidence: 21 cases · Narrative: 29 cases
 
 ## Extraction
 
@@ -909,9 +909,9 @@ Huge crater on Ganpatrao Kadam Marg opposite medical store. Cars swerving into o
 Kitni baar complaint karein? Western Express Highway Andheri East pe wahi gadda phir se khul gaya
 ````
 
-## Extraction, routed to Claude (suite `extraction_routed`)
+## Extraction, no reliable evidence (suite `extraction_routed`)
 
-The linked complaints the app sends to Claude. None has reliable evidence (no photo, non-English app text, vague citizen category), so this suite shows whether Claude beats the rules fallback on its real traffic. Kept out of the main suite's headline.
+The linked complaints the evidence can't decide (no photo, non-English app text, vague citizen category). Claude scored 19% here vs 28.6% for the most common category, so the app uses the latter and flags them for a field check. Kept out of the main suite's headline.
 
 | id | tags | category (truth) | citizen picked |
 |---|---|---|---|

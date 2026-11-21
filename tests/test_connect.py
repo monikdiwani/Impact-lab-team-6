@@ -104,6 +104,7 @@ def test_source_mix_is_sane(connect_out):
     src, n = m["extraction_source_counts"], sum(m["extraction_source_counts"].values())
     assert src.get("citizen", 0) / n <= 0.15, src           # a column swap would push this up
     assert src.get("claude_fallback", 0) / n <= 0.03, src
+    assert src.get("no_evidence", 0) / n <= 0.01, src            # 24 of 6,501 in this data
     assert m["not_road_complaints"] == 120
 
 

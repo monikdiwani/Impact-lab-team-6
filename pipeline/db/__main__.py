@@ -27,6 +27,8 @@ if __name__ == "__main__":
         print(f"{target} is up to date with its inputs")
         sys.exit(0)
     p = build(Path(a.data), Path(a.out), target, None if a.no_docs else DOC)
+    from pipeline.db.sync import export_all
+    export_all(p)              # app data + CSV copies follow the database (real DB only)
     con = sqlite3.connect(p)
     counts = json.loads(con.execute("SELECT value_json FROM meta WHERE key='row_counts'").fetchone()[0])
     con.close()

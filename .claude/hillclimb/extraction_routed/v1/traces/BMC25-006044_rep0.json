@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-006044\",\n \"received_at\": \"2025-09-18 06:17\",\n \"channel\": \"Ward Office Walk-in\",\n \"language\": \"mr\",\n \"category_reported\": \"Road related\",\n \"description\": \"सिग्नल समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.\",\n \"locality_text\": \"Madanpura\",\n \"ward_code\": \"E\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"E\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Complaint at Madanpura (text in mr, not translated); classified as Pothole from no reliable evidence (most common category; needs a field check).\",\n \"extraction_source\": \"no_evidence\"\n}"
+ }
+]

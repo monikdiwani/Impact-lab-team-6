@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000552\",\n \"received_at\": \"2025-06-17 16:43\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Other\",\n \"description\": \"Kitni baar complaint karein? Linking Road Santacruz West pe wahi gadda phir se khul gaya\",\n \"locality_text\": \"Santacruz West\",\n \"ward_code\": \"H/W\",\n \"lat\": 19.054095,\n \"lon\": 72.839548,\n \"photo_description\": null,\n \"upvotes\": 19\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"H/W\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Citizen complains that the same pothole on Linking Road, Santacruz West has reopened despite repeated complaints.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

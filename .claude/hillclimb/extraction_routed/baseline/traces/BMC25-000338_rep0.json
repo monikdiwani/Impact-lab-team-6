@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000338\",\n \"received_at\": \"2025-06-18 09:21\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Other\",\n \"description\": \"Shiv Sena shakha ke paas gutter ka dhakkan khula hai, paani mein dikh nahi raha. Koi gir jayega\",\n \"locality_text\": \"Kanjurmarg\",\n \"ward_code\": \"S\",\n \"lat\": 19.137218,\n \"lon\": 72.934501,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"S\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"A gutter cover near the Shiv Sena shakha in Kanjurmarg is open and hidden under water, posing a risk that someone may fall in.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

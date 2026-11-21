@@ -48,5 +48,6 @@
   "evals/graders.py",
   "evals/targets.py",
   "evals/cases/extraction_routed.jsonl"
- ]
+ ],
+ "harness_sha": "1889dc33a046ac640334eee644c467c7ccd2af5ba2052e7f2816e85caff84284"
 }

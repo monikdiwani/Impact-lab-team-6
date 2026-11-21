@@ -2,7 +2,7 @@
 
 The front end for the Team 6 project. It shows where each Mumbai ward's monsoon road repair money went, whether the work held up, and where the next rupee should go. All data is synthetic and every contractor is fictional.
 
-Stack: Vite + React + Tailwind CSS v4 + daisyUI 5, with recharts for charts and d3-geo for the ward map. There is no backend. The app reads JSON files that `export_data.py` builds from the pipeline outputs, so it makes no live Claude calls and works offline.
+Stack: Vite + React + Tailwind CSS v4 + daisyUI 5, with recharts for charts and d3-geo for the ward map. There is no backend. The app reads JSON files that `export_data.py` builds from the SQLite database (`outputs/follow_the_rupee.db`), so it makes no live Claude calls and works offline. The JSON is re-exported automatically every time the database rebuilds (any pipeline run), and `public/data/manifest.json` records which database build it came from.
 
 ## Pages
 
@@ -49,7 +49,7 @@ This writes a static site to `app/dist/`. Upload that folder to any static host 
 
 | Path | What |
 |---|---|
-| `export_data.py` | Turns `outputs/*.parquet` and `data/*.csv` into `public/data/*.json` |
+| `export_data.py` | Turns the database (`outputs/follow_the_rupee.db`, read through `pipeline.db`) into `public/data/*.json`. It never reads parquet or CSV files |
 | `src/lib/` | Data loading, Indian rupee formatting, hash router |
 | `src/components/` | App shell, ward map, work-order drill-down, shared UI pieces |
 | `src/pages/` | One file per page |

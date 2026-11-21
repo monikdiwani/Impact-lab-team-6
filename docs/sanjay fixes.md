@@ -282,3 +282,43 @@ The database rebuilt itself.
 - `--suite extraction_routed --target app --approve-harness`
 
 The earlier 166-case runs are archived with the suffix `-166-cases-before-review-fixes`.
+
+## 13. The app reads the database, and Claude stops guessing where there's no evidence
+
+### The web app now reads the database
+
+**The problem:** Devansh's React app (`app/`) read JSON built by `app/export_data.py` straight from the parquet and CSV files, bypassing the database. `outputs/csv/` wasn't refreshed by any run either.
+
+**The fix:**
+- `app/export_data.py` now reads only the SQLite database through `pipeline.db`: tables, `meta`, `narratives` and `geo_layers`.
+- **Verified identical output:** a deep comparison of all 13 JSON files from the old file-based export and the new database-based one found no differences.
+- **Every database rebuild re-exports everything downstream** (`pipeline/db/sync.py` `export_all`, called after a module run, `python -m pipeline` and `python -m pipeline.db`):
+  - the app's `app/public/data/*.json`;
+  - `outputs/csv/*.csv`, now including the judge-checkable `audit_flags.csv`, `billing_anomalies.csv` (493 warranty jobs, 114 over-bills, 45 double bills), `budget_plan.csv` and `road_risk.csv`. The rubric assessment ranked this as its highest-value action.
+- **Freshness checks:** `app/public/data/manifest.json` and `outputs/csv/README.txt` record which database build they came from, and `tests/test_db.py` fails if either is stale.
+- **Proof the files aren't read:** a test disables the parquet and CSV readers and confirms the export still works from the database alone.
+
+### Claude no longer guesses on complaints with no evidence
+
+**The problem:** Sanjay's paid `extraction_routed` run found that, on the 21 linked complaints with no reliable evidence (non-English app text, vague citizen category, no photo), **Claude was right 19.0% of the time against 28.6% for simply answering the most common category**. The text in these complaints doesn't describe the real problem in this data.
+
+**The fix:**
+- These complaints now get the most common category, with source `no_evidence`, a summary that says "needs a field check", and **no Claude call**.
+- The free re-run (`v1`) confirms it: **28.6%** category, and severity within one **71.4% against 57.1%**.
+- Claude is now used for category only on the 120 junk complaints, where it labelled all 120 correctly.
+- The case files didn't change, so the existing harness approval is still valid.
+
+### Outputs regenerated
+
+- **M1:** text 2,869, photo 2,838, citizen 650, Claude 120, no_evidence 24.
+- **M3:** builds from 614 open issues; 122 repairs, ₹82.6 L.
+
+### API credit ran out
+
+**10 of the 24 ward memos are templates.** The Anthropic account's credit ran out partway through: the API now answers *"Your credit balance is too low"*, which is an HTTP 400 error. M3 fell back to its template as designed and nothing crashed. The other 14 memos came from the cache.
+
+**To restore them:** add credit (Anthropic Console, Plans & Billing), then run `python -m pipeline`. Only the 10 missing memos will be requested; everything else is cached.
+
+Until then, paid evals will record each call as a `serving_error` instead of scoring it.
+
+**Tests:** 150 → **157**, all passing; all 17 eval gates pass.

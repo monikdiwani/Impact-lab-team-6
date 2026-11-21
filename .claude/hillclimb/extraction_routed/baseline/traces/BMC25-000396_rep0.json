@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000396\",\n \"received_at\": \"2025-06-16 13:33\",\n \"channel\": \"Ward Office Walk-in\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Other\",\n \"description\": \"Bhai LBS Marg pe chawl gate ke paas bahut bada khadda hai, roz koi na koi girta hai. Please jaldi theek karo\",\n \"locality_text\": \"Saki Naka Junction\",\n \"ward_code\": \"L\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Citizen reports a very large pothole on LBS Marg near a chawl gate at Saki Naka Junction where someone falls every day, and asks for a quick repair.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

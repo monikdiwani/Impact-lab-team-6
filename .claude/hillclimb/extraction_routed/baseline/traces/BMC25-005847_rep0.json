@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005847\",\n \"received_at\": \"2025-09-16 20:38\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Road related\",\n \"description\": \"post office समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.\",\n \"locality_text\": \"RCF Colony\",\n \"ward_code\": \"M/W\",\n \"lat\": 19.046415,\n \"lon\": 72.894279,\n \"photo_description\": null,\n \"upvotes\": 23\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"M/W\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Potholes in front of the post office in RCF Colony were filled but have broken open again, and the citizen says the work was of poor quality.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

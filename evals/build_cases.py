@@ -2,7 +2,7 @@
 produces the same files. Run:  python -m evals.build_cases
 
   evals/cases/extraction.jsonl          answerable complaints with ground truth from the linked work order
-  evals/cases/extraction_routed.jsonl   the linked complaints the app actually sends to Claude
+  evals/cases/extraction_routed.jsonl   the linked complaints the evidence can't decide
   evals/cases/narrative.jsonl    facts packets for contractor / ward / flag text
   evals/cases/REVIEW.md          human-readable copy of both, for the sign-off read
 """
@@ -165,15 +165,16 @@ def _case(row: dict, tags: list[str], best: dict) -> dict:
 
 
 def build_routed() -> list[dict]:
-    """The linked complaints M1's router sends to Claude (route() == 'claude'). In this data
-    none has reliable evidence (no photo, non-English app text, vague citizen category), so
-    this suite shows whether Claude beats the fallback on its real traffic. Defined with
-    M1's own router on purpose: rebuild the cases if the routing rules change."""
+    """The linked complaints M1's rules can't decide from evidence: route() returns
+    'claude' or 'no_evidence'. All 21 have no reliable evidence (no photo, non-English app
+    text, vague citizen category). Claude scored 19% on them vs 28.6% for the most common
+    category (21 Nov), so the app now uses the latter; this suite keeps measuring that
+    choice. Defined with M1's own router on purpose: rebuild if the routing rules change."""
     from pipeline.connect.extract import route
     m = _linked().assign(severity=lambda d: d.sla_hours.map(SEVERITY_FROM_SLA))
     m["support"] = m.apply(_support, axis=1)
     routed = m[[route(r.description, r.photo_description, r.category_reported, r.language, r.channel)[1]
-                == "claude" for r in m.itertuples()]]
+                in ("claude", "no_evidence") for r in m.itertuples()]]
     best = severity_best_table(m[~m.complaint_id.isin(routed.complaint_id)])
     cases = []
     for r in routed.itertuples(index=False):
@@ -368,7 +369,7 @@ def write_review(extraction, narrative, routed=()):
     def fence(s):
         return f"````\n{s}\n````"
     out = ["# Eval cases: review before sign-off", "",
-           f"Extraction: {len(extraction)} cases · Extraction routed to Claude: {len(routed)} cases · "
+           f"Extraction: {len(extraction)} cases · No reliable evidence: {len(routed)} cases · "
            f"Narrative: {len(narrative)} cases", "",
            "## Extraction", "", "| id | tags | category (truth) | severity | ward | evidence for truth |",
            "|---|---|---|---|---|---|"]
@@ -384,10 +385,10 @@ def write_review(extraction, narrative, routed=()):
                 f"*{i['category_reported']}*, truth *{c['expected']['category']}*{photo}",
                 fence(i["description"]), ""]
     if routed:
-        out += ["## Extraction, routed to Claude (suite `extraction_routed`)", "",
-                "The linked complaints the app sends to Claude. None has reliable evidence (no photo, "
-                "non-English app text, vague citizen category), so this suite shows whether Claude beats the "
-                "rules fallback on its real traffic. Kept out of the main suite's headline.", "",
+        out += ["## Extraction, no reliable evidence (suite `extraction_routed`)", "",
+                "The linked complaints the evidence can't decide (no photo, non-English app text, vague citizen "
+                "category). Claude scored 19% here vs 28.6% for the most common category, so the app uses the "
+                "latter and flags them for a field check. Kept out of the main suite's headline.", "",
                 "| id | tags | category (truth) | citizen picked |", "|---|---|---|---|"]
         for c in routed:
             out.append(f"| {c['id']} | {' '.join(c['tags'])} | {c['expected']['category']} | "
@@ -414,7 +415,7 @@ def main():
     tags = pd.Series([t for c in ex for t in c["tags"]]).value_counts().to_dict()
     print(f"extraction: {len(ex)} cases {tags}")
     print(f"narrative: {len(nar)} cases {pd.Series([c['tags'][0] for c in nar]).value_counts().to_dict()}")
-    print(f"extraction_routed: {len(routed)} cases (the linked complaints the app sends to Claude) "
+    print(f"extraction_routed: {len(routed)} cases (linked complaints with no reliable evidence) "
           f"{pd.Series([t for c in routed for t in c['tags']]).value_counts().to_dict()}")
 
 

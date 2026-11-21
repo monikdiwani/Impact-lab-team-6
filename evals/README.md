@@ -27,7 +27,7 @@ The gap between `rules` and `app` is what Claude adds. `claude` is an ablation: 
 
 **Suites:**
 - `extraction` has 150 answerable complaints. It's a regression check.
-- `extraction_routed` has the 21 linked complaints the app actually sends to Claude. This is where Claude's category contribution shows.
+- `extraction_routed` has the 21 linked complaints the evidence can't decide (no photo, non-English app text, vague citizen category).
 - `narrative` has 29 facts packets for M2's text.
 
 Each suite has its own approval (`.claude/hillclimb/<suite>/_state.json`). Free targets always run from scratch.
@@ -59,7 +59,7 @@ A case is kept in the main suite only if at least one **reliable** input points 
 
 **What this guard means (from the independent review):**
 - **The main suite is a regression check, not a headroom measure.** The guard uses the same three evidence sources as M1's router, and in this data those sources are never wrong when present. So M1's rules score 100% on the kept cases by construction. The suite answers "does extraction still get every answerable complaint right?"
-- **The dropped rows aren't "constant error".** They're rows where every method is guessing. They're measured separately: the linked rows the app sends to Claude make up `extraction_routed`, and `measure_routing` reports rules against the base rate on all held-out rows.
+- **The dropped rows aren't "constant error".** They're rows where every method is guessing. They're measured separately: the linked rows the evidence can't decide make up `extraction_routed`, and `measure_routing` reports rules against the base rate on all held-out rows.
 
 The earlier guard dropped any case whose text contradicted the truth (521 candidates). That removed exactly those realistic contradictory cases, which made text-reading look better than it is.
 
@@ -68,7 +68,10 @@ The earlier guard dropped any case whose text contradicted the truth (521 candid
 - **`extraction` (150):**
   - 15 per language × (citizen right / citizen wrong) cell, plus 30 with a blank ward.
   - Chips: `photo` / `no_photo`, `helpline`, `noisy_text` (non-English app/portal text), `blank_ward`.
-- **`extraction_routed` (21):** every linked complaint for which M1's `route()` returns `claude`.
+- **`extraction_routed` (21):** every linked complaint for which M1's `route()` returns `claude` or `no_evidence`. Results so far:
+  - `baseline` (Claude reads them): **19.0%** category.
+  - `v1` (the most common category, no Claude call): **28.6%** category, and severity within one 71.4% against 57.1%.
+  - So the app now uses the `v1` approach and flags these complaints for a field check.
   - All 21 are Hindi, Marathi or Hinglish app text, with a vague citizen category and no photo, so there's no reliable evidence.
   - Free baselines: rules fallback 28.6%, citizen 0%.
   - The paid `app` run here shows whether Claude beats the fallback on its real traffic.
@@ -100,7 +103,7 @@ pipeline.common.llm.reset_last_meta() / get_last_meta()                         
 python -m evals.run_eval --suite extraction --target oracle    # must be 100%
 python -m evals.run_eval --suite extraction --target null      # must be 0%
 python -m evals.run_eval --suite extraction --target citizen   # the bar: 57.3% category on this set
-python -m evals.run_eval --suite extraction_routed --target rules   # fallback on Claude's real traffic: 28.6%
+python -m evals.run_eval --suite extraction_routed --target rules   # no-evidence rows: 28.6%
 python -m evals.run_eval --suite extraction --target rules     # M1 without Claude: category 100%, severity best 100%
 python -m evals.run_eval --suite narrative  --target template  # 100% on programmatic checks
 python -m evals.run_eval --suite narrative  --target rules     # M2's templates through the graders

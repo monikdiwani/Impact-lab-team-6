@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005766\",\n \"received_at\": \"2025-09-12 20:21\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"mr\",\n \"category_reported\": \"Road related\",\n \"description\": \"Kurla West मध्ये पाणी साचले आहे, गाड्या अडकल्या आहेत. पंप पाठवा.\",\n \"locality_text\": \"Kurla West\",\n \"ward_code\": \"L\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Water has accumulated on the road in Kurla West, vehicles are stuck, and the citizen requests that pumps be sent.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

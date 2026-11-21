@@ -6,7 +6,8 @@
     python -m pipeline --only m1,m3       # M3 reads M1's open issues, so re-run it after M1
 
 Order: M1 connect (complaints, issues, open issues) -> M3 risk (reads M1's open issues)
--> M2 audit (independent of M1/M3) -> database. Each module's own run() would also
+-> M2 audit (independent of M1/M3) -> database -> web app data (app/export_data.py).
+Each module's own run() would also
 update the database (pipeline/db/sync.py); here that is paused so it is built once.
 """
 from __future__ import annotations
@@ -57,6 +58,7 @@ def main(argv=None) -> int:
     t = time.time()
     p = build(data, out, None, DOC)
     print(f"[pipeline] database updated -> {p} ({time.time() - t:.0f}s)")
+    sync.export_all(p)
     stale = stale_inputs(p, data, out)
     if stale:
         print(f"[pipeline] WARNING: database differs from inputs: {stale}", file=sys.stderr)

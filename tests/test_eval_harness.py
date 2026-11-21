@@ -143,7 +143,7 @@ def test_extraction_cases_are_well_formed():
         assert "status" not in c["input"] and "resolved_at" not in c["input"]
 
 
-def test_routed_suite_is_exactly_what_the_app_sends_to_claude():
+def test_routed_suite_is_exactly_what_the_evidence_cannot_decide():
     from pipeline.connect.extract import route
     routed = R.load_cases("extraction_routed")
     assert routed
@@ -151,7 +151,8 @@ def test_routed_suite_is_exactly_what_the_app_sends_to_claude():
     for c in routed:
         i = c["input"]
         assert route(i["description"], i["photo_description"], i["category_reported"],
-                     i["language"], i["channel"])[1] == "claude", c["id"]
+                     i["language"], i["channel"])[1] in ("claude", "no_evidence"), c["id"]
+        assert c["meta"]["support"] == [], c["id"]
         assert c["id"] not in main_ids
 
 

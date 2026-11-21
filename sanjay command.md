@@ -41,7 +41,7 @@ What it checks: no complaints lost, ward coverage ≥ 98%, recovered wards corre
 ### Eval (two extraction suites)
 
 - `extraction` (150 answerable complaints) is a regression check.
-- `extraction_routed` (21 complaints) is exactly what the app sends to Claude. That's where Claude's real contribution shows.
+- `extraction_routed` (21 complaints) holds the complaints the evidence can't decide. Claude scored 19.0% here and the most common category 28.6%, so the app now uses the latter (no Claude call).
 
 ```powershell
 # 1. free: harness self-checks and M1 without Claude
@@ -49,7 +49,7 @@ python -m evals.run_eval --suite extraction --target oracle           # 100%
 python -m evals.run_eval --suite extraction --target null             # 0%
 python -m evals.run_eval --suite extraction --target citizen          # the bar: 57.3%
 python -m evals.run_eval --suite extraction --target rules            # M1's real code, Claude off: 100%
-python -m evals.run_eval --suite extraction_routed --target rules     # fallback on Claude's traffic: 28.6%
+python -m evals.run_eval --suite extraction_routed --target rules     # no-evidence rows: 28.6%
 python -m evals.measure_routing                                       # routing figures on all held-out complaints
 
 # 2. paid. The cases, runner and M1 code changed on 21 Nov (review fixes), so approve again.
@@ -67,7 +67,7 @@ python -m evals.run_eval --suite extraction --target app --variant v1
 
 Numbers to report:
 - **`extraction`:** category (citizen bar 57.3%; rules 100% by construction, so watch for any drop), category on `cat_wrong`, and category by evidence source.
-- **`extraction_routed`:** Claude's category accuracy against the 28.6% rules fallback. This is the only place Claude decides a category that can be checked.
+- **`extraction_routed`:** `baseline` (Claude) 19.0%, `v1` (most common category, no Claude) 28.6%. Re-run it after any routing change.
 - **ward recovery** on blank-ward cases.
 - **severity:** `severity best` should be 100%. `severity =` and `severity ±1` should equal the ceiling line the runner prints (44.7% / 94.7% on this set); they can't go higher, because within a category the true severity is random.
 - Language is an input, so it isn't scored.

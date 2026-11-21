@@ -8,15 +8,15 @@
   "c_condition": 0.45
  },
  "open_issues_source": "M1",
- "n_open_issues": 617,
+ "n_open_issues": 614,
  "data_notes": [],
  "n_roads": 291,
  "plan_actions": {
-  "Repair": 123,
-  "Monitor": 107,
+  "Repair": 122,
+  "Monitor": 108,
   "Invoke DLP": 61
  },
- "plan_repair_inr": 8036370.0,
+ "plan_repair_inr": 8259760.0,
  "over_budget_wards": [
   "A",
   "E",

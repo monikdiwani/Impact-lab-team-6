@@ -10,22 +10,29 @@ Evidence routing. Figures are from `python -m evals.measure_routing` (21 Nov), o
   citizen         Hindi / Marathi / Hinglish app or portal text, no       86%  (that free text is statistically unrelated to
                   photo, citizen picked a specific category                     the real problem in this synthetic data: its
                                                                                 first keyword is right ~25%: hi 28%, hi-en 20%, mr 32%)
+  no_evidence     Hindi / Marathi / Hinglish app or portal text, no       the most common category ("Pothole"), flagged
+                  photo, vague citizen category ("Other", "Road related") for a field check; no Claude call (see below)
   claude          anything else: unknown photo text, reliable text with  Claude reads all the evidence and may answer
-                  zero or several keyword matches, vague category on      "Not road-related"
-                  unreliable text
+                  zero or several keyword matches                         "Not road-related"
 
 Rules alone (Claude rows on their fallback): 98.3% vs 84.3% for trusting the citizen,
 89.0% on rows where the citizen picked the wrong category; 100% on every row that has
-reliable evidence. 144 of the 6,501 complaints (2.2%) go to Claude: 120 of them are
-non-road / junk ("Test", "Street light not working", "Garbage not collected": reliable
-text, no photo, no road keyword) and 24 have no reliable evidence at all.
+reliable evidence. 120 of the 6,501 complaints go to Claude, all of them non-road / junk
+("Test", "Street light not working", "Garbage not collected": reliable text, no photo, no
+road keyword); Claude labels them "Not road-related" (120/120 on 21 Nov).
+
+Why no Claude for 'no_evidence' rows: nothing in them carries signal (the text is unrelated
+to the real problem in this data and the citizen picked "Other"). Measured on the 21 such
+linked complaints (eval suite `extraction_routed`, 21 Nov): Claude 19.0% (4/21) vs 28.6%
+(6/21) for the most common category. So the rows get "Pothole" plus an honest summary, and
+the app can show them as needing a field check, instead of a confident-looking guess.
 
 Without Claude (no key, LLM_OFFLINE miss, or LLM_DISABLE=1):
   - non-road rows become NOT_ROAD (source 'noise_fallback', severity None); M1's run()
     keeps them in complaints_clean but out of de-dup and open issues (M3's demand);
-  - other rows take the citizen's specific category, then the first keyword of RELIABLE
-    text, then "Pothole" (most common); source 'claude_fallback' (28.6% right on the 21
-    such linked rows, the eval suite `extraction_routed`).
+  - other Claude-routed rows (unknown photo text, reliable text with several keyword
+    matches; none in this data) take the citizen's specific category, then the first
+    keyword of RELIABLE text, then "Pothole"; source 'claude_fallback'.
 
 Severity: in this data severity depends on the category alone. Within a category it is
 noise: urgency words, upvotes, photo, road type and area show no signal. So severity is a
@@ -178,7 +185,8 @@ def route(desc, photo, reported, language, channel) -> tuple[str | None, str]:
         return (hits[0], "text") if len(hits) == 1 else (None, "claude")
     if reported in CATEGORIES:
         return reported, "citizen"
-    return None, "claude"
+    # no photo, unreliable text, vague citizen category: no evidence to read, so no Claude call
+    return DEFAULT_CATEGORY, "no_evidence"
 
 
 def _fallback(desc, photo, reported, language, channel) -> tuple[str, str]:
@@ -193,6 +201,7 @@ def _fallback(desc, photo, reported, language, channel) -> tuple[str, str]:
 
 
 _SOURCE_LABEL = {"photo": "the photo", "citizen": "the citizen's selected category",
+                 "no_evidence": "no reliable evidence (most common category; needs a field check)",
                  "claude_fallback": "rules (Claude unavailable)", "noise_fallback": "no road keywords"}
 
 

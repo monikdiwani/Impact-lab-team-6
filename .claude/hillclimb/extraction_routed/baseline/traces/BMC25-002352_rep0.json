@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002352\",\n \"received_at\": \"2025-07-14 09:45\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Other\",\n \"description\": \"सिग्नल जवळ रस्त्यावर मोठा खड्डा आहे, Vinoba Bhave Nagar. लवकर दुरुस्त करा.\",\n \"locality_text\": \"Vinoba Bhave Nagar\",\n \"ward_code\": \"L\",\n \"lat\": 19.078462,\n \"lon\": 72.890062,\n \"photo_description\": null,\n \"upvotes\": 30\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"There is a large pothole on the road near the signal in Vinoba Bhave Nagar; the citizen asks for it to be repaired quickly.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

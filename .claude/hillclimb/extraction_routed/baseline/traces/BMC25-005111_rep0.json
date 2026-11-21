@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction_routed"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005111\",\n \"received_at\": \"2025-08-26 22:47\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Road related\",\n \"description\": \"BEST depot समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.\",\n \"locality_text\": \"Goregaon West\",\n \"ward_code\": \"P/S\",\n \"lat\": 19.164857,\n \"lon\": 72.847073,\n \"photo_description\": null,\n \"upvotes\": 14\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"P/S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Potholes in front of the BEST depot in Goregaon West that had been filled have broken open again, and the citizen says the repair work was of poor quality.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]
