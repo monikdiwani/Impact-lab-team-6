@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004799\",\n \"received_at\": \"2025-08-21 18:47\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Other\",\n \"description\": \"पेट्रोल पंप जवळ रस्त्यावर मोठा खड्डा आहे, Thakur Village. लवकर दुरुस्त करा.\",\n \"locality_text\": \"Thakur Village\",\n \"ward_code\": \"R/S\",\n \"lat\": 19.197789,\n \"lon\": 72.85001,\n \"photo_description\": \"Large sinkhole on road edge with exposed pipe\",\n \"upvotes\": 26\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"R/S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Road cave-in reported at Thakur Village (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

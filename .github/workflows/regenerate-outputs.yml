@@ -1,0 +1,83 @@
+# CD (pipeline): manual. Re-runs M1 -> M3 -> M2 -> database on a clean runner, runs the
+# tests, and opens a pull request if any output changed. Offline by default (cached Claude
+# answers only, free); tick "claude" to call Claude for new prompts (needs the
+# ANTHROPIC_API_KEY secret and costs money).
+name: CD - regenerate outputs
+
+on:
+  workflow_dispatch:
+    inputs:
+      claude:
+        description: "Call Claude for prompts not in the cache (paid; needs ANTHROPIC_API_KEY secret)"
+        type: boolean
+        default: false
+      only:
+        description: "Steps to run (comma-separated subset of m1,m3,m2)"
+        type: string
+        default: "m1,m3,m2"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: regenerate-outputs
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PYTHONIOENCODING: utf-8
+      ONLY: ${{ inputs.only }}
+      USE_CLAUDE: ${{ inputs.claude }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - name: Validate inputs
+        run: |
+          [[ "$ONLY" =~ ^(m1|m2|m3)(,(m1|m2|m3))*$ ]] || { echo "::error::only must be a comma list of m1,m3,m2"; exit 1; }
+      - name: Run the pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ inputs.claude && secrets.ANTHROPIC_API_KEY || '' }}
+        run: |
+          if [ "$USE_CLAUDE" = "true" ]; then
+            [ -n "$ANTHROPIC_API_KEY" ] || { echo "::error::ANTHROPIC_API_KEY secret is not set"; exit 1; }
+            python -m pipeline --only "$ONLY"
+          else
+            python -m pipeline --no-llm --only "$ONLY"
+          fi
+      - name: Tests
+        run: python -m pytest -q
+      - name: Open a pull request if outputs changed
+        run: |
+          # the database's build time always changes; only open a PR if real content changed
+          changed=$(git status --porcelain -- outputs docs/DATABASE.md | grep -v 'outputs/follow_the_rupee.db' || true)
+          if [ -z "$changed" ]; then
+            echo "Outputs unchanged; nothing to propose." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          branch="bot/regenerate-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add outputs docs/DATABASE.md
+          git commit -m "Regenerate outputs and database (steps: $ONLY, claude: $USE_CLAUDE)"
+          git push origin "$branch"
+          {
+            echo "Automated re-run of the pipeline (steps: \`$ONLY\`, Claude for new prompts: \`$USE_CLAUDE\`)."
+            echo
+            echo "Tests passed on the regenerated outputs. Changed files:"
+            echo '```'
+            echo "$changed"
+            echo '```'
+            echo "Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          } > pr.md
+          gh pr create --base main --head "$branch" --title "Regenerate outputs ($ONLY)" --body-file pr.md

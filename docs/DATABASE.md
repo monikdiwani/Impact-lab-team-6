@@ -10,7 +10,7 @@ df = db.query("SELECT * FROM v_complaint_trail WHERE complaint_id = ?", ["BMC25-
 con = db.connect()          # read-only sqlite3 connection
 ```
 
-**Rebuild** after any pipeline run: `python -m pipeline.db`. **Check freshness**: `python -m pipeline.db --check` (exits 1 if an input changed since the build).
+**Kept in step automatically:** every M1 / M2 / M3 run that writes `outputs/` rebuilds this database (`pipeline/db/sync.py`); runs into other folders (tests, backtest) never touch it. Full run: `python -m pipeline` (add `--no-llm` for a free run). Manual rebuild: `python -m pipeline.db`; check freshness: `python -m pipeline.db --check` (exits 1 if an input changed since the build).
 
 Size 7.3 MB · 28 tables · 6 views · timestamps are ISO text `YYYY-MM-DD HH:MM:SS` · all data synthetic.
 

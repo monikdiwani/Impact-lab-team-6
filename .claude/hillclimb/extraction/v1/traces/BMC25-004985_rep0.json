@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004985\",\n \"received_at\": \"2025-08-23 06:33\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Other\",\n \"description\": \"mandir समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.\",\n \"locality_text\": \"Nagpada\",\n \"ward_code\": \"E\",\n \"lat\": 18.977772,\n \"lon\": 72.837023,\n \"photo_description\": \"Uncovered manhole with a stick and plastic bag as warning\",\n \"upvotes\": 13\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"E\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Open or broken manhole reported at Nagpada (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

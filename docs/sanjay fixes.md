@@ -181,3 +181,38 @@ All cleaned data now lives in one SQLite database, `outputs/follow_the_rupee.db`
 - the audit flags on that job.
 
 17 new tests in `tests/test_db.py`.
+
+## 10. The database stays connected to every run
+
+**The problem:** the database was a separate manual step (`python -m pipeline.db`). Re-running M1, M2 or M3 without it left the app reading old data.
+
+| Run type | What happens to the database now |
+|---|---|
+| `python -m pipeline` (new) | Runs M1, then M3, then M2, then builds the database once at the end (auto-sync paused in between). `--only m3` runs one step. |
+| `python -m pipeline --no-llm` | Same, with no new Claude calls: cached answers are reused (`LLM_OFFLINE=1`). Verified: an offline full run reproduces every committed output exactly (151 Claude extractions and 24 Claude memos from cache). |
+| A single module into `outputs/` (`python -m pipeline.risk`, `pipeline.audit.run(...)`, `pipeline.connect.run(...)`) | Its `run()` ends with `pipeline.db.sync.after_run()` and rebuilds the database. Verified for M3 and M2 standalone (`[db] M3: database updated`). |
+| Tests, risk backtest, scratch folders | Never touch it: they write to temp folders. Verified that `pytest` leaves the committed database's build time unchanged. |
+| Paid evals | Don't involve the database. They grade Claude through the app functions on fixed cases. |
+
+**Safety details**
+- **A failed rebuild doesn't crash the module run.** The module's outputs are already written, and the previous database stays as it was, because the build is atomic. The error is printed and `tests/test_db.py` fails until it's fixed.
+- **Parallel runs don't collide:** each process builds into its own temp file.
+- **Locked files are handled:** on Windows, if the app holds the file open, the swap retries and then explains.
+- **Stale-plan reminder:** running M1 alone warns when M3's plan is older than M1's open issues.
+
+**Why a second offline switch exists:** `LLM_DISABLE` (used by tests and the eval `rules` target) skips the cache entirely. For a pipeline run into `outputs/` that would replace the cached Claude texts with templates, so `--no-llm` uses `LLM_OFFLINE` instead.
+
+8 new tests: auto-sync builds for `outputs/` and only `outputs/`; pause and env switch; a failed rebuild doesn't crash; every module's `run()` has the hook; the full run keeps dependency order and builds once; offline mode uses the cache and never calls the API. Full suite: 113 pass.
+
+## 11. CI / CD with GitHub Actions
+
+Details and one-time GitHub setup are in [docs/CI_CD.md](CI_CD.md).
+
+| Workflow | Trigger | Does |
+|---|---|---|
+| CI | every push / PR to main, dev | lint, DB freshness, pytest on Python 3.12 + 3.14, free eval gates (`python -m evals.ci_check`: 17 gates, all passing locally) |
+| CD - publish data | CI passed on a push to main | replaces the `data-latest` release: database, schema doc, outputs zip, Claude cache zip, checksums |
+| CD - regenerate outputs | manual | re-runs the pipeline on a clean runner (offline by default), runs the tests, opens a PR if outputs changed |
+| Paid evals | manual | runs a paid eval as a new variant with the `ANTHROPIC_API_KEY` secret. Respects the committed harness approval. Optional reviewer gate through the `paid-evals` environment |
+
+**Found while building it:** `requirements.txt` was missing `scikit-learn` and `scipy`. M1's de-duplication needs them, and on a clean machine it would have silently fallen back to the weaker rules-based de-dup. Both are added. Also added: `.gitattributes` (database and parquet files are binary), Dependabot (weekly update PRs), and a CI badge in the README. 3 unused imports and variables in Sanjay's files were cleaned up.

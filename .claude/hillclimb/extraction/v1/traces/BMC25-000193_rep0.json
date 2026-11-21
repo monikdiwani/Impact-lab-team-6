@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000193\",\n \"received_at\": \"2025-06-11 11:03\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Shiv Sena shakha जवळ रस्त्यावर मोठा खड्डा आहे, Marol. लवकर दुरुस्त करा.\",\n \"locality_text\": \"Marol\",\n \"ward_code\": \"K/E\",\n \"lat\": 19.111766,\n \"lon\": 72.872914,\n \"photo_description\": \"Collapsed road section with barricade tape\",\n \"upvotes\": 31\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"K/E\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Road cave-in reported at Marol (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

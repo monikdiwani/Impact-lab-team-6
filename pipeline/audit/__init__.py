@@ -80,6 +80,8 @@ def run(data_dir: Path, out_dir: Path) -> dict[str, Path]:
     ws.to_parquet(paths["ward_scorecard"], index=False)
     paths["scorecard_text"] = out_dir / "scorecard_text.json"
     paths["scorecard_text"].write_text(json.dumps(text, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    from pipeline.db.sync import after_run  # keep outputs/follow_the_rupee.db in step (no-op outside outputs/)
+    after_run(data_dir, out_dir, "M2")
     return paths
 
 

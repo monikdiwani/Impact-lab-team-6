@@ -103,6 +103,8 @@ That's your first prototype. Now make it better. 🚀
 
 ## Team 6 workspace
 
+[![CI](https://github.com/monikdiwani/Impact-lab-team-6/actions/workflows/ci.yml/badge.svg)](https://github.com/monikdiwani/Impact-lab-team-6/actions/workflows/ci.yml)
+
 Our build for the challenge. The sections above are the organisers' brief.
 
 | Path | What it is |
@@ -113,7 +115,8 @@ Our build for the challenge. The sections above are the organisers' brief.
 | `tests/` | Free regression suite: `pytest -q`. Module tests skip until that module exists |
 | `evals/` | Claude evals and the risk backtest: see [evals/README.md](evals/README.md) |
 | [sanjay command.md](sanjay%20command.md) | Copy-paste test and eval commands for M1, M2 and M3 |
-| `outputs/follow_the_rupee.db` | **SQLite database the app reads**: reference data, cleaned outputs and Claude texts, with keys enforced. Schema and example queries: [docs/DATABASE.md](docs/DATABASE.md). Rebuild with `python -m pipeline.db` |
+| [docs/CI_CD.md](docs/CI_CD.md) | GitHub Actions: CI on every push/PR (lint, DB freshness, tests on Python 3.12 + 3.14, free eval gates); CD publishes the `data-latest` release; manual pipeline re-run and paid evals |
+| `outputs/follow_the_rupee.db` | **SQLite database the app reads**: reference data, cleaned outputs and Claude texts, with keys enforced. Schema and example queries: [docs/DATABASE.md](docs/DATABASE.md). Updates itself after every pipeline run. Full run: `python -m pipeline` (add `--no-llm` for a free offline run) |
 
 **Modules:** M1 Connect (complaints), M2 Audit (flags and scorecards), M3 Risk and budget, M4 Streamlit app and integration. Each module exposes `run(data_dir, out_dir)` and writes its own parquet files.
 

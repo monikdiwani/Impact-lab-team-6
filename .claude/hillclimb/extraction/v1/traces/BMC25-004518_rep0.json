@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004518\",\n \"received_at\": \"2025-08-18 19:53\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"Complainant states waterlogging at Kamani, near BEST depot on CST Road. \",\n \"locality_text\": \"Kamani\",\n \"ward_code\": \"L\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Waterlogging reported at Kamani (original text in hi-en).\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

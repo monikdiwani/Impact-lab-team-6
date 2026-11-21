@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-006195\",\n \"received_at\": \"2025-09-21 19:37\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"mr\",\n \"category_reported\": \"Road related\",\n \"description\": \"As per caller road cave-in at Parel, near municipal school on Dr Babasaheb Ambedkar Road. \",\n \"locality_text\": \"Parel\",\n \"ward_code\": \"F/S\",\n \"lat\": 18.988407,\n \"lon\": 72.843939,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"F/S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Road cave-in reported at Parel (original text in mr).\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001571\",\n \"received_at\": \"2025-07-06 10:40\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road related\",\n \"description\": \"HUGE CRATER ON JP ROAD OPPOSITE SIGNAL. CARS SWERVING INTO OTHER LANE. ACCIDENT WAITING TO HAPPEN.\",\n \"locality_text\": \"Juhu\",\n \"ward_code\": \"K/W\",\n \"lat\": 19.130969,\n \"lon\": 72.846549,\n \"photo_description\": \"Close-up of a crater filled with muddy water, broken asphalt edges\",\n \"upvotes\": 23\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"HUGE CRATER ON JP ROAD OPPOSITE SIGNAL. CARS SWERVING INTO OTHER LANE. ACCIDENT WAITING TO HAPPEN.\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

@@ -108,3 +108,87 @@ def test_committed_database_is_up_to_date():
         pytest.skip("no committed database yet")
     stale = stale_inputs(DEFAULT_DB)
     assert not stale, f"outputs/follow_the_rupee.db is older than {stale}; rebuild with: python -m pipeline.db"
+
+
+# ---- auto-sync: every run into outputs/ updates the DB; other folders never touch it ------
+
+@pytest.fixture
+def fake_project(tmp_path, monkeypatch):
+    """A copy of outputs/ standing in for the app's folder, with its own DB and doc path."""
+    from pipeline.db import build as B
+    out = tmp_path / "outputs"
+    shutil.copytree(OUT, out, ignore=shutil.ignore_patterns("llm_cache", "csv", "*.db*"))
+    monkeypatch.setattr(B, "OUT", out)
+    monkeypatch.setattr(B, "DOC", tmp_path / "DATABASE.md")
+    monkeypatch.setenv("RUPEE_DB", str(tmp_path / "app.db"))
+    monkeypatch.delenv("RUPEE_DB_AUTOSYNC", raising=False)
+    return out
+
+
+def test_run_into_app_outputs_updates_the_db(fake_project, tmp_path):
+    from pipeline.db.sync import after_run
+    p = after_run(DATA, fake_project, "M2")
+    assert p == tmp_path / "app.db" and p.exists() and stale_inputs(p, DATA, fake_project) == []
+
+
+def test_run_into_other_folders_never_touches_the_db(fake_project, tmp_path):
+    from pipeline.db.sync import after_run
+    assert after_run(DATA, tmp_path / "scratch", "M1") is None
+    assert not (tmp_path / "app.db").exists()
+
+
+def test_committed_db_untouched_by_test_runs():
+    """conftest/backtest runs write to temp folders, so they must not rebuild outputs/'s DB."""
+    from pipeline.db.sync import _same
+    from pipeline.db.build import OUT as REAL_OUT
+    import tempfile
+    assert not _same(tempfile.gettempdir(), REAL_OUT)
+
+
+def test_paused_and_env_switch(fake_project, tmp_path, monkeypatch):
+    from pipeline.db import sync
+    with sync.paused():
+        assert sync.after_run(DATA, fake_project, "M1") is None
+    assert sync.enabled()
+    monkeypatch.setenv("RUPEE_DB_AUTOSYNC", "0")
+    assert sync.after_run(DATA, fake_project, "M1") is None
+    assert not (tmp_path / "app.db").exists()
+
+
+def test_failed_rebuild_does_not_crash_the_run(fake_project, monkeypatch, capsys):
+    from pipeline.db import build as B
+    from pipeline.db.sync import after_run
+
+    def boom(*a, **k):
+        raise ValueError("foreign key violations: {...}")
+    monkeypatch.setattr(B, "build", boom)
+    assert after_run(DATA, fake_project, "M3") is None
+    assert "updating the database failed" in capsys.readouterr().err
+
+
+def test_each_module_run_ends_with_the_db_hook():
+    import inspect
+    from pipeline import audit, connect, risk
+    for mod, tag in ((connect, "M1"), (audit, "M2"), (risk, "M3")):
+        assert f'after_run(data_dir, out_dir, "{tag}")' in inspect.getsource(mod.run), tag
+
+
+def test_full_run_order_and_single_build(monkeypatch, tmp_path):
+    from pipeline import run_all
+    from pipeline.db import sync
+    monkeypatch.delenv("LLM_OFFLINE", raising=False)   # main(--no-llm) sets it; restore after the test
+    calls = []
+
+    def step(name):
+        def fn(d, o):
+            assert not sync.enabled(), "auto-sync must be paused inside python -m pipeline"
+            calls.append(name)
+        return fn
+    monkeypatch.setattr(run_all, "STEPS", {k: (k, step(k)) for k in run_all.ORDER})
+    monkeypatch.setattr(run_all, "build", lambda *a, **k: calls.append("db") or tmp_path / "x.db")
+    monkeypatch.setattr(run_all, "stale_inputs", lambda *a, **k: [])
+    assert run_all.main(["--no-llm"]) == 0
+    assert calls == ["m1", "m3", "m2", "db"]
+    calls.clear()
+    assert run_all.main(["--no-llm", "--only", "m2,m1"]) == 0
+    assert calls == ["m1", "m2", "db"]          # always dependency order, whatever was typed

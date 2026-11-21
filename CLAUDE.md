@@ -45,11 +45,20 @@ Things that trip people up:
 
 The team plan (stack, module ownership, output schemas, audit rules with expected counts) is in [docs/BLUEPRINT.md](docs/BLUEPRINT.md). Follow its ownership and schema contracts when adding code. Output schemas are in `contracts/schemas.py`.
 
+## CI / CD
+
+- `.github/workflows/`: **CI** (`ci.yml`) runs lint, a DB freshness check, `pytest` on Python 3.12 and 3.14, and `python -m evals.ci_check` (the free eval gates) on every push and PR to main/dev. It never calls Claude. **CD:** `cd-data-release.yml` publishes the `data-latest` release after CI passes on main. `regenerate-outputs.yml` (manual) re-runs the pipeline and opens a PR. `paid-evals.yml` (manual) runs paid evals with the `ANTHROPIC_API_KEY` secret. Setup and branch protection are in [docs/CI_CD.md](docs/CI_CD.md).
+- Before pushing, run the same checks locally: `python -m ruff check --select E9,F63,F7,F82 .`, `python -m pipeline.db --check`, `python -m pytest -q`, `python -m evals.ci_check`. Code must stay Python 3.12-compatible.
+- New dependencies go in `requirements.txt` (CI installs only that). M1's de-dup needs `scikit-learn` and `scipy`; without them it silently falls back to weaker rules.
+
 ## Database (what the app reads)
 
 - `outputs/follow_the_rupee.db` (SQLite, about 7 MB, committed) holds the reference data, every cleaned pipeline output and the Claude texts, with primary and foreign keys enforced at build time. The app should read it through `pipeline.db` (`db.query(sql, params)` or `db.connect()`, read-only), not the parquet or CSV files.
 - Start from the views: `v_complaint_trail`, `v_work_orders`, `v_ward_money`, `v_contractor_cards`, `v_next_rupee`, `v_work_order_flags`. The schema reference, with an example query per question, is [docs/DATABASE.md](docs/DATABASE.md), which is generated, so don't hand-edit it.
-- **Rebuild after any pipeline run:** `python -m pipeline.db` (about 10 s). Check freshness with `python -m pipeline.db --check`. `tests/test_db.py` fails if the committed DB is older than its inputs.
+- **Kept in step automatically.** Every M1, M2 or M3 `run()` that writes into `outputs/` ends with `pipeline.db.sync.after_run()`, which rebuilds the DB (about 10 s). Runs into other folders (tests, backtest, scratch) never touch it, so `pytest` doesn't change the committed DB. A new module that writes to `outputs/` must call `after_run` too.
+- **Full run:** `python -m pipeline` runs M1, then M3, then M2, then builds the DB once (auto-sync is paused between steps). `--no-llm` makes no new Claude calls and reuses cached answers (`LLM_OFFLINE=1`), so an offline re-run reproduces the committed outputs exactly. `--only m3` runs one step.
+- **Manual:** `python -m pipeline.db` to rebuild, or `python -m pipeline.db --check` to check freshness. `tests/test_db.py` fails if the committed DB is older than its inputs.
+- `LLM_DISABLE=1` (tests, eval `rules` target) skips Claude and the cache. `LLM_OFFLINE=1` uses the cache but never calls the API. Don't use `LLM_DISABLE` for pipeline runs into `outputs/`, because it replaces the cached Claude texts with templates.
 - SQLite divides an INTEGER by an INTEGER as integers, so `CAST(... AS REAL)` before dividing money columns (`cost_inr` and `standard_rate_inr` are both integers).
 
 ## Tests and evals

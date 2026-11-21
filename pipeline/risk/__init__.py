@@ -105,4 +105,6 @@ def run(data_dir: Path, out_dir: Path, use_llm: bool = True) -> dict[str, Path]:
     }
     paths["risk_report"].write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     log.info("M3 wrote %s", ", ".join(p.name for p in paths.values()))
+    from pipeline.db.sync import after_run  # keep outputs/follow_the_rupee.db in step (no-op outside outputs/)
+    after_run(data_dir, out_dir, "M3")
     return paths

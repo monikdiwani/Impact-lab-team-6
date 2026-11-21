@@ -1,0 +1,4 @@
+# Binary data: never apply line-ending conversion or text diffs.
+*.db       binary
+*.parquet  binary
+*.png      binary
