@@ -164,6 +164,7 @@ The first version (exposure 0.15 / safety 0.20 / flood 0.15 / condition 0.40, fl
 | 2026-11-21 | Built `pipeline/risk/` (config, load, demand, road_risk, planner, explain, run, CLI) |
 | 2026-11-21 | Backtest v1 lost to naive (0.577 vs 0.586). Tuned weights over 4 cutoffs, v2 beats naive at every cutoff (0.648 vs 0.586 official) |
 | 2026-11-21 | Added 3 invariants to `tests/test_risk.py`. All 11 M3 tests pass (shim run) |
+| 2026-11-21 | Added `notebooks/m3_outputs.ipynb`: loads all M3 parquet/JSON outputs cell by cell, with built-in checks (score rebuild, no overspend, DLP ₹0). All cells verified |
 | 2026-11-21 | pyarrow installed in `.venv` (manual resumable download). Real `pytest -q`: 30 passed, 24 skipped. Official backtest confirmed 0.648 vs 0.586. Generated `outputs/` M3 files |
 
 ## 10. Open items / next steps
