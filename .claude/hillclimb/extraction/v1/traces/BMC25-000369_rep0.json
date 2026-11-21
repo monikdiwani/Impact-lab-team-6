@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000369\",\n \"received_at\": \"2025-06-15 20:51\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"mr\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Complainant states waterlogging at Kherwadi, near flyover on Vakola Bridge Road. Repeat caller.\",\n \"locality_text\": \"Kherwadi\",\n \"ward_code\": \"H/E\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"H/E\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Waterlogging reported at Kherwadi (original text in mr).\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

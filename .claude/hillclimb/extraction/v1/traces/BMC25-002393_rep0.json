@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002393\",\n \"received_at\": \"2025-07-16 18:28\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Open manhole on Ganpatrao Kadam Marg near signal, Lalbaug. Covered with water, not visible. Very dangerous!\",\n \"locality_text\": \"Lalbaug\",\n \"ward_code\": \"F/S\",\n \"lat\": 19.009144,\n \"lon\": 72.835268,\n \"photo_description\": \"Uncovered manhole with a stick and plastic bag as warning\",\n \"upvotes\": 16\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"F/S\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Open manhole on Ganpatrao Kadam Marg near signal, Lalbaug. Covered with water, not visible. Very dangerous!\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

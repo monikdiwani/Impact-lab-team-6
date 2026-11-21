@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000632\",\n \"received_at\": \"2025-06-17 17:28\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Caller reports choked drain / nullah overflow at Malad West, near masjid on Marve Road. Caller agitated.\",\n \"locality_text\": \"Malad\",\n \"ward_code\": \"P/N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Choked drain / nullah overflow reported at Malad (original text in hi-en).\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

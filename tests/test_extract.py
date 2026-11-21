@@ -2,7 +2,6 @@
 fast (no pipeline run, Claude disabled by conftest)."""
 from __future__ import annotations
 
-import pandas as pd
 import pytest
 
 from pipeline.connect import extract as X

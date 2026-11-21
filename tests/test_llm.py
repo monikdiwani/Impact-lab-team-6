@@ -36,6 +36,7 @@ class FakeClient:
 @pytest.fixture
 def env(monkeypatch, tmp_path):
     monkeypatch.delenv("LLM_DISABLE", raising=False)
+    monkeypatch.delenv("LLM_OFFLINE", raising=False)
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
     monkeypatch.setenv("LLM_CACHE_DIR", str(tmp_path))
 
@@ -109,3 +110,12 @@ def test_meta_is_per_thread(env):
     t.start()
     t.join()
     assert seen["other"] is None and llm.get_last_meta() is not None
+
+
+def test_offline_uses_cache_but_never_calls(env, monkeypatch):
+    fake = env(_msg('"cached text"'))
+    assert llm.ask("p", system="s", fallback="FB") == '"cached text"'      # warm the cache (1 call)
+    monkeypatch.setenv("LLM_OFFLINE", "1")
+    assert llm.ask("p", system="s", fallback="FB") == '"cached text"'      # cache hit, no call
+    assert llm.ask("other", system="s", fallback="FB") == "FB"             # miss: fallback, no call
+    assert len(fake.calls) == 1 and llm.get_last_meta()["error"] == "offline_cache_miss"

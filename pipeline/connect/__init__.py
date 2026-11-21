@@ -81,4 +81,6 @@ def run(data_dir: Path, out_dir: Path) -> dict[str, Path]:
         frame.to_parquet(paths[name], index=False)
     paths["dedup_metrics"] = out_dir / "dedup_metrics.json"
     paths["dedup_metrics"].write_text(json.dumps(m, indent=2), encoding="utf-8")
+    from pipeline.db.sync import after_run  # keep outputs/follow_the_rupee.db in step (no-op outside outputs/)
+    after_run(data_dir, out_dir, "M1")
     return paths

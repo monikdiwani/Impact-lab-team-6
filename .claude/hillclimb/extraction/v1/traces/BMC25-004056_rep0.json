@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004056\",\n \"received_at\": \"2025-08-13 21:31\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road related\",\n \"description\": \"Manhole cover broken near BEST depot. Someone kept a stick and plastic as warning. Fix ASAP.\",\n \"locality_text\": \"Kamani\",\n \"ward_code\": \"L\",\n \"lat\": 19.064703,\n \"lon\": 72.887218,\n \"photo_description\": null,\n \"upvotes\": 20\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Manhole cover broken near BEST depot. Someone kept a stick and plastic as warning. Fix ASAP.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

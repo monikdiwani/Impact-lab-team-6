@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004185\",\n \"received_at\": \"2025-08-12 21:23\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Ganpati mandal pandal ke paas gutter ka dhakkan khula hai, paani mein dikh nahi raha. Koi gir jayega\",\n \"locality_text\": \"Grant Road\",\n \"ward_code\": \"D\",\n \"lat\": 18.958677,\n \"lon\": 72.808863,\n \"photo_description\": \"Close-up of a crater filled with muddy water, broken asphalt edges\",\n \"upvotes\": 10\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"D\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Pothole reported at Grant Road (original text in hi-en).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

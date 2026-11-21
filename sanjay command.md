@@ -138,12 +138,28 @@ Result on 21 Nov: **model spearman 0.650, P@20 0.40, captured@20 0.164**, so it 
 
 ---
 
-## Database (what the app connects to)
+## Before you push (same checks as GitHub CI)
 
 ```powershell
-python -m pipeline.db            # rebuild outputs/follow_the_rupee.db + docs/DATABASE.md after any pipeline run (~10 s)
+python -m ruff check --select E9,F63,F7,F82 .   # lint (pip install ruff once)
+python -m pipeline.db --check                  # database matches outputs
+python -m pytest -q                            # tests (~1.5 min)
+python -m evals.ci_check                       # free eval gates (~35 s): harness, M1/M2 with Claude off, M3 backtest
+```
+
+CI runs these on every push and PR (Actions tab). The paid evals and a pipeline re-run can also be started from the Actions tab (see `docs/CI_CD.md`).
+
+## Database (what the app connects to)
+
+The database updates itself whenever M1, M2 or M3 writes into `outputs/` (you'll see `[db] M2: database updated`). Tests and the backtest write to temp folders and never touch it.
+
+```powershell
+python -m pipeline               # full run: M1 -> M3 -> M2 -> database (Claude on if .env has a key)
+python -m pipeline --no-llm      # same, free: no new Claude calls, cached answers reused (reproduces outputs/ exactly)
+python -m pipeline --only m3     # one module, then the database
+python -m pipeline.db            # manual rebuild of outputs/follow_the_rupee.db + docs/DATABASE.md (~10 s)
 python -m pipeline.db --check    # is the database up to date with data/ and outputs/?
-pytest tests/test_db.py -q       # keys, row counts, views, read-only access, freshness
+pytest tests/test_db.py -q       # keys, counts, views, read-only access, freshness, auto-sync
 ```
 
 ```python
@@ -152,7 +168,7 @@ db.query("SELECT * FROM v_complaint_trail WHERE complaint_id = ?", ["BMC25-00000
 db.query("SELECT * FROM v_next_rupee WHERE ward_code = ? ORDER BY rank", ["F/S"])
 ```
 
-Full run order after code changes: M1 `python -c "from pipeline.connect import run; run('data','outputs')"`, then M3 `python -m pipeline.risk`, then M2 `python -c "from pipeline.audit import run; run('data','outputs')"`, then `python -m pipeline.db`.
+M3 reads M1's open issues, so after changing M1 re-run M3 too: `python -m pipeline --only m1,m3`. The runner always uses the order M1, then M3, then M2. Running M1 on its own prints a reminder when M3's plan is older than M1's open issues.
 
 ---
 

@@ -1,8 +1,11 @@
 """Cached Claude wrapper (owner: M1). `ask()` never raises; returns `fallback` on failure.
 
 Every response is cached to outputs/llm_cache/<sha256>.json (override with LLM_CACHE_DIR)
-so the demo needs no network. With no ANTHROPIC_API_KEY, or with LLM_DISABLE=1, only the
-fallback is returned (LLM_DISABLE also skips the cache, for a clean rules-only run).
+so the demo needs no network.
+  LLM_OFFLINE=1   cached answers only, never a new API call (misses get the fallback). Used by
+                  `python -m pipeline --no-llm`, so an offline re-run keeps the cached Claude texts.
+  LLM_DISABLE=1   no Claude at all, cache included: a clean rules-only run (tests, eval `rules`).
+  no API key      behaves like LLM_OFFLINE.
 
 Failures are not silent: get_last_meta() returns what happened on this thread's last
 call (model, usage, stop_reason, cache hit, error), so the eval runner can tell a real
@@ -84,6 +87,9 @@ def ask(prompt: str, *, system: str, effort: str = "medium", schema: dict | None
             return entry["response"]
         except (OSError, ValueError, KeyError):
             pass   # unreadable cache entry: fall through and call the API
+    if os.environ.get("LLM_OFFLINE") == "1":
+        _set_meta(error="offline_cache_miss")
+        return fallback
     if not os.environ.get("ANTHROPIC_API_KEY"):
         _set_meta(error="no_api_key")
         return fallback

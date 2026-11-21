@@ -5,7 +5,6 @@ check it is internally consistent.
 """
 from __future__ import annotations
 
-import pandas as pd
 import pytest
 
 from contracts.schemas import PLAN_ACTIONS, validate

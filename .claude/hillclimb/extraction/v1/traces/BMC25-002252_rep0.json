@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002252\",\n \"received_at\": \"2025-07-13 13:59\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Huge crater on SV Road opposite medical store. Cars swerving into other lane. Accident waiting to happen.\",\n \"locality_text\": \"Malad East\",\n \"ward_code\": \"P/N\",\n \"lat\": 19.180001,\n \"lon\": 72.846501,\n \"photo_description\": \"Close-up of a crater filled with muddy water, broken asphalt edges\",\n \"upvotes\": 6\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Huge crater on SV Road opposite medical store. Cars swerving into other lane. Accident waiting to happen.\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

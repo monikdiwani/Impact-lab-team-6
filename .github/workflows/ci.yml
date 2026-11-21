@@ -1,0 +1,102 @@
+# CI: runs on every push and pull request to main/dev. Free: no secrets, no Claude calls.
+# Locally, the same checks are:
+#   python -m ruff check --select E9,F63,F7,F82 .   |   python -m pipeline.db --check
+#   python -m pytest -q                              |   python -m evals.ci_check
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONIOENCODING: utf-8
+  PYTHONUNBUFFERED: "1"
+  LLM_OFFLINE: "1"          # CI never calls Claude: cached answers only (tests also set LLM_DISABLE)
+
+jobs:
+  lint:
+    name: Lint (syntax errors, undefined names)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      - run: ruff check --select E9,F63,F7,F82 --output-format=github .
+
+  database:
+    name: Database matches committed outputs
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - name: outputs/follow_the_rupee.db is up to date with data/ and outputs/
+        run: python -m pipeline.db --check
+
+  test:
+    name: Tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - name: pytest
+        run: python -m pytest -q --junitxml=test-results.xml
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-py${{ matrix.python }}
+          path: test-results.xml
+          retention-days: 14
+
+  eval-gates:
+    name: Free eval gates (M1 / M2 with Claude off, M3 backtest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: pip install -r requirements.txt
+      - name: Harness sanity + rules targets + risk backtest
+        run: python -m evals.ci_check
+      - name: Upload eval summaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-gates
+          path: |
+            .claude/hillclimb/_selfcheck/*/summary.json
+            .claude/hillclimb/risk_backtest/app.json
+          retention-days: 14
