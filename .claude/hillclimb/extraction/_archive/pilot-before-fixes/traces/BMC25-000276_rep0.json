@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000276\",\n \"received_at\": \"2025-06-11 11:16\",\n \"channel\": \"MyBMC App\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"church जवळ रस्त्यावर मोठा खड्डा आहे, Andheri East. लवकर दुरुस्त करा.\",\n \"locality_text\": \"Andheri East\",\n \"ward_code\": \"K/E\",\n \"lat\": 19.116745,\n \"lon\": 72.870157,\n \"photo_description\": \"Close-up of a crater filled with muddy water, broken asphalt edges\",\n \"upvotes\": 13\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"K/E\",\n \"language\": null,\n \"english_summary\": \"church जवळ रस्त्यावर मोठा खड्डा आहे, Andheri East. लवकर दुरुस्त करा.\"\n}"
+ }
+]

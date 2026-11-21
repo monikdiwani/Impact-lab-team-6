@@ -41,17 +41,21 @@ Things that trip people up:
 - `complaints.ward_code` is blank for about 7% of rows and `category_reported` is wrong or vague for about 18%. Recover ward from lat/lon (point-in-polygon on `wards.geojson` matches the dataset's `ward_code`) or from `locality_text` via `localities.csv` aliases, which include Devanagari.
 - Complaint `description` and `social_posts.text` mix English, Hinglish, Marathi and Hindi. `photo_description` stands in for image content.
 - Timestamps are `YYYY-MM-DD HH:MM` IST. Files are UTF-8, so read with an explicit `encoding="utf-8"` on Windows. Printing Devanagari text to the Windows console crashes unless `PYTHONIOENCODING=utf-8` is set.
+- City-wide spend is about ₹13 crore. Ward budgets are sized against it, so budget-vs-spend comparisons are meaningful.
 
 The team plan (stack, module ownership, output schemas, audit rules with expected counts) is in [docs/BLUEPRINT.md](docs/BLUEPRINT.md). Follow its ownership and schema contracts when adding code. Output schemas are in `contracts/schemas.py`.
 
 ## Tests and evals
 
-- `pytest -q`: Layer-1 regression suite. Module tests skip until `pipeline.<module>.run(data_dir, out_dir)` exists. Run one file with `pytest tests/test_audit.py -q`, or one test with `pytest tests/test_audit.py -k planted -q`.
+- `pytest -q`: Layer-1 suite, about 2.5 min, free. `tests/conftest.py` sets `LLM_DISABLE=1`, so no Claude calls even with a key in `.env`. Run one file with `pytest tests/test_audit.py -q`, or one test with `pytest tests/test_audit.py -k planted -q`. The fast unit tests are `tests/test_extract.py`, `tests/test_llm.py` and `tests/test_eval_harness.py`.
 - `tests/test_audit.py` pins the expected flag counts (114 / 45 / 493 / 1259 / 611) and plants anomalies via `tests/planted.py`. Change thresholds there in the same PR as any audit rule change.
-- `python -m evals.run_eval --suite extraction|narrative --target app|oracle|null|citizen|template`: Claude evals; see [evals/README.md](evals/README.md). Non-`app` targets are free harness self-checks. `--approve-harness` is a human step; don't pass it on the user's behalf.
+- `python -m evals.run_eval --suite extraction|narrative --target app|claude|rules|oracle|null|citizen|template`: see [evals/README.md](evals/README.md). `rules` runs the real app code with Claude off (free). `app` and `claude` are paid and gated. `--approve-harness` is a human step; don't pass it on the user's behalf.
 - `python -m evals.backtest_risk`: checks whether the road risk ranking predicts August–September trouble from June–July data, compared with a naive baseline.
 - `python -m evals.build_cases` regenerates `evals/cases/` deterministically.
-- [sanjay command.md](sanjay%20command.md) has copy-paste test and eval commands per module (M1 Connect, M2 Audit, M3 Risk).
-- `--target app` evals call `pipeline.connect.extract.extract_complaint` (M1) and `pipeline.audit.explain.{contractor_scorecard_text,ward_summary_text,flag_explanation}` (M2). The contract is in `evals/targets.py`; keep those signatures stable.
-- No pipeline code exists yet (only tests, evals and contracts), so module tests currently skip and `--target app` exits with a message.
-- City-wide spend is about ₹13 crore. Ward budgets are sized against it, so budget-vs-spend comparisons are meaningful.
+- [sanjay command.md](sanjay%20command.md) has copy-paste test and eval commands per module. [docs/sanjay fixes.md](docs/sanjay%20fixes.md) records what was fixed on 21 Nov and why.
+- Eval contract (keep signatures stable, see `evals/targets.py`): `pipeline.connect.extract.extract_complaint(record, force_claude=False)` (M1), `pipeline.audit.explain.{contractor_scorecard_text,ward_summary_text,flag_explanation}` (M2), and `pipeline.common.llm.{reset_last_meta,get_last_meta}`.
+
+## Claude calls
+
+- All Claude calls go through `pipeline/common/llm.py` `ask()`, which never raises. Responses are cached in `outputs/llm_cache/` (or `LLM_CACHE_DIR`). `LLM_DISABLE=1` returns the fallback with no network. Failures are recorded in `get_last_meta()["error"]`, not swallowed.
+- M1 extraction calls Claude only for unclear complaints, about 150 of 6,501. Category comes from the photo template, then English or helpline text, then the citizen's category. Severity is a per-category lookup. The reasons and measurements are in the `pipeline/connect/extract.py` docstring. In this synthetic data, Hindi, Marathi and Hinglish app/portal text is unrelated to the true category, so don't route category decisions through it.

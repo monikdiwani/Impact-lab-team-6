@@ -21,11 +21,6 @@
    "kind": "binary"
   },
   {
-   "id": "language",
-   "label": "language",
-   "kind": "binary"
-  },
-  {
    "id": "valid_output",
    "label": "valid output",
    "kind": "binary"
@@ -48,5 +43,6 @@
   "evals/graders.py",
   "evals/targets.py",
   "evals/cases/extraction.jsonl"
- ]
+ ],
+ "harness_sha": "6bad92e668419edb2eb7776d26021d692d308403d78b070d76b4b82d58b8dace"
 }

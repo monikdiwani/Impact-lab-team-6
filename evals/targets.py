@@ -4,8 +4,12 @@
 are free, deterministic stand-ins used to validate the harness itself:
   oracle   returns the truth / a known-good text  -> should score ~100%
   null     returns nothing                         -> should score ~0%
-  citizen  (extraction) trusts what the citizen typed -> the bar Claude must beat
+  citizen  (extraction) trusts what the citizen typed -> the bar to beat
   template (narrative) a fixed fill-in-the-blanks text, no LLM
+  rules    the real app code with Claude switched off (LLM_DISABLE=1): measures the
+           deterministic part for free; the gap to `app` is what Claude adds
+  claude   (extraction, paid) the app's Claude path forced for EVERY case, bypassing the
+           rules: how good is Claude on its own, and does it over-trust unreliable text?
 
 App contracts (owners implement these; signatures are the integration point):
   pipeline.connect.extract.extract_complaint(record: dict) -> dict          [M1]
@@ -14,9 +18,10 @@ App contracts (owners implement these; signatures are the integration point):
   pipeline.audit.explain.ward_summary_text(facts: dict) -> str              [M2]
   pipeline.audit.explain.flag_explanation(facts: dict) -> str               [M2]
 
-Optional: if pipeline.common.llm exposes get_last_meta() -> {"model", "usage",
-"stop_reason"} for the current thread's last call, the runner records it per case
-so cost and truncation show up in the results.
+pipeline.common.llm exposes reset_last_meta() / get_last_meta() -> {"model", "usage",
+"stop_reason", "cache", "error"} for the current thread's last call. The runner resets
+before each case and reads after, so it knows whether the case called Claude, what it
+cost, and whether the call failed (failed calls go to errors.jsonl, not the scores).
 """
 from __future__ import annotations
 
@@ -37,31 +42,62 @@ def _load(spec: str):
     return getattr(importlib.import_module(mod), fn)
 
 
-def app_meta():
+TEMPLATES = {"contractor": "pipeline.audit.explain:contractor_template",
+             "ward": "pipeline.audit.explain:ward_template",
+             "flag": "pipeline.audit.explain:flag_template"}
+
+
+def template_for(case):
+    """M2's deterministic fallback text for a narrative case, or None if unavailable.
+    Lets the runner report whether the app's final text was Claude's or the template."""
     try:
-        return importlib.import_module("pipeline.common.llm").get_last_meta()
-    except (ImportError, AttributeError):
+        return _load(TEMPLATES[case["kind"]])(dict(case["facts"]))
+    except (ImportError, AttributeError, KeyError):
         return None
 
 
+def _llm():
+    try:
+        return importlib.import_module("pipeline.common.llm")
+    except ImportError:
+        return None
+
+
+def reset_app_meta() -> None:
+    mod = _llm()
+    if mod is not None and hasattr(mod, "reset_last_meta"):
+        mod.reset_last_meta()
+
+
+def app_meta():
+    """Meta of the app's last Claude call on this thread (None if it made none)."""
+    mod = _llm()
+    return mod.get_last_meta() if mod is not None and hasattr(mod, "get_last_meta") else None
+
+
 def resolve(suite: str, target: str):
-    """Return fn(case) -> output."""
-    if target == "app":
+    """Return fn(case) -> output. For 'rules' the caller must set LLM_DISABLE=1 first."""
+    if target in ("app", "rules", "claude"):
         table = APP[suite]
         fns = {k: _load(v) for k, v in table.items()}   # raises early if not implemented
         if suite == "extraction":
+            if target == "claude":
+                return lambda case: fns["*"](dict(case["input"]), force_claude=True)
             return lambda case: fns["*"](dict(case["input"]))
+        if target == "claude":
+            raise SystemExit("--target claude only applies to --suite extraction "
+                             "(the narrative app already asks Claude for every text)")
         return lambda case: fns[case["kind"]](dict(case["facts"]))
 
     if suite == "extraction":
         if target == "oracle":
             return lambda c: {"category_clean": c["expected"]["category"], "severity_1_5": c["expected"]["severity"],
-                              "ward_code": c["expected"]["ward_code"], "language": c["expected"]["language"]}
+                              "ward_code": c["expected"]["ward_code"]}
         if target == "null":
             return lambda c: {}
         if target == "citizen":
             return lambda c: {"category_clean": c["input"]["category_reported"], "severity_1_5": 3,
-                              "ward_code": c["input"]["ward_code"], "language": "en"}
+                              "ward_code": c["input"]["ward_code"]}
 
     if suite == "narrative":
         if target == "null":

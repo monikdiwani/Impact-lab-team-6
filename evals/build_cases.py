@@ -20,35 +20,77 @@ CASES = Path(__file__).resolve().parent / "cases"
 SEED = 6
 
 SEVERITY_FROM_SLA = {24: 5, 48: 4, 72: 3, 120: 2, 168: 1}
-# fields the extractor may see; status/resolved_at/complainant_id would leak the answer
-INPUT_FIELDS = ["complaint_id", "received_at", "channel", "category_reported", "description",
-                "locality_text", "ward_code", "lat", "lon", "photo_description", "upvotes"]
+# Fields the extractor may see. status/resolved_at/complainant_id would leak the answer.
+# `language` is an input, not something to predict: 1916-helpline rows are English
+# operator notes even when the caller spoke Marathi or Hindi (740 linked rows), so the
+# label can't be recovered from the text.
+INPUT_FIELDS = ["complaint_id", "received_at", "channel", "language", "category_reported",
+                "description", "locality_text", "ward_code", "lat", "lon", "photo_description",
+                "upvotes"]
 WORD_LIMITS = {"contractor": 120, "ward": 150, "flag": 25}
+HELPLINE = "1916 Helpline"
 
-# Label-noise guard: the synthetic text sometimes contradicts the linked work order
-# (e.g. "paani bhar gaya" on a manhole job). A case is kept only if the description
-# or photo text supports the truth label, or neither gives a clear signal.
+# ---- answerability guard ------------------------------------------------------------
+# A case stays only if at least one piece of *reliable* evidence points to the truth label:
+#   - the photo description: the data has 12 fixed photo templates and each maps to
+#     exactly one work_type (100% pure), so a photo is decisive;
+#   - the free text, but only where text is measurably reliable: English text and helpline
+#     operator notes (keywords right 90-98%). Hindi / Marathi / Hinglish text from the app
+#     or portal is statistically independent of the true category in this synthetic data
+#     (every keyword row has the base-rate mix), so a keyword match there is chance;
+#   - the citizen's selected category.
+# Cases with none of these are unanswerable by any system and only add constant error.
+# This is policy-neutral: contradictory cases (e.g. Hindi text says "manhole", citizen and
+# truth say "pothole") are KEPT, because they are realistic and separate good systems
+# from ones that over-trust the text.
+PHOTO_TRUTH = {
+    "wide shot of road with several potholes": "Pothole",
+    "crater filled with muddy water": "Pothole",
+    "road under brown water": "Waterlogging",
+    "wading through knee-deep water": "Waterlogging",
+    "uncovered manhole": "Open or broken manhole",
+    "manhole cover sunk": "Open or broken manhole",
+    "nullah water overflowing": "Choked drain / nullah overflow",
+    "garbage blocking storm drain": "Choked drain / nullah overflow",
+    "sinkhole on road edge": "Road cave-in",
+    "collapsed road section": "Road cave-in",
+    "paver blocks on footpath": "Broken paver blocks",
+    "loose paver blocks": "Broken paver blocks",
+}
 KEYWORDS = {
-    "Pothole": r"pothole|khadd|gadd|खड्ड|गड्ड",
-    "Waterlogging": r"waterlog|flood|paani|pani|पाणी|पानी",
-    "Open or broken manhole": r"manhole|ढक्कन|झाकण|chamber",
-    "Choked drain / nullah overflow": r"drain|nullah|nala|नाला|नाले|gatar",
-    "Road cave-in": r"cave|sinkhole|dhans|धस|खचला|collapsed",
+    "Pothole": r"pot ?hole|khadd|gadd|crater|खड्ड|गड्ड|गड्ढ",
+    "Waterlogging": r"water ?log|flood|paani|\bpani\b|knee[- ]deep|not receding|पाणी|पानी|साचल|भर गया",
+    "Open or broken manhole": r"manhole|chamber|dhakkan|ढक्कन|झाकण|मैनहोल",
+    "Choked drain / nullah overflow": r"choked|drain|nullah|\bnala\b|gatar|नाला|नाले|गटार",
+    "Road cave-in": r"cave[- ]?in|caved|sinkhole|has sunk|collaps|dhans|धंस|धस|खचल",
     "Broken paver blocks": r"paver|ब्लॉक",
 }
 
 
-def _guess(text):
-    t = str(text).lower()
-    hits = [k for k, pat in KEYWORDS.items() if re.search(pat, t)]
-    return hits[0] if len(hits) == 1 else None
+def _photo_truth(photo):
+    t = str(photo).lower() if isinstance(photo, str) else ""
+    return next((c for k, c in PHOTO_TRUTH.items() if k in t), None)
 
 
-def _label_supported(row) -> bool:
-    g_desc, g_photo = _guess(row.description), _guess(row.photo_description)
-    if g_desc is None and g_photo is None:
-        return True
-    return row.work_type in (g_desc, g_photo)
+def _text_hits(text):
+    t = str(text).lower() if isinstance(text, str) else ""
+    return {k for k, pat in KEYWORDS.items() if re.search(pat, t)}
+
+
+def _reliable_text(row) -> bool:
+    return row.channel == HELPLINE or row.language == "en"
+
+
+def _support(row) -> set:
+    """Which reliable inputs point to the truth label."""
+    s = set()
+    if _photo_truth(row.photo_description) == row.work_type:
+        s.add("photo")
+    if _reliable_text(row) and row.work_type in _text_hits(row.description):
+        s.add("text")
+    if row.category_reported == row.work_type:
+        s.add("citizen")
+    return s
 
 
 def _csv(name):
@@ -65,7 +107,8 @@ def _clean(v):
 
 # ---- extraction -----------------------------------------------------------------
 
-def build_extraction(per_cell: int = 15, n_blank_ward: int = 30) -> list[dict]:
+def build_extraction(per_cell: int = 15, n_blank_ward: int = 30, n_vague: int = 15,
+                     n_ambiguous_text: int = 10) -> list[dict]:
     wo, c = _csv("work_orders"), _csv("complaints")
     sample200 = set(_csv("complaints_sample_200").complaint_id)   # prompt-dev set: keep out
     links = (wo.dropna(subset=["linked_complaint_ids"])
@@ -73,10 +116,12 @@ def build_extraction(per_cell: int = 15, n_blank_ward: int = 30) -> list[dict]:
              .explode("complaint_id"))
     m = c.merge(links[["complaint_id", "work_order_id", "work_type", "sla_hours", "ward_code"]],
                 on="complaint_id", suffixes=("", "_truth"))
-    m = m[~m.complaint_id.isin(sample200)]
-    supported = m.apply(_label_supported, axis=1)
-    print(f"label guard: dropped {int((~supported).sum())} of {len(m)} candidates whose text contradicts the truth label")
-    m = m[supported]
+    m = m[~m.complaint_id.isin(sample200)].copy()
+    m["support"] = m.apply(_support, axis=1)
+    answerable = m.support.map(bool)
+    print(f"answerability guard: dropped {int((~answerable).sum())} of {len(m)} candidates "
+          f"with no reliable input pointing to the truth label")
+    m = m[answerable]
     m["cat_wrong"] = m.category_reported != m.work_type
     rng = np.random.default_rng(SEED)
 
@@ -88,6 +133,18 @@ def build_extraction(per_cell: int = 15, n_blank_ward: int = 30) -> list[dict]:
         for wrong in (True, False):
             cell = rest[(rest.language == lang) & (rest.cat_wrong == wrong)]
             picked.append(cell.sample(min(per_cell, len(cell)), random_state=int(rng.integers(1e9))))
+    # Ambiguous slice: no photo, and either a vague citizen category or reliable text that
+    # names zero or several categories. Only a handful of answerable complaints look like
+    # this, which is where a reader (Claude) can add something over fixed rules.
+    no_photo = m.photo_description.isna()
+    vague = m.category_reported.isin(["Other", "Road related"])
+    n_hits = m.description.map(lambda t: len(_text_hits(t)))
+    reliable = (m.channel == HELPLINE) | (m.language == "en")
+    amb_text = m[no_photo & reliable & (n_hits != 1)]
+    amb_vague = m[no_photo & vague & ~m.complaint_id.isin(amb_text.complaint_id)]
+    picked.append(amb_text.sample(min(n_ambiguous_text, len(amb_text)), random_state=SEED))
+    picked.append(amb_vague.sample(min(n_vague, len(amb_vague)), random_state=SEED))
+    ambiguous_ids = set(amb_text.complaint_id) | set(amb_vague.complaint_id)
     df = pd.concat(picked).drop_duplicates("complaint_id")
 
     cases = []
@@ -96,6 +153,13 @@ def build_extraction(per_cell: int = 15, n_blank_ward: int = 30) -> list[dict]:
         tags = [row["language"], "cat_wrong" if row["cat_wrong"] else "cat_right"]
         if pd.isna(row["ward_code"]):
             tags.append("blank_ward")
+        tags.append("photo" if isinstance(row["photo_description"], str) else "no_photo")
+        if row["channel"] == HELPLINE:
+            tags.append("helpline")
+        elif row["language"] != "en":
+            tags.append("noisy_text")
+        if row["complaint_id"] in ambiguous_ids:
+            tags.append("ambiguous")
         cases.append({
             "id": row["complaint_id"],
             "tags": tags,
@@ -104,9 +168,8 @@ def build_extraction(per_cell: int = 15, n_blank_ward: int = 30) -> list[dict]:
                 "category": row["work_type"],
                 "severity": SEVERITY_FROM_SLA[int(row["sla_hours"])],
                 "ward_code": row["ward_code_truth"],
-                "language": row["language"],
             },
-            "meta": {"work_order_id": row["work_order_id"]},
+            "meta": {"work_order_id": row["work_order_id"], "support": sorted(row["support"])},
         })
     return sorted(cases, key=lambda x: x["id"])
 
@@ -255,17 +318,19 @@ def write_review(extraction, narrative):
         return f"````\n{s}\n````"
     out = ["# Eval cases: review before sign-off", "",
            f"Extraction: {len(extraction)} cases · Narrative: {len(narrative)} cases", "",
-           "## Extraction", "", "| id | tags | category (truth) | severity | ward | language |",
+           "## Extraction", "", "| id | tags | category (truth) | severity | ward | evidence for truth |",
            "|---|---|---|---|---|---|"]
     for c in extraction:
         e = c["expected"]
         out.append(f"| {c['id']} | {' '.join(c['tags'])} | {e['category']} | {e['severity']} | "
-                   f"{e['ward_code']} | {e['language']} |")
+                   f"{e['ward_code']} | {', '.join(c['meta']['support'])} |")
     out += ["", "### Inputs", ""]
     for c in extraction:
         i = c["input"]
-        out += [f"**{c['id']}** ({' · '.join(c['tags'])}) — citizen picked *{i['category_reported']}*, "
-                f"truth *{c['expected']['category']}*", fence(i["description"]), ""]
+        photo = f" · photo: *{i['photo_description']}*" if i.get("photo_description") else ""
+        out += [f"**{c['id']}** ({' · '.join(c['tags'])}) — {i['channel']}, citizen picked "
+                f"*{i['category_reported']}*, truth *{c['expected']['category']}*{photo}",
+                fence(i["description"]), ""]
     out += ["## Narrative", ""]
     for c in narrative:
         out += [f"### {c['id']} ({' · '.join(c['tags'])})",

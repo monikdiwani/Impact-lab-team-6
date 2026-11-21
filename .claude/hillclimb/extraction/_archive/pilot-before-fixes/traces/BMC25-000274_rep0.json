@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000274\",\n \"received_at\": \"2025-06-11 11:55\",\n \"channel\": \"1916 Helpline\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"As per caller choked drain / nullah overflow at Vinoba Bhave Nagar, near church on Kurla Andheri Road. \",\n \"locality_text\": \"Vinoba Bhave Nagar\",\n \"ward_code\": \"L\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"L\",\n \"language\": null,\n \"english_summary\": \"As per caller choked drain / nullah overflow at Vinoba Bhave Nagar, near church on Kurla Andheri Road.\"\n}"
+ }
+]

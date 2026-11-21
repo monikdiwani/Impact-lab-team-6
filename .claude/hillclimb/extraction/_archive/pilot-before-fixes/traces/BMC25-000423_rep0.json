@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000423\",\n \"received_at\": \"2025-06-16 08:54\",\n \"channel\": \"MyBMC App\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"hospital gate के पास सड़क पर बड़ा गड्ढा है, Santacruz West. जल्दी ठीक करें.\",\n \"locality_text\": \"Santacruz West\",\n \"ward_code\": \"H/W\",\n \"lat\": 19.069302,\n \"lon\": 72.84224,\n \"photo_description\": \"People wading through knee-deep water near shops\",\n \"upvotes\": 26\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 4,\n \"ward_code\": \"H/W\",\n \"language\": null,\n \"english_summary\": \"hospital gate के पास सड़क पर बड़ा गड्ढा है, Santacruz West. जल्दी ठीक करें.\"\n}"
+ }
+]

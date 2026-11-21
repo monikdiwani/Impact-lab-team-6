@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000431\",\n \"received_at\": \"2025-06-16 07:02\",\n \"channel\": \"MyBMC App\",\n \"category_reported\": \"Other\",\n \"description\": \"90 Feet Road Dharavi completely flooded, kids unable to go to school. Dharavi.\",\n \"locality_text\": \"Dharavi\",\n \"ward_code\": null,\n \"lat\": 19.045394,\n \"lon\": 72.852679,\n \"photo_description\": null,\n \"upvotes\": 26\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"G/N\",\n \"language\": null,\n \"english_summary\": \"90 Feet Road in Dharavi is completely flooded, and children are unable to go to school.\"\n}"
+ }
+]

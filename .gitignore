@@ -1,7 +1,27 @@
-.venv/
-__pycache__/
-.pytest_cache/
+# --- Secrets: never commit API keys ---
 .env
+.env.*
+!.env.example
+*.env
+*.pem
+*.key
+secrets.*
 .streamlit/secrets.toml
 .claude/settings.local.json
+
+# --- Python ---
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# --- Eval self-check output (regenerable) ---
 .claude/hillclimb/_selfcheck/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.claude/hillclimb/*/_llm_cache/

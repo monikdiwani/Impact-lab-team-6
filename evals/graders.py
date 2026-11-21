@@ -12,9 +12,11 @@ EXTRACTION_METRICS = [
     {"id": "severity_within1", "label": "severity ±1", "kind": "binary"},
     {"id": "severity_exact", "label": "severity =", "kind": "binary"},
     {"id": "ward", "label": "ward", "kind": "binary"},
-    {"id": "language", "label": "language", "kind": "binary"},
     {"id": "valid_output", "label": "valid output", "kind": "binary"},
 ]
+# Severity truth is a function of the category in this data (within a category it is
+# noise), so even a perfect category gives at most ~47% exact / ~89% within one.
+SEVERITY_CEILING = {"severity_exact": 0.47, "severity_within1": 0.89}
 CATEGORIES = {"Pothole", "Waterlogging", "Choked drain / nullah overflow", "Open or broken manhole",
               "Broken paver blocks", "Road cave-in"}
 
@@ -33,7 +35,6 @@ def grade_extraction(output, expected) -> tuple[dict, dict]:
         "severity_within1": int(sev is not None and abs(sev - expected["severity"]) <= 1),
         "severity_exact": int(sev == expected["severity"]),
         "ward": int(output.get("ward_code") == expected["ward_code"]),
-        "language": int(output.get("language") == expected["language"]),
         "valid_output": int(cat in CATEGORIES and sev in {1, 2, 3, 4, 5}),
     }
     expl = {}

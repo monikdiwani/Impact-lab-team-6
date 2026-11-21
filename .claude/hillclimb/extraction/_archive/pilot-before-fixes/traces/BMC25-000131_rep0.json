@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000131\",\n \"received_at\": \"2025-06-06 21:13\",\n \"channel\": \"MyBMC App\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Loose paver blocks on Ghatkopar Mankhurd Link Road, Trombay. Water collecting in gaps.\",\n \"locality_text\": \"Trombay\",\n \"ward_code\": \"M/E\",\n \"lat\": 19.0615,\n \"lon\": 72.926353,\n \"photo_description\": null,\n \"upvotes\": 13\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 3,\n \"ward_code\": \"M/E\",\n \"language\": null,\n \"english_summary\": \"Loose paver blocks on Ghatkopar Mankhurd Link Road, Trombay. Water collecting in gaps.\"\n}"
+ }
+]

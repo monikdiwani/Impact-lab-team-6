@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000347\",\n \"received_at\": \"2025-06-17 12:02\",\n \"channel\": \"MyBMC App\",\n \"category_reported\": \"Other\",\n \"description\": \"Santacruz West में पानी भर गया है, एम्बुलेंस नहीं निकल पा रही.\",\n \"locality_text\": \"Santacruz West\",\n \"ward_code\": \"H/W\",\n \"lat\": 19.061439,\n \"lon\": 72.841061,\n \"photo_description\": null,\n \"upvotes\": 9\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 5,\n \"ward_code\": \"H/W\",\n \"language\": null,\n \"english_summary\": \"Waterlogging in Santacruz West; an ambulance is unable to get through.\"\n}"
+ }
+]

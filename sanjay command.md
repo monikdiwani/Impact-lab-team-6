@@ -6,11 +6,11 @@ Run everything from the repo root. Details: [evals/README.md](evals/README.md).
 
 ```powershell
 pip install -r requirements.txt
+copy .env.example .env                   # then open .env and paste your key after ANTHROPIC_API_KEY=
 $env:PYTHONIOENCODING = "utf-8"          # Devanagari in the cases crashes the console without this
-$env:ANTHROPIC_API_KEY = "sk-ant-..."    # only needed for the paid evals (M1, M2)
 ```
 
-Git Bash equivalent: `export PYTHONIOENCODING=utf-8`
+`.env` is git-ignored. `evals/run_eval.py` loads it automatically, and a key already set in your shell takes priority. Only the paid evals (M1, M2) need the key. Git Bash: `cp .env.example .env` and `export PYTHONIOENCODING=utf-8`.
 
 ## All three at once
 
@@ -20,41 +20,53 @@ pytest -q -rs            # same, and lists why each test was skipped
 ```
 
 A skipped test means the module isn't written yet. A failed test means it's written and wrong.
+The suite switches Claude off for itself (`LLM_DISABLE=1`), so it is free even with a key in `.env`. It takes about 2.5 minutes; most of that is M1's de-dup model.
 
 ---
 
 ## M1: Connect (complaints)
 
 **Needs:** `pipeline/connect/__init__.py` with `run(data_dir, out_dir)` (tests) and
-`pipeline/connect/extract.py` with `extract_complaint(record: dict) -> dict` (eval).
+`pipeline/connect/extract.py` with `extract_complaint(record: dict, force_claude=False) -> dict` (eval).
 
 ### Test (free)
 
 ```powershell
 pytest tests/test_connect.py -q -s       # -s prints dedup precision / recall / F1
+pytest tests/test_extract.py tests/test_llm.py -q   # extraction routing + Claude wrapper (seconds, no network)
 ```
 
 What it checks: no complaints lost, ward coverage ≥ 98%, recovered wards correct (≥ 90% on blank-ward rows), work-order links preserved, de-dup F1 ≥ 0.60 against the real linked groups, open issues have a `road_id`.
 
-### Eval (extraction suite, 150 cases)
+### Eval (extraction suite, 166 cases)
 
 ```powershell
-# 1. free harness self-checks: must give 100% / 0% / 56.7% category
+# 1. free: harness self-checks (100% / 0% / 54.8% category) and M1 without Claude
 python -m evals.run_eval --suite extraction --target oracle
 python -m evals.run_eval --suite extraction --target null
-python -m evals.run_eval --suite extraction --target citizen    # the bar Claude must beat
+python -m evals.run_eval --suite extraction --target citizen    # the bar to beat
+python -m evals.run_eval --suite extraction --target rules      # M1's real code, Claude off
 
-# 2. first paid run: pilot on 10 cases. --approve-harness is YOUR step: review evals/cases/REVIEW.md first
+# 2. paid pilot. The cases and runner changed on 21 Nov, so approve again.
+#    --approve-harness is YOUR step: review evals/cases/REVIEW.md first
 python -m evals.run_eval --suite extraction --target app --approve-harness --limit 10
 
-# 3. full run
+# 3. full run, plus the Claude-only ablation (every case through Claude, rules bypassed)
 python -m evals.run_eval --suite extraction --target app
+python -m evals.run_eval --suite extraction --target claude
 
 # 4. after changing the prompt: run it as a new variant, then compare summaries
 python -m evals.run_eval --suite extraction --target app --variant v1
 ```
 
-Numbers to report: **category** (beat 56.7%), **category on `cat_wrong`** (Claude fixing the citizen's mistakes), **ward recovery on blank-ward cases**, severity ±1, and the per-language rows (en / hi-en / mr / hi).
+Numbers to report:
+- **category** (citizen bar 54.8%), **category on `cat_wrong`** (fixing the citizen's mistakes) and **category by evidence source** (photo / text / citizen / claude).
+- **The `ambiguous` slice:** the only cases where Claude decides the category in `app`.
+- **ward recovery on blank-ward cases.**
+- **severity:** read it against the ceiling of about 47% exact / 89% within one, not 100%.
+- Language is now an input, so it isn't scored.
+
+Your 10-case pilot from before the fixes is kept in `.claude/hillclimb/extraction/_archive/pilot-before-fixes/`.
 
 ---
 
@@ -76,11 +88,12 @@ What it checks: flag counts 114 OVERBILL / 45 DOUBLE_BILL / 493 DLP_PAID / 1259 
 ### Eval (narrative suite, 29 cases)
 
 ```powershell
-# 1. free harness self-checks
+# 1. free harness self-checks, and M2's real templates through the graders
 python -m evals.run_eval --suite narrative --target template    # 100% on the programmatic checks
 python -m evals.run_eval --suite narrative --target null        # 0%
+python -m evals.run_eval --suite narrative --target rules       # M2's code with Claude off: 100% today
 
-# 2. first paid run: pilot, then approve
+# 2. first paid run: pilot, then approve (approve again: the runner changed on 21 Nov)
 python -m evals.run_eval --suite narrative --target app --approve-harness --limit 5
 
 # 3. full run, free checks only (invented numbers, fake IDs, word limits, banned words, required context)
@@ -120,6 +133,8 @@ python -m evals.backtest_risk --cutoff 2025-07-15
 ```
 
 Compare the `model` row with `baseline_past_work_orders` (spearman 0.586, P@20 0.30, captured@20 0.137). **Beating those is the pass mark.** If the model is lower, it's adding noise and the weights need rethinking. Results are saved to `.claude/hillclimb/risk_backtest/`.
+
+Result on 21 Nov: **model spearman 0.650, P@20 0.40, captured@20 0.164**, so it beats the baseline on all three. M3 tuned its weights on this backtest (4 cutoffs), so treat it as an in-sample number.
 
 ---
 

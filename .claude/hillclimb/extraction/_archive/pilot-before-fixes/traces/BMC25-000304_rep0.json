@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000304\",\n \"received_at\": \"2025-06-15 10:15\",\n \"channel\": \"MyBMC Web Portal\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Since morning water not receding on Kurla Andheri Road. Kurla East. Shops flooded.\",\n \"locality_text\": \"Kurla East\",\n \"ward_code\": null,\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": \"People wading through knee-deep water near shops\",\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 3,\n \"ward_code\": \"L\",\n \"language\": null,\n \"english_summary\": \"Since morning water not receding on Kurla Andheri Road. Kurla East. Shops flooded.\"\n}"
+ }
+]

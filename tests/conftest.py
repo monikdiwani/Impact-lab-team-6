@@ -4,12 +4,20 @@ Each module test runs that module's `run(data_dir, out_dir)` entry point once pe
 session (blueprint §10) and reads the parquet files it wrote. If a module isn't
 written yet, its tests are skipped, not failed, so the suite is green from day one
 and starts biting as soon as code lands.
+
+Claude is switched off for the whole session (LLM_DISABLE=1): the suite must be free and
+deterministic. Without this, a key in the shell would make every pipeline run below call
+Claude (~360 paid calls per session). M1's connect step (~200 s, mostly the dedup model)
+runs once and its outputs are shared with the risk fixture.
 """
 from __future__ import annotations
 
 import importlib
+import os
 import shutil
 from pathlib import Path
+
+os.environ["LLM_DISABLE"] = "1"
 
 import pandas as pd
 import pytest
@@ -65,11 +73,13 @@ def audit_out(tmp_path_factory):
 
 
 @pytest.fixture(scope="session")
-def risk_out(tmp_path_factory):
+def risk_out(tmp_path_factory, request):
     out = tmp_path_factory.mktemp("risk")
-    # risk reads open_issues.parquet from out_dir when present (blueprint §10)
+    # risk reads open_issues.parquet from out_dir when present (blueprint §10); reuse the
+    # session's connect run instead of running M1 a second time
     try:
-        run_module("pipeline.connect", DATA, out)
+        connect_dir = request.getfixturevalue("connect_out")
+        shutil.copy2(connect_dir / "open_issues.parquet", out / "open_issues.parquet")
     except pytest.skip.Exception:
         pass
     return run_module("pipeline.risk", DATA, out)
