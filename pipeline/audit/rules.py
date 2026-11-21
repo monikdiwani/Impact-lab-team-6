@@ -15,7 +15,7 @@ FLAG_COLS = ["flag_type", "severity", "work_order_id", "related_work_order_id", 
 
 
 def _inr(x: float) -> str:
-    return f"₹{x:,.0f}"
+    return C.inr(float(x))
 
 
 def _base(wo: pd.DataFrame, flag_type: str) -> pd.DataFrame:

@@ -44,3 +44,14 @@ DEFINITIONS = {
     "rate_card_tolerance_pct": round((OVERBILL_RATIO - 1) * 100),
     "double_bill_window_days": DOUBLE_BILL_DAYS,
 }
+
+
+def inr(x: float) -> str:
+    """Indian digit grouping: 195064 -> '₹1,95,064', 13432818 -> '₹1,34,32,818'."""
+    n = int(round(abs(x)))
+    s = str(n)
+    if len(s) > 3:
+        head, tail = s[:-3], s[-3:]
+        head = ",".join([head[max(0, i - 2):i] for i in range(len(head), 0, -2)][::-1])
+        s = f"{head},{tail}"
+    return f"{'-' if x < 0 else ''}₹{s}"

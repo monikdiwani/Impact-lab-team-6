@@ -82,9 +82,3 @@ def run(data_dir: Path, out_dir: Path) -> dict[str, Path]:
     paths["scorecard_text"].write_text(json.dumps(text, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
     return paths
 
-
-if __name__ == "__main__":
-    import sys
-    root = Path(__file__).resolve().parents[2]
-    out = run(root / "data", Path(sys.argv[1]) if len(sys.argv) > 1 else root / "outputs")
-    print({k: str(v) for k, v in out.items()})

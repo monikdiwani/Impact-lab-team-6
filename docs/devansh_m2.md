@@ -85,7 +85,8 @@ All contractors are fictional (synthetic data).
 
 One row per ward: budget, billed, % of budget used, ₹ flagged, % of spend flagged, re-open %, on-time %, top contractor by spend, summary text.
 
-- `flagged_inr` takes the largest ₹ flag per work order, so one job is never counted twice.
+- `flagged_inr` takes the largest ₹ flag per billed job, so one bill is never counted twice. A repeat-repair amount is the follow-up job's bill, so it is counted under the follow-up job (fixed 21 Nov after the UI review found ₹36.5 L counted twice; city total is now ₹5.15 Cr, 38.3% of billed).
+- Evidence and summary text use Indian digit grouping (₹1,95,064).
 - Ward billed totals add up to ₹13,43,28,183, matching the test.
 - 6 wards are over budget. G/S has the highest share of spend flagged (63.7%).
 

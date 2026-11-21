@@ -36,9 +36,16 @@ def _grade(score: float) -> str:
 
 
 def _money_by_wo(flags: pd.DataFrame) -> pd.Series:
-    """₹ at risk per WO, taking the largest single flag so one job is never counted twice."""
+    """₹ at risk per billed job, taking the largest single flag so one bill is never counted twice.
+
+    A REPEAT_REPAIR flag sits on the failed job, but its amount is the follow-up job's bill,
+    so it is keyed to the follow-up job (related_work_order_id). Otherwise that bill would be
+    counted again under the follow-up's own flags (for example DLP_PAID).
+    """
     m = flags[flags.flag_type.isin(C.MONEY_FLAGS)]
-    return m.groupby("work_order_id").amount_at_risk_inr.max()
+    billed_job = m.related_work_order_id.where(
+        (m.flag_type == "REPEAT_REPAIR") & m.related_work_order_id.notna(), m.work_order_id)
+    return m.groupby(billed_job).amount_at_risk_inr.max()
 
 
 def city_average(wo: pd.DataFrame) -> dict:
