@@ -1,0 +1,52 @@
+{
+ "metrics": [
+  {
+   "id": "category",
+   "label": "category",
+   "kind": "binary"
+  },
+  {
+   "id": "severity_within1",
+   "label": "severity \u00b11",
+   "kind": "binary"
+  },
+  {
+   "id": "severity_exact",
+   "label": "severity =",
+   "kind": "binary"
+  },
+  {
+   "id": "ward",
+   "label": "ward",
+   "kind": "binary"
+  },
+  {
+   "id": "language",
+   "label": "language",
+   "kind": "binary"
+  },
+  {
+   "id": "valid_output",
+   "label": "valid output",
+   "kind": "binary"
+  }
+ ],
+ "perf_fields": [
+  {
+   "id": "latency_s",
+   "label": "latency",
+   "unit": "s"
+  },
+  {
+   "id": "cost_usd",
+   "label": "cost",
+   "unit": "$"
+  }
+ ],
+ "harness_paths": [
+  "evals/run_eval.py",
+  "evals/graders.py",
+  "evals/targets.py",
+  "evals/cases/extraction.jsonl"
+ ]
+}

@@ -1,0 +1,57 @@
+{
+ "metrics": [
+  {
+   "id": "passes_all",
+   "label": "passes all",
+   "kind": "binary"
+  },
+  {
+   "id": "numbers_grounded",
+   "label": "numbers OK",
+   "kind": "binary"
+  },
+  {
+   "id": "ids_valid",
+   "label": "IDs valid",
+   "kind": "binary"
+  },
+  {
+   "id": "within_limit",
+   "label": "word limit",
+   "kind": "binary"
+  },
+  {
+   "id": "no_accusation",
+   "label": "no accusation",
+   "kind": "binary"
+  },
+  {
+   "id": "context",
+   "label": "context",
+   "kind": "binary"
+  },
+  {
+   "id": "nonempty",
+   "label": "non-empty",
+   "kind": "binary"
+  }
+ ],
+ "perf_fields": [
+  {
+   "id": "latency_s",
+   "label": "latency",
+   "unit": "s"
+  },
+  {
+   "id": "cost_usd",
+   "label": "cost",
+   "unit": "$"
+  }
+ ],
+ "harness_paths": [
+  "evals/run_eval.py",
+  "evals/graders.py",
+  "evals/targets.py",
+  "evals/cases/narrative.jsonl"
+ ]
+}

@@ -1,0 +1,20 @@
+{
+ "cutoff": "2025-08-01",
+ "target": "naive",
+ "n_roads": 291,
+ "model": {
+  "spearman": 0.586,
+  "precision_at_20": 0.3,
+  "trouble_captured_at_20": 0.137
+ },
+ "baseline_past_work_orders": {
+  "spearman": 0.586,
+  "precision_at_20": 0.3,
+  "trouble_captured_at_20": 0.137
+ },
+ "baseline_random": {
+  "spearman": 0.0,
+  "precision_at_20": 0.069,
+  "trouble_captured_at_20": 0.069
+ }
+}
