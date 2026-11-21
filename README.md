@@ -101,6 +101,32 @@ That's your first prototype. Now make it better. 🚀
 
 ---
 
+## Team 6 workspace
+
+Our build for the challenge. The sections above are the organisers' brief.
+
+| Path | What it is |
+|---|---|
+| [docs/BLUEPRINT.md](docs/BLUEPRINT.md) | Plan: dataset findings, four-member split, git workflow, output contracts, timeline |
+| [docs/architecture.excalidraw](docs/architecture.excalidraw) | System flow diagram (open at excalidraw.com) |
+| `contracts/schemas.py` | Frozen column layouts for every file the pipeline writes to `outputs/` |
+| `tests/` | Free regression suite: `pytest -q`. Module tests skip until that module exists |
+| `evals/` | Claude evals and the risk backtest: see [evals/README.md](evals/README.md) |
+| [sanjay command.md](sanjay%20command.md) | Copy-paste test and eval commands for M1, M2 and M3 |
+
+**Modules:** M1 Connect (complaints), M2 Audit (flags and scorecards), M3 Risk and budget, M4 Streamlit app and integration. Each module exposes `run(data_dir, out_dir)` and writes its own parquet files.
+
+**Quick start**
+
+```bash
+pip install -r requirements.txt
+export PYTHONIOENCODING=utf-8     # Windows: Devanagari text crashes the console without it
+pytest -q                          # free
+python -m evals.run_eval --suite extraction --target citizen   # free baseline for the complaint eval
+```
+
+**Key findings** (measured on the data, see the blueprint): 45 possible double bills, 493 work orders (₹2.62 Cr) billed on roads still under warranty, 114 bills above 1.3× the rate card, and re-open rates from 9% to 39% across contractors.
+
 ## Tips for the day
 
 - **Go narrow and finish.** One tool that works beats a half-built platform.

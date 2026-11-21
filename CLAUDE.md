@@ -51,4 +51,7 @@ The team plan (stack, module ownership, output schemas, audit rules with expecte
 - `python -m evals.run_eval --suite extraction|narrative --target app|oracle|null|citizen|template`: Claude evals; see [evals/README.md](evals/README.md). Non-`app` targets are free harness self-checks. `--approve-harness` is a human step; don't pass it on the user's behalf.
 - `python -m evals.backtest_risk`: checks whether the road risk ranking predicts August–September trouble from June–July data, compared with a naive baseline.
 - `python -m evals.build_cases` regenerates `evals/cases/` deterministically.
+- [sanjay command.md](sanjay%20command.md) has copy-paste test and eval commands per module (M1 Connect, M2 Audit, M3 Risk).
+- `--target app` evals call `pipeline.connect.extract.extract_complaint` (M1) and `pipeline.audit.explain.{contractor_scorecard_text,ward_summary_text,flag_explanation}` (M2). The contract is in `evals/targets.py`; keep those signatures stable.
+- No pipeline code exists yet (only tests, evals and contracts), so module tests currently skip and `--target app` exits with a message.
 - City-wide spend is about ₹13 crore. Ward budgets are sized against it, so budget-vs-spend comparisons are meaningful.
