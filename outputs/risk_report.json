@@ -1,0 +1,36 @@
+{
+ "as_of": "2025-10-11",
+ "weights": {
+  "c_exposure": 0.05,
+  "c_safety": 0.1,
+  "c_critical": 0.1,
+  "c_flood": 0.3,
+  "c_condition": 0.45
+ },
+ "open_issues_source": "M3-fallback",
+ "n_open_issues": 455,
+ "data_notes": [],
+ "n_roads": 291,
+ "plan_actions": {
+  "Repair": 124,
+  "Monitor": 106,
+  "Invoke DLP": 61
+ },
+ "plan_repair_inr": 8250430.0,
+ "over_budget_wards": [
+  "A",
+  "E",
+  "L",
+  "M/W",
+  "R/C",
+  "R/S"
+ ],
+ "recommended_methods": {
+  "Broken paver blocks": "Paver blocks relaid",
+  "Choked drain / nullah overflow": "Desilting and garbage removal",
+  "Open or broken manhole": "Manhole cover replaced + grating",
+  "Pothole": "Hot mix patch",
+  "Road cave-in": "Excavation, pipeline repair, PQC patch",
+  "Waterlogging": "Dewatering pump deployed"
+ }
+}
