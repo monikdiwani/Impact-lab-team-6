@@ -71,7 +71,7 @@ jobs:
         run: |
           { echo "## Paid eval: $SUITE / $TARGET (variant v${GITHUB_RUN_NUMBER})"; echo '```'
             sed -n '/scored,/,$p' eval.log 2>/dev/null || echo "no summary"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: eval-${{ inputs.suite }}-${{ inputs.target }}-v${{ github.run_number }}
