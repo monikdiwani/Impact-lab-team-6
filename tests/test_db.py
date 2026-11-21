@@ -68,8 +68,13 @@ def test_complaint_trail_view(built):
     assert one.cost_inr == expect.cost_inr
 
 
-def test_issues_cover_every_complaint(built):
-    assert q(built, "SELECT SUM(n_complaints) n FROM issues").n[0] == 6501
+def test_issues_cover_every_road_complaint(built):
+    """Every road complaint belongs to an issue; non-road complaints ('Not road-related')
+    stay in complaints for the trail but have no issue."""
+    with_issue = q(built, "SELECT COUNT(*) n FROM complaints WHERE issue_id IS NOT NULL").n[0]
+    assert q(built, "SELECT SUM(n_complaints) n FROM issues").n[0] == with_issue
+    no_issue = q(built, "SELECT DISTINCT category_clean FROM complaints WHERE issue_id IS NULL")
+    assert set(no_issue.category_clean) <= {"Not road-related"}
     assert q(built, "SELECT COUNT(*) n FROM open_issues WHERE issue_id NOT IN (SELECT issue_id FROM issues)").n[0] == 0
     assert q(built, "SELECT COUNT(*) n FROM open_issues o JOIN issues i USING (issue_id) WHERE i.is_open = 0").n[0] == 0
 

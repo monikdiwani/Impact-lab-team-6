@@ -37,6 +37,7 @@ class FakeClient:
 def env(monkeypatch, tmp_path):
     monkeypatch.delenv("LLM_DISABLE", raising=False)
     monkeypatch.delenv("LLM_OFFLINE", raising=False)
+    monkeypatch.delenv("LLM_CACHE_READ", raising=False)
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
     monkeypatch.setenv("LLM_CACHE_DIR", str(tmp_path))
 
@@ -119,3 +120,50 @@ def test_offline_uses_cache_but_never_calls(env, monkeypatch):
     assert llm.ask("p", system="s", fallback="FB") == '"cached text"'      # cache hit, no call
     assert llm.ask("other", system="s", fallback="FB") == "FB"             # miss: fallback, no call
     assert len(fake.calls) == 1 and llm.get_last_meta()["error"] == "offline_cache_miss"
+
+
+# ---- review fixes ------------------------------------------------------------------------
+
+def _write_entry(tmp_path, prompt, response, model="claude-opus-5-5", system="s", effort="medium", schema=None,
+                 raw=None, bom=False):
+    p = tmp_path / f"{llm._key(prompt, system, effort, schema)}.json"
+    text = raw if raw is not None else json.dumps({"response": response, "model": model, "stop_reason": "end_turn"})
+    p.write_bytes((b"\xef\xbb\xbf" if bom else b"") + text.encode("utf-8"))
+    return p
+
+
+def test_disable_skips_a_filled_cache(env, tmp_path, monkeypatch):
+    fake = env(_msg("x"))
+    _write_entry(tmp_path, "p", "CACHED")
+    monkeypatch.setenv("LLM_DISABLE", "1")
+    llm.reset_last_meta()
+    assert llm.ask("p", system="s", fallback="FB") == "FB"
+    assert fake.calls == [] and llm.get_last_meta() == {"disabled": True}
+
+
+@pytest.mark.parametrize("raw", ["[1, 2]", "\"just a string\"", "null", "{\"no_response\": 1}", "not json"])
+def test_bad_cache_entry_never_raises(env, tmp_path, raw):
+    fake = env(_msg("fresh answer"))
+    _write_entry(tmp_path, "p", None, raw=raw)
+    llm.reset_last_meta()
+    assert llm.ask("p", system="s", fallback="FB") == "fresh answer"      # treated as a miss
+    assert len(fake.calls) == 1 and llm.cached("q", system="s") is None
+
+
+def test_cache_entry_with_bom_is_read(env, tmp_path):
+    fake = env(_msg("x"))
+    _write_entry(tmp_path, "p", "CACHED", bom=True)
+    assert llm.ask("p", system="s", fallback="FB") == "CACHED" and fake.calls == []
+
+
+def test_answer_from_fallback_model_is_used_but_not_cached(env, tmp_path):
+    env(_msg("from fallback", model="claude-opus-4-8"))
+    assert llm.ask("p", system="s", fallback="FB") == "from fallback"
+    assert not list(tmp_path.glob("*.json"))
+
+
+def test_cache_read_switch_forces_a_fresh_call(env, tmp_path, monkeypatch):
+    fake = env(_msg("new sample"))
+    _write_entry(tmp_path, "p", "OLD")
+    monkeypatch.setenv("LLM_CACHE_READ", "0")
+    assert llm.ask("p", system="s", fallback="FB") == "new sample" and len(fake.calls) == 1

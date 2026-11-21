@@ -1,32 +1,37 @@
 """Category / severity / English summary (owner: M1).
 
-Evidence routing, measured on the 4,798 linked complaints that are NOT in the eval set
-(truth = work_type of the linked work order):
+Evidence routing. Figures are from `python -m evals.measure_routing` (21 Nov), on the
+4,798 linked complaints outside the eval set (truth = work_type of the linked work order):
 
-  source    when                                                       accuracy
-  photo     photo_description is one of the 12 known photo templates  100%  (each template maps to exactly one category)
-  text      English text or 1916-helpline operator notes, exactly one  100%  (even when the citizen picked a different category)
-            category's keywords match
-  citizen   Hindi / Marathi / Hinglish text from the app or portal,     87%  (in this synthetic data that free text is
-            no photo, citizen picked a specific category                     statistically unrelated to the real problem:
-                                                                             reading it is right ~26% of the time)
-  claude    anything else: unknown photo text, no or several keyword   Claude reads all the evidence
-            hits in reliable text, vague category ("Other", "Road
-            related") on unreliable text
+  source          when                                                    accuracy
+  photo           photo_description is one of the 12 known templates     100%  (each template maps to one category)
+  text            English text or 1916-helpline operator notes, exactly  100%  (even when the citizen picked another category)
+                  one category's keywords match
+  citizen         Hindi / Marathi / Hinglish app or portal text, no       86%  (that free text is statistically unrelated to
+                  photo, citizen picked a specific category                     the real problem in this synthetic data: its
+                                                                                first keyword is right ~25%: hi 28%, hi-en 20%, mr 32%)
+  claude          anything else: unknown photo text, reliable text with  Claude reads all the evidence and may answer
+                  zero or several keyword matches, vague category on      "Not road-related"
+                  unreliable text
 
 Rules alone (Claude rows on their fallback): 98.3% vs 84.3% for trusting the citizen,
-89.1% on the rows where the citizen picked the wrong category. Only 151 of the 6,501
-complaints (2.3%) go to Claude, so a full pipeline run makes ~150 calls, run
-concurrently (MAX_WORKERS) and cached.
-Without an API key (or with LLM_DISABLE=1) the 'claude' rows fall back to the citizen's
-category, then the first keyword hit, then "Pothole" (the most common category), and are
-tagged 'claude_fallback' so the share is visible.
+89.0% on rows where the citizen picked the wrong category; 100% on every row that has
+reliable evidence. 144 of the 6,501 complaints (2.2%) go to Claude: 120 of them are
+non-road / junk ("Test", "Street light not working", "Garbage not collected": reliable
+text, no photo, no road keyword) and 24 have no reliable evidence at all.
+
+Without Claude (no key, LLM_OFFLINE miss, or LLM_DISABLE=1):
+  - non-road rows become NOT_ROAD (source 'noise_fallback', severity None); M1's run()
+    keeps them in complaints_clean but out of de-dup and open issues (M3's demand);
+  - other rows take the citizen's specific category, then the first keyword of RELIABLE
+    text, then "Pothole" (most common); source 'claude_fallback' (28.6% right on the 21
+    such linked rows, the eval suite `extraction_routed`).
 
 Severity: in this data severity depends on the category alone. Within a category it is
 noise: urgency words, upvotes, photo, road type and area show no signal. So severity is a
 lookup from the final category (mode per category). With the true category that scores
 47% exact / 89% within one, the ceiling for any method that only sees the complaint;
-with the extracted category it scores 46.2% / 88.1%. Checked with a cross-validated model
+with the extracted category it scores 46.2% / 88.0%. Checked with a cross-validated model
 (grouped by work order) on 30 features - channel, language, upvotes, time, rainfall, tides,
 ward, hotspot distance, GPS, photo, text length, and even work-order cost/method/area/road
 traffic: 42.7-45.9% exact, i.e. worse than the lookup's 46.6%. More features only fit noise.
@@ -34,6 +39,7 @@ traffic: 42.7-45.9% exact, i.e. worse than the lookup's 46.6%. More features onl
 from __future__ import annotations
 
 import re
+import threading
 from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
@@ -42,12 +48,13 @@ from pipeline.common import llm
 
 CATEGORIES = ["Pothole", "Waterlogging", "Open or broken manhole",
               "Choked drain / nullah overflow", "Road cave-in", "Broken paver blocks"]
+NOT_ROAD = "Not road-related"                      # garbage, street lights, hawkers, junk text ...
 VAGUE = {"Road related", "Other"}
 DEFAULT_CATEGORY = "Pothole"                       # 44% of linked complaints
 HELPLINE = "1916 Helpline"
 MAX_WORKERS = 8                                     # concurrent Claude calls in extract()
 
-# mode of the true severity per category (linked complaints)
+# mode of the true severity per category (linked complaints); non-road complaints get none
 SEVERITY = {"Broken paver blocks": 1, "Choked drain / nullah overflow": 3, "Pothole": 3,
             "Waterlogging": 4, "Open or broken manhole": 5, "Road cave-in": 5}
 
@@ -68,7 +75,9 @@ PHOTO = {
 }
 
 # Keyword rules for free text. A text counts as a confident match only when exactly one
-# category matches; several or none go to Claude.
+# category matches; several or none go to Claude. ("knee deep" is not a waterlogging cue:
+# the data has "knee deep pothole" and "caved in ... knee deep"; the photo template that
+# mentions knee-deep water is matched by PHOTO.)
 _KW = [
     ("Road cave-in", r"cave[- ]?in|caved|sinkhole|sink ?hole|collaps|has sunk|road sunk|"
                      r"dhans|धंस|धस|खचल|khachal"),
@@ -77,16 +86,16 @@ _KW = [
     ("Broken paver blocks", r"paver|paving block|पेवर|ब्लॉक"),
     ("Choked drain / nullah overflow", r"choked|drain|nullah|\bnala\b|naala|sewage|gatar|"
                                        r"गटार|नाला|नाले|नाली"),
-    ("Waterlogging", r"water ?logg|flood|paani|\bpani\b|submerg|knee[- ]deep|waist[- ]deep|"
-                     r"not receding|पानी|पाणी|साचल|तुंबल|भर गया"),
-    ("Pothole", r"pot ?holes?|gadd?ha|khadd?a|crater|खड्ड|गड्ढ|गड्डा"),
+    ("Waterlogging", r"water ?logg|flood|paani|\bpani\b|submerg|not receding|"
+                     r"पानी|पाणी|साचल|तुंबल|भर गया"),
+    ("Pothole", r"pot[- ]?holes?|gadd?ha|khadd?a|crater|खड्ड|गड्ढ|गड्डा"),
 ]
 _DEVANAGARI = re.compile(r"[ऀ-ॿ]")
 _MARATHI = re.compile(r"आहे|आहेत|जवळ|करा|मध्ये|रस्त्यावर|साचले|झाले|पाणी|लवकर|खूप|वर ")
 _HINGLISH = re.compile(r"\b(?:mein|hai|nahi|ke|ki|ka|saamne|paani|gaya|kab|itna|pe|bhar|"
                        r"raha|rahi|ho|aur|kar|karo|jaldi|bahut)\b", re.I)
 
-SYSTEM = """You classify Mumbai civic road complaints. Inputs can be English, Hindi, Marathi or Hinglish.
+SYSTEM = """You classify Mumbai civic complaints sent to the roads department. Inputs can be English, Hindi, Marathi or Hinglish.
 Categories:
 - Pothole: a hole or crater in the road surface.
 - Waterlogging: standing or flooded water on the road.
@@ -94,8 +103,9 @@ Categories:
 - Choked drain / nullah overflow: a blocked drain or a nullah overflowing.
 - Road cave-in: part of the road has sunk or collapsed (sinkhole, cave-in).
 - Broken paver blocks: loose, broken or uprooted paver blocks.
+- Not road-related: anything that is not a road problem, such as garbage collection, street lights, hawkers, noise, trees, mosquitoes, or test and gibberish text. Use it even if the citizen picked a road category.
 Weigh the evidence in this order:
-1. The photo description, if present: it says what the camera saw.
+1. The photo description, if present: it says what the camera saw. It decides the category unless it shows no road problem.
 2. Helpline operator notes and English free text.
 3. The category the citizen selected. It is wrong for about 1 in 6 complaints, and "Other" or "Road related" carry no information.
 Give a one-sentence English summary of what the complaint says. Do not invent details.
@@ -105,7 +115,7 @@ SCHEMA = {
     "type": "object", "additionalProperties": False,
     "required": ["category", "english_summary", "evidence"],
     "properties": {
-        "category": {"type": "string", "enum": CATEGORIES},
+        "category": {"type": "string", "enum": CATEGORIES + [NOT_ROAD]},
         "english_summary": {"type": "string"},
         "evidence": {"type": "string", "enum": ["photo", "text", "citizen_category", "none"]},
     },
@@ -144,7 +154,15 @@ def text_is_reliable(language: str, channel: str) -> bool:
     return channel == HELPLINE or language == "en"
 
 
-def severity_for(category: str) -> int:
+def no_road_signal(desc, photo, language, channel) -> bool:
+    """Reliable text, no photo, and not one road keyword. In this data that is exactly the
+    120 junk / non-road complaints ("Test", "Street light not working", ...)."""
+    return (not _s(photo).strip()) and text_is_reliable(language, channel) and not keyword_hits(desc)
+
+
+def severity_for(category: str) -> int | None:
+    if category == NOT_ROAD:
+        return None
     return SEVERITY.get(category, 3)
 
 
@@ -163,18 +181,27 @@ def route(desc, photo, reported, language, channel) -> tuple[str | None, str]:
     return None, "claude"
 
 
-def _fallback_category(desc, reported) -> str:
+def _fallback(desc, photo, reported, language, channel) -> tuple[str, str]:
+    """Used when a row needs Claude but Claude is unavailable. -> (category, source)."""
+    if no_road_signal(desc, photo, language, channel):
+        return NOT_ROAD, "noise_fallback"
     if reported in CATEGORIES:
-        return reported
-    hits = keyword_hits(desc)
-    return hits[0] if hits else DEFAULT_CATEGORY
+        return reported, "claude_fallback"
+    # keywords only from text that carries signal; non-English app text is near-random
+    hits = keyword_hits(desc) if text_is_reliable(language, channel) else []
+    return (hits[0] if hits else DEFAULT_CATEGORY), "claude_fallback"
 
 
-def _rule_summary(desc, category, locality, language) -> str:
-    if language == "en":
+_SOURCE_LABEL = {"photo": "the photo", "citizen": "the citizen's selected category",
+                 "claude_fallback": "rules (Claude unavailable)", "noise_fallback": "no road keywords"}
+
+
+def _rule_summary(desc, category, locality, language, channel, source) -> str:
+    if text_is_reliable(language, channel):        # English text or operator notes: keep them
         return _s(desc).strip()[:160]
     place = f" at {locality}" if _s(locality) else ""
-    return f"{category} reported{place} (original text in {language})."
+    return (f"Complaint{place} (text in {language}, not translated); classified as {category} "
+            f"from {_SOURCE_LABEL.get(source, source)}.")
 
 
 def _ask_claude(desc, photo, reported, language, channel, locality):
@@ -182,15 +209,19 @@ def _ask_claude(desc, photo, reported, language, channel, locality):
               f"Citizen-selected category: {_s(reported)}\n"
               f"Photo description: {_s(photo) or '(none)'}\n"
               f"Complaint text:\n{_s(desc)}")
-    got = llm.ask(prompt, system=SYSTEM, effort="low", schema=SCHEMA, fallback=None)
-    if isinstance(got, dict) and got.get("category") in CATEGORIES:
+    try:
+        got = llm.ask(prompt, system=SYSTEM, effort="low", schema=SCHEMA, fallback=None)
+    except Exception:  # noqa: BLE001 - ask() shouldn't raise, but the pipeline must not crash
+        return None
+    if isinstance(got, dict) and got.get("category") in CATEGORIES + [NOT_ROAD] \
+            and isinstance(got.get("english_summary"), str):
         return got
     return None
 
 
 def classify(desc, photo, reported, language, channel, locality=None,
              force_claude: bool = False) -> dict:
-    """One complaint -> {category, severity, english_summary, source}.
+    """One complaint -> {category, severity, english_summary, source, language}.
     force_claude skips the rules (used by the eval's Claude-only ablation)."""
     language = language if isinstance(language, str) and language else detect_language(desc)
     cat, source = (None, "claude") if force_claude else route(desc, photo, reported, language, channel)
@@ -200,9 +231,9 @@ def classify(desc, photo, reported, language, channel, locality=None,
         if got:
             cat, source, summary = got["category"], "claude", got["english_summary"].strip()
         else:
-            cat, source = _fallback_category(desc, reported), "claude_fallback"
+            cat, source = _fallback(desc, photo, reported, language, channel)
     return {"category": cat, "severity": severity_for(cat),
-            "english_summary": summary or _rule_summary(desc, cat, locality, language),
+            "english_summary": summary or _rule_summary(desc, cat, locality, language, channel, source),
             "source": source, "language": language}
 
 
@@ -215,33 +246,42 @@ def extract(df: pd.DataFrame) -> pd.DataFrame:
         res = list(pool.map(lambda r: classify(*r), rows))
     out = df.copy()
     out["category_clean"] = [x["category"] for x in res]
-    out["severity_1_5"] = [x["severity"] for x in res]
+    out["severity_1_5"] = pd.array([x["severity"] for x in res], dtype="Int64")   # <NA> for non-road
     out["english_summary"] = [x["english_summary"] for x in res]
     out["extraction_source"] = [x["source"] for x in res]
     return out
 
 
 _RES: dict = {}
+_RES_LOCK = threading.Lock()
+
+
+def _resources():
+    """Ward locator + gazetteer, built once and published together (thread-safe)."""
+    if not _RES:
+        with _RES_LOCK:
+            if not _RES:
+                from pipeline.common import io
+                from pipeline.common.geo import WardLocator
+                from pipeline.connect.ward import Gazetteer
+                loc, gaz = WardLocator(io.load_wards_geojson()), Gazetteer(io.load_localities())
+                _RES.update(loc=loc, gaz=gaz)
+    return _RES["loc"], _RES["gaz"]
 
 
 def extract_complaint(record: dict, force_claude: bool = False) -> dict:
     """Eval/app contract: one raw complaint dict -> cleaned fields."""
-    from pipeline.common import io
-    from pipeline.common.geo import WardLocator
-    from pipeline.connect.ward import Gazetteer
-    if not _RES:
-        _RES["loc"] = WardLocator(io.load_wards_geojson())
-        _RES["gaz"] = Gazetteer(io.load_localities())
+    loc, gaz = _resources()
     r = classify(record.get("description"), record.get("photo_description"),
                  record.get("category_reported"), record.get("language"),
                  record.get("channel"), record.get("locality_text"), force_claude=force_claude)
     ward, ward_source = record.get("ward_code"), "given"
     if not isinstance(ward, str) or not ward:
         lat, lon = record.get("lat"), record.get("lon")
-        ward = _RES["loc"].locate(lat, lon) if lat is not None and lon is not None else None
+        ward = loc.locate(lat, lon) if lat is not None and lon is not None else None
         ward_source = "gps" if ward else None
         if ward is None:
-            hit = _RES["gaz"].match(record.get("locality_text"), record.get("description"))
+            hit = gaz.match(record.get("locality_text"), record.get("description"))
             ward, ward_source = (hit[1], "locality") if hit else (None, None)
     return {"category_clean": r["category"], "severity_1_5": r["severity"], "ward_code": ward,
             "ward_source": ward_source, "language": r["language"],

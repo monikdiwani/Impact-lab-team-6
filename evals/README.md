@@ -25,13 +25,20 @@ On Windows, set `PYTHONIOENCODING=utf-8` first (the cases contain Devanagari). `
 
 The gap between `rules` and `app` is what Claude adds. `claude` is an ablation: how good is Claude on its own, and does it over-trust unreliable text?
 
+**Suites:**
+- `extraction` has 150 answerable complaints. It's a regression check.
+- `extraction_routed` has the 21 linked complaints the app actually sends to Claude. This is where Claude's category contribution shows.
+- `narrative` has 29 facts packets for M2's text.
+
+Each suite has its own approval (`.claude/hillclimb/<suite>/_state.json`). Free targets always run from scratch.
+
 ## Where the ground truth comes from
 
 All of it is derived from `data/` by `python -m evals.build_cases`, which is deterministic:
 
 - **category**: `work_type` of the work order the complaint is linked to. Citizens picked a different category for 16.5% of linked complaints.
 - **severity 1–5**: the work order's `sla_hours` (24 → 5, 48 → 4, 72 → 3, 120 → 2, 168 → 1). Within a category this is noise. A cross-validated model on 30 features (time, rain, tides, ward, hotspot distance, road traffic, even work-order cost and method) scores worse than a per-category lookup. So even a perfect category scores at most about **47% exact / 89% within one** overall.
-  - `severity =` and `severity ±1` are capped by the data. The runner prints the ceiling for the set next to them (166-case set: 46.4% / 95.2%).
+  - `severity =` and `severity ±1` are capped by the data. The runner prints the ceiling for the set next to them (150-case set: 44.7% / 94.7%).
   - **`severity best`** is what the extractor controls. It passes when the answer is the exact truth or the best possible guess for the true category (`expected.severity_best`, derived from linked complaints outside the eval set). It should be 100%.
 - **ward**: the work order's ward. It matches 100% of complaints that have a ward, and 30 test cases have a blank ward.
 - **language is an input, not scored.** 1916-helpline rows are English operator notes even when the caller spoke Marathi or Hindi (740 linked rows), so the label can't be recovered from the text.
@@ -40,24 +47,37 @@ All of it is derived from `data/` by `python -m evals.build_cases`, which is det
 ### What the data says about evidence (measured on the linked complaints)
 
 - **Photo description:** 12 fixed templates, each maps to exactly one category (100% pure).
-- **English text and helpline notes:** the keywords are right 90–98% of the time, even when the citizen picked the wrong category.
+- **English text and helpline notes:** a single keyword match is right 100% of the time on linked complaints, even when the citizen picked the wrong category.
 - **Hindi / Marathi / Hinglish text from the app or portal:** statistically independent of the true category. Every keyword row has the same base-rate mix (about 44% pothole, 25% waterlogging, …). This is an artefact of the synthetic data.
 - **Citizen-selected category:** right 84% of the time.
+- **Junk / non-road complaints:** 120 complaints ("Test", "asdfgh", "Street light not working", "Garbage not collected") have English text with no road keyword and no photo. M1 labels them "Not road-related" (Claude agreed on all 120) and keeps them out of issues and M3's demand.
+- **Recompute all of these:** `python -m evals.measure_routing` (free). It prints the figures quoted in `pipeline/connect/extract.py`.
 
 ### Answerability guard
 
-A case is kept only if at least one **reliable** input points to its truth label: a photo template, English or helpline text, or the citizen category. Cases with no such evidence (87 of 4,787 candidates) are unanswerable by any system, so they're dropped. Contradictory cases are **kept**. For example, Hindi text that says "manhole" when the citizen and the truth both say pothole: these separate good systems from ones that over-trust the text. Each case records its supporting evidence in `meta.support` and in the REVIEW table.
+A case is kept in the main suite only if at least one **reliable** input points to its truth label: a photo template, English or helpline text, or the citizen category (87 of 4,787 candidates have none). Contradictory cases are **kept**. For example, Hindi text that says "manhole" when the citizen and the truth both say pothole catches a system that over-trusts unreliable text. Each case records its supporting evidence in `meta.support` and in the REVIEW table.
+
+**What this guard means (from the independent review):**
+- **The main suite is a regression check, not a headroom measure.** The guard uses the same three evidence sources as M1's router, and in this data those sources are never wrong when present. So M1's rules score 100% on the kept cases by construction. The suite answers "does extraction still get every answerable complaint right?"
+- **The dropped rows aren't "constant error".** They're rows where every method is guessing. They're measured separately: the linked rows the app sends to Claude make up `extraction_routed`, and `measure_routing` reports rules against the base rate on all held-out rows.
 
 The earlier guard dropped any case whose text contradicted the truth (521 candidates). That removed exactly those realistic contradictory cases, which made text-reading look better than it is.
 
-### The case set (166)
+### The case sets
 
-- **15 per language × (citizen right / citizen wrong) cell:** 120 cases.
-- **30 with a blank ward.**
-- **An `ambiguous` slice of 24:** no photo, plus a vague citizen category or reliable text naming zero or several categories. This is the only slice where a reader can add anything over fixed rules, and in `app` the cases that reach Claude come from here.
-- **Chips on each case:** `photo` / `no_photo`, `helpline`, `noisy_text` (non-English app/portal text), `blank_ward`, `ambiguous`.
+- **`extraction` (150):**
+  - 15 per language × (citizen right / citizen wrong) cell, plus 30 with a blank ward.
+  - Chips: `photo` / `no_photo`, `helpline`, `noisy_text` (non-English app/portal text), `blank_ward`.
+- **`extraction_routed` (21):** every linked complaint for which M1's `route()` returns `claude`.
+  - All 21 are Hindi, Marathi or Hinglish app text, with a vague citizen category and no photo, so there's no reliable evidence.
+  - Free baselines: rules fallback 28.6%, citizen 0%.
+  - The paid `app` run here shows whether Claude beats the fallback on its real traffic.
+  - Defined with M1's own router, so rebuild the cases if the routing rules change.
 
-**Honest limit:** on answerable complaints, M1's rules already score 100% on this set (98.3% across all 4,798 linked complaints outside it). Claude's measurable job on category is the ambiguous slice. Its other job is English summaries, which these graders don't score. Most complaints that actually reach Claude in the pipeline are open ones with no work order yet, so they have no ground truth.
+**Where Claude adds value:**
+- **On category:** only `extraction_routed`, plus the 120 non-road complaints (which have no work order, so no category truth).
+- **English summaries:** these graders don't score them.
+- **Head to head:** the `claude` ablation compares Claude with the router on the main suite. Earlier result: Claude alone was 93.4%, and all of its misses were on unreliable non-English text.
 
 ## What the app must expose (contract)
 
@@ -79,7 +99,8 @@ pipeline.common.llm.reset_last_meta() / get_last_meta()                         
 ```bash
 python -m evals.run_eval --suite extraction --target oracle    # must be 100%
 python -m evals.run_eval --suite extraction --target null      # must be 0%
-python -m evals.run_eval --suite extraction --target citizen   # the bar: 54.8% category on this set
+python -m evals.run_eval --suite extraction --target citizen   # the bar: 57.3% category on this set
+python -m evals.run_eval --suite extraction_routed --target rules   # fallback on Claude's real traffic: 28.6%
 python -m evals.run_eval --suite extraction --target rules     # M1 without Claude: category 100%, severity best 100%
 python -m evals.run_eval --suite narrative  --target template  # 100% on programmatic checks
 python -m evals.run_eval --suite narrative  --target rules     # M2's templates through the graders
@@ -106,8 +127,12 @@ If oracle, null or template move, the harness is broken. Fix that before trustin
 
 Output per run: `results.jsonl` (one row per case with grade, explanation, model, usage, evidence source), `traces/`, `errors.jsonl` (timeouts, failed Claude calls, model mismatches, all kept out of the scores), `summary.json` and `run_info.json`.
 
-- **Resuming:** runs resume where they stopped. A run directory refuses to resume under different eval files: use a new `--variant`, or move the old folder into `_archive/`.
-- **Response cache:** the app's Claude responses are cached in `.claude/hillclimb/<suite>/_llm_cache/` (git-ignored, separate from the demo cache in `outputs/llm_cache/`). Re-runs of unchanged prompts are free. `--fresh` bypasses the cache, which `--reps > 1` needs to mean anything.
+- **Resuming:** paid runs resume where they stopped. A run directory refuses to resume if the eval files, the app code (`pipeline/connect`, `pipeline/common`, M2's `explain.py` and `config.py`) or the `--judge` setting changed. It says which one changed. Use a new `--variant`, or move the old folder into `_archive/`. Free targets never resume; they always re-run, so an app-code change shows up immediately.
+- **Response cache:** the app's Claude responses are cached in `.claude/hillclimb/<suite>/_llm_cache/` (git-ignored, separate from the demo cache in `outputs/llm_cache/`). Re-runs of unchanged prompts are free.
+  - `--fresh` skips cache reads (`LLM_CACHE_READ=0`), so every call and every rep is a new sample.
+  - Answers served by the fallback model are never cached.
+- **Refusals:** in the `claude` ablation a refusal goes to `errors.jsonl` (`refusal`), because the app's fallback answer isn't Claude's. In `app` runs the end-to-end answer is scored, and the refusal count is printed.
+- **The judge is gated:** `--judge` needs the approved harness, even on free targets, because the judge itself is paid.
 - **Judge:** `--judge` (narrative only) adds a `claude-sonnet-5-5` grader for fair / evidence / actionable / plain. The app runs on `claude-opus-5-5`, so it never grades its own output.
 
 ## Thresholds to keep in sync

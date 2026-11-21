@@ -216,3 +216,69 @@ Details and one-time GitHub setup are in [docs/CI_CD.md](CI_CD.md).
 | Paid evals | manual | runs a paid eval as a new variant with the `ANTHROPIC_API_KEY` secret. Respects the committed harness approval. Optional reviewer gate through the `paid-evals` environment |
 
 **Found while building it:** `requirements.txt` was missing `scikit-learn` and `scipy`. M1's de-duplication needs them, and on a clean machine it would have silently fallen back to the weaker rules-based de-dup. Both are added. Also added: `.gitattributes` (database and parquet files are binary), Dependabot (weekly update PRs), and a CI badge in the README. 3 unused imports and variables in Sanjay's files were cleaned up.
+
+## 12. Independent code review: 23 confirmed findings fixed
+
+A multi-agent review checked the M1 rewrite, the Claude wrapper and the eval harness. Five reviewers each took a different angle, and every finding was then re-checked by a separate skeptic who tried to disprove it. **23 findings were confirmed and 8 rejected.** All 23 are fixed.
+
+### What changed in the product
+
+| # | Finding | Fix | Effect |
+|---|---|---|---|
+| 0 | **120 junk or non-road complaints** ("Test", "asdfgh", "Street light not working", "Garbage not collected") became Pothole, severity 3, and **37 open issues made only of junk** (plus 7 mixed ones) fed M3's budget ranking | New category **"Not road-related"**. Reliable text with no road keyword and no photo goes to Claude, which may answer it. Without Claude it falls back to "Not road-related" (`noise_fallback`). These rows get no severity, stay in `complaints_clean` for the trail, and are kept out of de-dup and open issues | Claude labelled **all 120** as non-road, with no false positives. Open issues went from 658 to **617**. The M3 plan is now 123 repairs worth ₹80.4 L |
+| 1 | `extract_complaint` start-up wasn't thread-safe and could crash with `KeyError` | Built once under a lock, both objects published together | Test runs 80 calls on 8 threads |
+| 7 | Summaries mislabelled helpline English notes as "original text in mr", and stated the inferred category as if the citizen reported it | Reliable text is kept verbatim. Other text says "not translated; classified as X from <source>" | |
+| 8 | "knee deep" triggered Waterlogging on pothole and cave-in texts; "Pot-hole" matched nothing | Keyword patterns fixed | 7 complaints now decided by text instead of Claude. English text matching two categories went from 6 to 0 |
+| 9 | Fallback used keywords from non-English text that is close to random | Fallback reads keywords only from reliable text, otherwise uses "Pothole" | Fallback on Claude's real traffic: **28.6%** (was about 19%) |
+| 10, 18 | Docstring and README numbers were stale (old 150/166-case sets, "87%", "~26%", "90–98%", "150 complaints") | New `python -m evals.measure_routing` recomputes every figure. Docs now quote its output | |
+| 12 | A malformed cache file could still raise into the app; a cache file with a byte-order mark was ignored | Cache entries are validated, a BOM is tolerated, and M1 also guards the call | |
+| 15 | Answers from the server-side fallback model were cached as the main model's answers | Not cached any more | |
+
+### What changed in the eval harness
+
+| # | Finding | Fix |
+|---|---|---|
+| 2, 6 | The free `rules` target replayed old results after the app code changed | Free targets always run from scratch. A test changes the app between two runs |
+| 3 | `--judge` and plain runs shared one folder, so judge metrics showed 0% or their columns disappeared | Judge setting is part of the run identity. Metrics are computed only over rows that have them (`n/a` otherwise). Judge columns are never dropped |
+| 4 | "Policy-neutral" and "constant error" claims about the answerability guard were false: rules score 100% on the kept cases **by construction** | The claims are corrected in the code and README. The main suite is described as a regression check. The rows without reliable evidence are measured separately (next row) |
+| 5 | The "ambiguous" slice barely reached Claude (5 cases, all already solved by the fallback) | Removed. New suite **`extraction_routed`** holds exactly the 21 linked complaints M1 sends to Claude (none with reliable evidence). Free baselines: rules fallback 28.6%, citizen 0%. This is where Claude's category value can be checked |
+| 11 | `--fresh` didn't make reps independent | `LLM_CACHE_READ=0`: no cache reads, so every call is a new sample |
+| 13 | `--judge` on a free target made paid judge calls without the approval gate | Gated |
+| 14 | Claude refusals in the ablation were scored using the rules answer | Refusals go to `errors.jsonl`. In `app` runs they're counted and printed |
+| 16 | A `.env` saved as UTF-8 with BOM lost the key silently; a UTF-16 `.env` crashed every eval and test collection | Both encodings load. An unreadable file prints a warning instead of crashing |
+| 17 | `--suite narrative --target claude` sent you to approve the harness first | Rejected before any setup |
+| 21 | The test suite and `rules` target could in principle reach the committed Claude cache | Both use an empty scratch cache. A test checks `LLM_DISABLE` ignores a filled cache |
+| — | Paid runs could resume after an M1 code change and mix two app versions | Run identity includes an app-code fingerprint, and the message says what changed |
+
+### Tests (findings 19 to 22 plus the fixes above)
+
+**150 tests now (was 113).** New ones cover:
+- pipeline category accuracy at least 97% on linked complaints (the DataFrame path, not just `route()`), and a sane source mix;
+- junk complaints: all 120 caught, and nothing else;
+- `extract()` agreeing row by row with `classify()`;
+- the Claude-only flag reaching the app;
+- the thread-safety stress test;
+- cache robustness and `LLM_CACHE_READ`;
+- a failed Claude call going to the errors file through the **real** per-thread path (the old test mocked it);
+- free re-runs after a code change, judge identity, refusals, `.env` encodings and the gate order.
+
+All **17 free eval gates** pass; risk backtest Spearman is 0.646 against 0.586 for the baseline.
+
+### Outputs regenerated (Claude on)
+
+**M1:**
+- **Sources:** text 2,869, photo 2,838, citizen 650, Claude 144 (0 fallbacks).
+- **Linked accuracy with Claude:** 98.3%.
+- **De-dup F1:** 0.758.
+
+**M3:** builds from M1's 617 real open issues, and all 24 memos are written by Claude.
+
+**M2:** unchanged.
+
+The database rebuilt itself.
+
+**Your step:** the eval cases, runner and M1 code changed, so approve each paid suite again after reading [evals/cases/REVIEW.md](../evals/cases/REVIEW.md):
+- `--suite extraction --target app --approve-harness`
+- `--suite extraction_routed --target app --approve-harness`
+
+The earlier 166-case runs are archived with the suffix `-166-cases-before-review-fixes`.

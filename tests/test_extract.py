@@ -45,7 +45,7 @@ def test_non_english_app_text_defers_to_the_citizen_category():
 
 
 @pytest.mark.parametrize("desc,photo,reported,lang,ch", [
-    ("Road has caved in near signal. Big hole about knee deep.", None, "Waterlogging", "en", APP),  # 2 categories
+    ("Drain overflowing and a deep pothole near the station", None, "Waterlogging", "en", APP),  # 2 categories
     ("Please send someone, very bad condition near station.", None, "Pothole", "en", APP),          # 0 categories
     ("कृपया लवकर दुरुस्त करा", None, "Other", "mr", APP),                                            # vague + unreliable
     ("Something on the road", "A strange new photo text", "Pothole", "en", APP),                     # unknown photo
@@ -55,7 +55,7 @@ def test_unclear_cases_go_to_claude(desc, photo, reported, lang, ch):
 
 
 def test_claude_fallback_without_key_is_visible():
-    r = X.classify("Please send someone, very bad condition near station.", None, "Pothole", "en", APP)
+    r = X.classify("Drain overflowing and a deep pothole near the station", None, "Pothole", "en", APP)
     assert r["source"] == "claude_fallback" and r["category"] == "Pothole"
     r = X.classify("कृपया लवकर दुरुस्त करा", None, "Other", "mr", APP)
     assert r["source"] == "claude_fallback" and r["category"] == X.DEFAULT_CATEGORY
@@ -112,6 +112,87 @@ def test_extract_dataframe_keeps_rows_and_tags_sources():
     c = read_csv("complaints").head(300)
     out = X.extract(c)
     assert len(out) == len(c) and out.index.equals(c.index)
-    assert set(out.category_clean) <= set(X.CATEGORIES)
-    assert set(out.extraction_source) <= {"photo", "text", "citizen", "claude", "claude_fallback"}
-    assert out.severity_1_5.between(1, 5).all()
+    assert set(out.category_clean) <= set(X.CATEGORIES) | {X.NOT_ROAD}
+    assert set(out.extraction_source) <= {"photo", "text", "citizen", "claude", "claude_fallback", "noise_fallback"}
+    road = out.category_clean != X.NOT_ROAD
+    assert out.severity_1_5[road].between(1, 5).all() and out.severity_1_5[~road].isna().all()
+
+
+
+# ---- review fixes ------------------------------------------------------------------------
+
+JUNK = ["Noise from construction at night", "Street light not working near building",
+        "Garbage not collected for 3 days", "Hawkers blocking footpath", "Test",
+        "Tree branch fallen on parked car", "Mosquito breeding in society compound", "asdfgh"]
+
+
+@pytest.mark.parametrize("text", JUNK)
+def test_non_road_complaints_are_rejected_not_turned_into_potholes(text):
+    for reported in ("Pothole", "Road related", "Other"):
+        r = X.classify(text, None, reported, "en", APP)
+        assert r["category"] == X.NOT_ROAD and r["severity"] is None and r["source"] == "noise_fallback"
+
+
+def test_every_junk_complaint_in_the_data_is_caught_and_nothing_else():
+    c = read_csv("complaints")
+    out = X.extract(c)
+    noise = out[out.category_clean == X.NOT_ROAD]
+    assert len(noise) == 120 and set(noise.description) == set(JUNK)
+    linked = set(read_csv("work_orders").linked_complaint_ids.dropna().str.split("|").explode())
+    assert not noise.complaint_id.isin(linked).any(), "a repaired road complaint was rejected as non-road"
+
+
+def test_keyword_fixes_from_review():
+    assert X.keyword_hits("Pot-hole reopened after last week's patch work") == ["Pothole"]
+    assert X.keyword_hits("knee deep pothole near the market") == ["Pothole"]          # not waterlogging
+    assert X.keyword_hits("Road has caved in. Big hole about knee deep.") == ["Road cave-in"]
+
+
+def test_fallback_ignores_keywords_in_unreliable_text():
+    # vague category + Hinglish app text that names a category: that text is near-random here
+    r = X.classify("gutter ka dhakkan khula hai", None, "Other", "hi-en", APP)
+    assert r["source"] == "claude_fallback" and r["category"] == X.DEFAULT_CATEGORY
+
+
+def test_summaries_are_honest_about_their_source():
+    helpline = X.classify("Caller reports pothole at Jogeshwari East. Says vehicles getting damaged.",
+                          None, "Pothole", "hi", HELP, "Jogeshwari East")
+    assert helpline["english_summary"].startswith("Caller reports pothole")     # operator note kept verbatim
+    noisy = X.classify("Hindmata mein school ke saamne paani bhar gaya hai", None, "Open or broken manhole",
+                       "hi-en", APP, "Hindmata")
+    assert "not translated" in noisy["english_summary"] and "citizen's selected category" in noisy["english_summary"]
+
+
+def test_force_claude_bypasses_the_rules():
+    text = ("Loose paver blocks on Ghatkopar Mankhurd Link Road, Trombay.", None, "Pothole", "en", APP)
+    photo = ("x", "Wide shot of road with several potholes, auto rickshaw swerving", "Pothole", "hi", APP)
+    for args in (text, photo):
+        assert X.classify(*args)["source"] in ("text", "photo")
+        assert X.classify(*args, force_claude=True)["source"] == "claude_fallback"   # Claude off in tests
+    rec = {"description": text[0], "photo_description": None, "category_reported": "Pothole",
+           "language": "en", "channel": APP, "locality_text": "Trombay", "ward_code": "M/E"}
+    assert X.extract_complaint(rec, force_claude=True)["extraction_source"] == "claude_fallback"
+    from evals import targets
+    out = targets.resolve("extraction", "claude")({"input": rec})
+    assert out["extraction_source"] in ("claude", "claude_fallback")
+
+
+def test_extract_matches_classify_row_by_row():
+    c = read_csv("complaints").sample(400, random_state=3)
+    out = X.extract(c)
+    for (_, r), (_, o) in zip(c.iterrows(), out.iterrows()):
+        want = X.classify(r.description, r.photo_description, r.category_reported, r.language,
+                          r.channel, r.locality_text)
+        assert (o.category_clean, o.extraction_source) == (want["category"], want["source"]), r.complaint_id
+
+
+def test_extract_complaint_is_thread_safe_on_first_use():
+    from concurrent.futures import ThreadPoolExecutor
+    X._RES.clear()
+    blank = {"description": "Huge pothole near Dadar station", "photo_description": None,
+             "category_reported": "Pothole", "language": "en", "channel": APP,
+             "locality_text": "Dadar", "ward_code": None, "lat": None, "lon": None}
+    given = {**blank, "ward_code": "G/N"}
+    with ThreadPoolExecutor(8) as pool:
+        outs = list(pool.map(X.extract_complaint, [blank, given] * 40))
+    assert all(o["ward_code"] for o in outs)

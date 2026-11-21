@@ -82,3 +82,36 @@ def test_open_issues(connect_out, complaints):
     assert oi.issue_id.is_unique
     assert oi.road_id.notna().mean() >= 0.9, "M3 needs a road_id on open issues"
     assert oi.severity_1_5.between(1, 5).all()
+
+
+# ---- review fixes: accuracy of the pipeline output itself, and non-road complaints -------
+
+def test_pipeline_category_accuracy_on_linked_complaints(clean, work_orders):
+    """complaints_clean (the DataFrame path, not just route()) must match the fixing work
+    order's category. Rules-only baseline is 98.3%; a pipeline that trusts the citizen
+    scores 84%, so this catches a regression of more than ~1 point."""
+    links = (work_orders.dropna(subset=["linked_complaint_ids"])
+             .assign(complaint_id=lambda d: d.linked_complaint_ids.str.split("|"))
+             .explode("complaint_id")[["complaint_id", "work_type"]])
+    m = clean.merge(links, on="complaint_id")
+    acc = (m.category_clean == m.work_type).mean()
+    assert acc >= 0.97, f"category accuracy {acc:.1%}"
+
+
+def test_source_mix_is_sane(connect_out):
+    import json
+    m = json.loads((connect_out / "dedup_metrics.json").read_text(encoding="utf-8"))
+    src, n = m["extraction_source_counts"], sum(m["extraction_source_counts"].values())
+    assert src.get("citizen", 0) / n <= 0.15, src           # a column swap would push this up
+    assert src.get("claude_fallback", 0) / n <= 0.03, src
+    assert m["not_road_complaints"] == 120
+
+
+def test_non_road_complaints_form_no_road_issue(clean, connect_out):
+    from pipeline.connect.extract import NOT_ROAD
+    noise = clean[clean.category_clean == NOT_ROAD]
+    assert len(noise) == 120
+    assert noise.issue_id.isna().all() and noise.severity_1_5.isna().all()
+    oi = read_output(connect_out, "open_issues")
+    assert not oi.category_clean.eq(NOT_ROAD).any()
+    assert set(oi.issue_id) <= set(clean.issue_id.dropna())

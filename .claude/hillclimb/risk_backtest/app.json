@@ -3,7 +3,7 @@
  "target": "app",
  "n_roads": 291,
  "model": {
-  "spearman": 0.652,
+  "spearman": 0.646,
   "precision_at_20": 0.4,
   "trouble_captured_at_20": 0.164
  },

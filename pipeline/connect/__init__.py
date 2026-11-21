@@ -32,6 +32,7 @@ def _open_issues(cl: pd.DataFrame, roads: pd.DataFrame, wards: pd.DataFrame) -> 
     roads = roads.assign(mlat=(roads.start_lat + roads.end_lat) / 2,
                          mlon=(roads.start_lon + roads.end_lon) / 2)
     wc = wards.set_index("ward_code")[["centroid_lat", "centroid_lon"]]
+    cl = cl[cl.issue_id.notna()]                      # non-road complaints have no issue
     ids = cl[cl.status.isin(OPEN)].issue_id.unique()
     rows = []
     for iid, g in cl[cl.issue_id.isin(ids)].groupby("issue_id"):
@@ -64,7 +65,11 @@ def run(data_dir: Path, out_dir: Path) -> dict[str, Path]:
     df = extract.extract(df)
     links = {c: w for w, ids in zip(wo.work_order_id, wo.linked_complaint_ids) for c in ids}
     df["linked_work_order_id"] = df.complaint_id.map(links)
-    df["issue_id"] = dedup.cluster(df, io.load_roads(data_dir).road_name)
+    # non-road complaints (garbage, street lights, junk text) stay in complaints_clean for the
+    # trail, but form no road issue: they are kept out of de-dup and of M3's open issues
+    road = df.category_clean != extract.NOT_ROAD
+    df["issue_id"] = None
+    df.loc[road, "issue_id"] = dedup.cluster(df[road], io.load_roads(data_dir).road_name)
 
     clean = df[["complaint_id", "received_at", "channel", "ward_code", "ward_source", "lat", "lon",
                 "category_clean", "severity_1_5", "language", "english_summary", "issue_id",
@@ -74,6 +79,7 @@ def run(data_dir: Path, out_dir: Path) -> dict[str, Path]:
 
     m = dedup.metrics(df)
     m["extraction_source_counts"] = df.extraction_source.value_counts().to_dict()
+    m["not_road_complaints"] = int((~road).sum())
     m["ward_source_counts"] = df.ward_source.fillna("unresolved").value_counts().to_dict()
     paths = {}
     for name, frame in (("complaints_clean", clean), ("wo_trail", trail), ("open_issues", oi)):

@@ -38,20 +38,26 @@ pytest tests/test_extract.py tests/test_llm.py -q   # extraction routing + Claud
 
 What it checks: no complaints lost, ward coverage ≥ 98%, recovered wards correct (≥ 90% on blank-ward rows), work-order links preserved, de-dup F1 ≥ 0.60 against the real linked groups, open issues have a `road_id`.
 
-### Eval (extraction suite, 166 cases)
+### Eval (two extraction suites)
+
+- `extraction` (150 answerable complaints) is a regression check.
+- `extraction_routed` (21 complaints) is exactly what the app sends to Claude. That's where Claude's real contribution shows.
 
 ```powershell
-# 1. free: harness self-checks (100% / 0% / 54.8% category) and M1 without Claude
-python -m evals.run_eval --suite extraction --target oracle
-python -m evals.run_eval --suite extraction --target null
-python -m evals.run_eval --suite extraction --target citizen    # the bar to beat
-python -m evals.run_eval --suite extraction --target rules      # M1's real code, Claude off
+# 1. free: harness self-checks and M1 without Claude
+python -m evals.run_eval --suite extraction --target oracle           # 100%
+python -m evals.run_eval --suite extraction --target null             # 0%
+python -m evals.run_eval --suite extraction --target citizen          # the bar: 57.3%
+python -m evals.run_eval --suite extraction --target rules            # M1's real code, Claude off: 100%
+python -m evals.run_eval --suite extraction_routed --target rules     # fallback on Claude's traffic: 28.6%
+python -m evals.measure_routing                                       # routing figures on all held-out complaints
 
-# 2. paid pilot. The cases and runner changed on 21 Nov, so approve again.
-#    --approve-harness is YOUR step: review evals/cases/REVIEW.md first
+# 2. paid. The cases, runner and M1 code changed on 21 Nov (review fixes), so approve again.
+#    Each suite has its own approval. --approve-harness is YOUR step: review evals/cases/REVIEW.md first.
 python -m evals.run_eval --suite extraction --target app --approve-harness --limit 10
+python -m evals.run_eval --suite extraction_routed --target app --approve-harness
 
-# 3. full run, plus the Claude-only ablation (every case through Claude, rules bypassed)
+# 3. full runs, plus the Claude-only ablation (every case through Claude, rules bypassed)
 python -m evals.run_eval --suite extraction --target app
 python -m evals.run_eval --suite extraction --target claude
 
@@ -60,13 +66,13 @@ python -m evals.run_eval --suite extraction --target app --variant v1
 ```
 
 Numbers to report:
-- **category** (citizen bar 54.8%), **category on `cat_wrong`** (fixing the citizen's mistakes) and **category by evidence source** (photo / text / citizen / claude).
-- **The `ambiguous` slice:** the only cases where Claude decides the category in `app`.
-- **ward recovery on blank-ward cases.**
-- **severity:** `severity best` should be 100%. `severity =` and `severity ±1` should equal the ceiling line the runner prints (46.4% / 95.2% on this set); they can't go higher, because within a category the true severity is random.
-- Language is now an input, so it isn't scored.
+- **`extraction`:** category (citizen bar 57.3%; rules 100% by construction, so watch for any drop), category on `cat_wrong`, and category by evidence source.
+- **`extraction_routed`:** Claude's category accuracy against the 28.6% rules fallback. This is the only place Claude decides a category that can be checked.
+- **ward recovery** on blank-ward cases.
+- **severity:** `severity best` should be 100%. `severity =` and `severity ±1` should equal the ceiling line the runner prints (44.7% / 94.7% on this set); they can't go higher, because within a category the true severity is random.
+- Language is an input, so it isn't scored.
 
-Earlier runs are kept in `.claude/hillclimb/extraction/_archive/` (the pre-fix pilot, plus baseline and v1 from before the `severity best` metric) and `.claude/hillclimb/extraction-claude-only/_archive/`. The grader and cases changed again on 21 Nov, so approve once more. Re-runs are free because the Claude answers are cached.
+**Earlier runs** are kept in `.claude/hillclimb/extraction/_archive/` and `.claude/hillclimb/extraction-claude-only/_archive/`: the pre-fix pilot, the runs from before the `severity best` metric, and the 166-case runs from before the review fixes. Paid runs now refuse to resume after an app-code change, so start a new `--variant` after editing M1.
 
 ---
 

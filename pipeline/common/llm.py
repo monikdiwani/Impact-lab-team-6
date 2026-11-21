@@ -5,7 +5,12 @@ so the demo needs no network.
   LLM_OFFLINE=1   cached answers only, never a new API call (misses get the fallback). Used by
                   `python -m pipeline --no-llm`, so an offline re-run keeps the cached Claude texts.
   LLM_DISABLE=1   no Claude at all, cache included: a clean rules-only run (tests, eval `rules`).
+  LLM_CACHE_READ=0  skip cache reads (answers are still written): every call is a fresh sample,
+                  used by the eval runner's --fresh so repeated reps are independent.
   no API key      behaves like LLM_OFFLINE.
+
+Only answers from MODEL itself are cached: if the server-side fallback served a request, the
+answer is returned but not cached, so a later run asks the primary model again.
 
 Failures are not silent: get_last_meta() returns what happened on this thread's last
 call (model, usage, stop_reason, cache hit, error), so the eval runner can tell a real
@@ -52,15 +57,20 @@ def reset_last_meta() -> None:
     _local.meta = None
 
 
+def _read_entry(path: Path) -> dict | None:
+    """A valid cache entry or None. Tolerates a BOM (file re-saved in an editor) and rejects
+    any shape other than {"response": ...}, so a bad file can never raise into the app."""
+    try:
+        entry = json.loads(path.read_text(encoding="utf-8-sig"))
+    except Exception:  # noqa: BLE001 - missing, unreadable, or not JSON: treat as a miss
+        return None
+    return entry if isinstance(entry, dict) and "response" in entry else None
+
+
 def cached(prompt: str, *, system: str, effort: str = "medium", schema: dict | None = None):
     """Return the cached response or None (no network)."""
-    p = _cache_dir() / f"{_key(prompt, system, effort, schema)}.json"
-    if p.exists():
-        try:
-            return json.loads(p.read_text(encoding="utf-8"))["response"]
-        except (OSError, ValueError, KeyError):
-            return None
-    return None
+    entry = _read_entry(_cache_dir() / f"{_key(prompt, system, effort, schema)}.json")
+    return entry["response"] if entry else None
 
 
 def _get_client():
@@ -79,14 +89,11 @@ def ask(prompt: str, *, system: str, effort: str = "medium", schema: dict | None
         return fallback
     key = _key(prompt, system, effort, schema)
     path = _cache_dir() / f"{key}.json"
-    if path.exists():
-        try:
-            entry = json.loads(path.read_text(encoding="utf-8"))
-            _set_meta(cache=True, model=entry.get("model", MODEL), usage=None,
-                      stop_reason=entry.get("stop_reason", "end_turn"))
-            return entry["response"]
-        except (OSError, ValueError, KeyError):
-            pass   # unreadable cache entry: fall through and call the API
+    entry = _read_entry(path) if os.environ.get("LLM_CACHE_READ") != "0" else None
+    if entry is not None:
+        _set_meta(cache=True, model=entry.get("model", MODEL), usage=None,
+                  stop_reason=entry.get("stop_reason", "end_turn"))
+        return entry["response"]
     if os.environ.get("LLM_OFFLINE") == "1":
         _set_meta(error="offline_cache_miss")
         return fallback
@@ -116,6 +123,8 @@ def ask(prompt: str, *, system: str, effort: str = "medium", schema: dict | None
         _set_meta(**meta, error=f"bad JSON: {e}"[:300])
         return fallback
     _set_meta(**meta)
+    if not str(msg.model).startswith(MODEL):
+        return resp   # served by the fallback model: use it, but don't cache it as MODEL's answer
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps({"response": resp, "model": msg.model, "stop_reason": msg.stop_reason},
