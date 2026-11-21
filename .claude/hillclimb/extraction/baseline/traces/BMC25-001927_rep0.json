@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001927\",\n \"received_at\": \"2025-07-13 17:52\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Complainant states pothole at Dahisar East, near vegetable market on Western Express Highway. \",\n \"locality_text\": \"Dahisar East\",\n \"ward_code\": \"R/N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"R/N\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Complainant states pothole at Dahisar East, near vegetable market on Western Express Highway.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

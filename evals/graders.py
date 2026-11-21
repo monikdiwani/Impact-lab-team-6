@@ -11,12 +11,16 @@ EXTRACTION_METRICS = [
     {"id": "category", "label": "category", "kind": "binary"},
     {"id": "severity_within1", "label": "severity ±1", "kind": "binary"},
     {"id": "severity_exact", "label": "severity =", "kind": "binary"},
+    {"id": "severity_best", "label": "severity best", "kind": "binary"},
     {"id": "ward", "label": "ward", "kind": "binary"},
     {"id": "valid_output", "label": "valid output", "kind": "binary"},
 ]
 # Severity truth is a function of the category in this data (within a category it is
-# noise), so even a perfect category gives at most ~47% exact / ~89% within one.
-SEVERITY_CEILING = {"severity_exact": 0.47, "severity_within1": 0.89}
+# noise), so even a perfect category gives at most ~47% exact / ~89% within one overall.
+# severity_exact / severity_within1 are therefore capped by the data, not the extractor.
+# severity_best is what the extractor controls: 1 if it gave the exact truth OR the best
+# possible guess for the true category (expected["severity_best"], see build_cases.py).
+# The runner prints the ceiling for each set next to the raw numbers.
 CATEGORIES = {"Pothole", "Waterlogging", "Choked drain / nullah overflow", "Open or broken manhole",
               "Broken paver blocks", "Road cave-in"}
 
@@ -34,6 +38,8 @@ def grade_extraction(output, expected) -> tuple[dict, dict]:
         "category": int(cat == expected["category"]),
         "severity_within1": int(sev is not None and abs(sev - expected["severity"]) <= 1),
         "severity_exact": int(sev == expected["severity"]),
+        "severity_best": int(sev is not None and (sev == expected["severity"]
+                                                  or sev in expected.get("severity_best", []))),
         "ward": int(output.get("ward_code") == expected["ward_code"]),
         "valid_output": int(cat in CATEGORIES and sev in {1, 2, 3, 4, 5}),
     }
@@ -42,6 +48,9 @@ def grade_extraction(output, expected) -> tuple[dict, dict]:
         expl["category"] = f"got {cat!r}, truth {expected['category']!r}"
     if not grade["severity_exact"]:
         expl["severity_exact"] = f"got {sev}, truth {expected['severity']}"
+    if not grade["severity_best"]:
+        expl["severity_best"] = (f"got {sev}; best possible for {expected['category']} is "
+                                 f"{expected.get('severity_best')}")
     if not grade["ward"]:
         expl["ward"] = f"got {output.get('ward_code')!r}, truth {expected['ward_code']!r}"
     return grade, expl

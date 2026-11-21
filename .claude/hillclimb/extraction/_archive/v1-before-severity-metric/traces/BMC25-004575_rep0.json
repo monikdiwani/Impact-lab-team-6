@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004575\",\n \"received_at\": \"2025-08-18 11:59\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Caller reports pothole at Dadar West, near market on Senapati Bapat Marg. Requests urgent action.\",\n \"locality_text\": \"Dadar West\",\n \"ward_code\": null,\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"G/N\",\n \"ward_source\": \"locality\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Pothole reported at Dadar West (original text in hi-en).\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

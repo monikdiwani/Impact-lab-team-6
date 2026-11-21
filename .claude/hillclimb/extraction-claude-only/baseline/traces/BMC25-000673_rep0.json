@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000673\",\n \"received_at\": \"2025-06-22 12:40\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Part of LBS Marg has sunk near petrol pump. Pipeline leaking below?\",\n \"locality_text\": \"Kurla West\",\n \"ward_code\": \"L\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": \"Large sinkhole on road edge with exposed pipe\",\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Part of LBS Marg near the petrol pump in Kurla West has sunk, forming a large sinkhole at the road edge with an exposed pipe, and the citizen suspects a leaking pipeline underneath.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

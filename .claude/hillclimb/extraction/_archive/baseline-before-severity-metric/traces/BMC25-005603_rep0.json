@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005603\",\n \"received_at\": \"2025-09-06 16:47\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"mr\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"mandir समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.\",\n \"locality_text\": \"Dongri\",\n \"ward_code\": \"B\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": \"People wading through knee-deep water near shops\",\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"B\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Waterlogging reported at Dongri (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

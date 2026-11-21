@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004301\",\n \"received_at\": \"2025-08-15 21:13\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"Nahur mein hospital gate ke saamne paani bhar gaya hai ghutne tak, gaadi nahi nikal rahi\",\n \"locality_text\": \"Nahur\",\n \"ward_code\": \"S\",\n \"lat\": 19.148755,\n \"lon\": 72.930656,\n \"photo_description\": \"Nullah water overflowing onto road\",\n \"upvotes\": 18\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"S\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"In Nahur, water has accumulated knee-deep in front of a hospital gate and vehicles cannot pass; the photo shows nullah water overflowing onto the road.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

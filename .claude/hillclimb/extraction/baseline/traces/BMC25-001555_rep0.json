@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001555\",\n \"received_at\": \"2025-07-06 15:10\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Road has caved in near signal, Ghatkopar East. Big hole about knee deep. Barricade needed immediately.\",\n \"locality_text\": \"Ghatkopar\",\n \"ward_code\": \"N\",\n \"lat\": 19.104578,\n \"lon\": 72.916376,\n \"photo_description\": null,\n \"upvotes\": 2\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"N\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"The road has caved in near the signal in Ghatkopar East, leaving a knee-deep hole, and the citizen asks for a barricade immediately.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

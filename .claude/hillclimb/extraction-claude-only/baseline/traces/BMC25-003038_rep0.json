@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003038\",\n \"received_at\": \"2025-07-25 20:34\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Deonar Village Road पर मैनहोल खुला है, बहुत खतरनाक है.\",\n \"locality_text\": \"Deonar\",\n \"ward_code\": \"M/E\",\n \"lat\": 19.059668,\n \"lon\": 72.930175,\n \"photo_description\": \"People wading through knee-deep water near shops\",\n \"upvotes\": 27\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"M/E\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Complainant reports an open, dangerous manhole on Deonar Village Road, while the photo shows people wading through knee-deep water near shops.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001569\",\n \"received_at\": \"2025-07-10 21:40\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"multiple potholes on jp road between hospital gate and signal. bus also slowing down, traffic jam till station.\",\n \"locality_text\": \"Juhu\",\n \"ward_code\": null,\n \"lat\": 19.130905,\n \"lon\": 72.846664,\n \"photo_description\": \"Wide shot of road with several potholes, auto rickshaw swerving\",\n \"upvotes\": 9\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"gps\",\n \"language\": \"en\",\n \"english_summary\": \"Multiple potholes on JP Road in Juhu between the hospital gate and the signal are slowing buses and causing a traffic jam up to the station.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

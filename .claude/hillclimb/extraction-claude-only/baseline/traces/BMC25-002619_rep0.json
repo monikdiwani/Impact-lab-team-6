@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002619\",\n \"received_at\": \"2025-07-20 16:31\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Goregaon West station road pe itna paani hai ki bus band hai. BMC kab aayegi?\",\n \"locality_text\": \"Goregaon West\",\n \"ward_code\": \"P/S\",\n \"lat\": 19.160426,\n \"lon\": 72.856951,\n \"photo_description\": \"Road under brown water up to car wheel arches\",\n \"upvotes\": 25\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"P/S\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Station road in Goregaon West is so heavily flooded that buses have stopped running, and the citizen asks when BMC will come.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

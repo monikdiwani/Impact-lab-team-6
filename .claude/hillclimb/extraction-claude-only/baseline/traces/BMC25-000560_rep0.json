@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000560\",\n \"received_at\": \"2025-06-17 09:34\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Shiv Sena shakha के पास सड़क पर बड़ा गड्ढा है, Saki Naka Junction. जल्दी ठीक करें.\",\n \"locality_text\": \"Saki Naka Junction\",\n \"ward_code\": \"L\",\n \"lat\": 19.074501,\n \"lon\": 72.894007,\n \"photo_description\": \"People wading through knee-deep water near shops\",\n \"upvotes\": 38\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Citizen reports a big pothole on the road near the Shiv Sena shakha at Saki Naka Junction and asks for a quick fix, while the attached photo shows people wading through knee-deep water near shops.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005101\",\n \"received_at\": \"2025-08-28 14:52\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Hill Road वर गटाराचे झाकण उघडे आहे, खूप धोकादायक आहे.\",\n \"locality_text\": \"Santacruz West\",\n \"ward_code\": \"H/W\",\n \"lat\": 19.061003,\n \"lon\": 72.841851,\n \"photo_description\": \"Wide shot of road with several potholes, auto rickshaw swerving\",\n \"upvotes\": 21\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"H/W\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Pothole reported at Santacruz West (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

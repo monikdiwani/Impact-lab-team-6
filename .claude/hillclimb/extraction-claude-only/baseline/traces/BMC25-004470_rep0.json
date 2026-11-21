@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004470\",\n \"received_at\": \"2025-08-19 19:16\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Pothole\",\n \"description\": \"municipal school के पास सड़क पर बड़ा गड्ढा है, Trombay. जल्दी ठीक करें.\",\n \"locality_text\": \"Trombay\",\n \"ward_code\": \"M/E\",\n \"lat\": 19.06032,\n \"lon\": 72.926063,\n \"photo_description\": \"Close-up of a crater filled with muddy water, broken asphalt edges\",\n \"upvotes\": 26\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"M/E\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"There is a large pothole on the road near the municipal school in Trombay; the citizen asks for it to be fixed quickly.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

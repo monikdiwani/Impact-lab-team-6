@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005821\",\n \"received_at\": \"2025-09-15 18:12\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"mr\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Citizen informs pothole at Lokhandwala, near church on SV Road. Requests urgent action.\",\n \"locality_text\": \"Lokhandwala\",\n \"ward_code\": null,\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"locality\",\n \"language\": \"mr\",\n \"english_summary\": \"Citizen reports a pothole near the church on SV Road in Lokhandwala and requests urgent action.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

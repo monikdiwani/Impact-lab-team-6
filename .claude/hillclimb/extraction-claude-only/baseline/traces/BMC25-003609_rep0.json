@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003609\",\n \"received_at\": \"2025-08-01 08:17\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"mr\",\n \"category_reported\": \"Other\",\n \"description\": \"Caller reports waterlogging at Vinoba Bhave Nagar, near chawl gate on Kurla Andheri Road. Requests urgent action.\",\n \"locality_text\": \"Vinoba Bhave Nagar\",\n \"ward_code\": \"L\",\n \"lat\": 19.080455,\n \"lon\": 72.887941,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Caller reports waterlogging near the chawl gate on Kurla Andheri Road in Vinoba Bhave Nagar and requests urgent action.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

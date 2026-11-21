@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003342\",\n \"received_at\": \"2025-07-26 14:23\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"As per caller waterlogging at Antop Hill, near signal on Sion Trombay Road. \",\n \"locality_text\": \"Antop Hill\",\n \"ward_code\": \"F/N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"F/N\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"As per caller waterlogging at Antop Hill, near signal on Sion Trombay Road.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

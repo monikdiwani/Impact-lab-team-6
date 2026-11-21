@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001867\",\n \"received_at\": \"2025-07-08 22:51\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Other\",\n \"description\": \"Andheri East station road pe itna paani hai ki bus band hai. BMC kab aayegi?\",\n \"locality_text\": \"Andheri East\",\n \"ward_code\": \"K/E\",\n \"lat\": 19.11605,\n \"lon\": 72.868825,\n \"photo_description\": \"Wide shot of road with several potholes, auto rickshaw swerving\",\n \"upvotes\": 14\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"K/E\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Citizen reports so much water on Andheri East station road that buses have stopped and asks when BMC will come; the attached photo shows several potholes with an auto rickshaw swerving.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

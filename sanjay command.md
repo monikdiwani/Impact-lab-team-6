@@ -63,10 +63,10 @@ Numbers to report:
 - **category** (citizen bar 54.8%), **category on `cat_wrong`** (fixing the citizen's mistakes) and **category by evidence source** (photo / text / citizen / claude).
 - **The `ambiguous` slice:** the only cases where Claude decides the category in `app`.
 - **ward recovery on blank-ward cases.**
-- **severity:** read it against the ceiling of about 47% exact / 89% within one, not 100%.
+- **severity:** `severity best` should be 100%. `severity =` and `severity ±1` should equal the ceiling line the runner prints (46.4% / 95.2% on this set); they can't go higher, because within a category the true severity is random.
 - Language is now an input, so it isn't scored.
 
-Your 10-case pilot from before the fixes is kept in `.claude/hillclimb/extraction/_archive/pilot-before-fixes/`.
+Earlier runs are kept in `.claude/hillclimb/extraction/_archive/` (the pre-fix pilot, plus baseline and v1 from before the `severity best` metric) and `.claude/hillclimb/extraction-claude-only/_archive/`. The grader and cases changed again on 21 Nov, so approve once more. Re-runs are free because the Claude answers are cached.
 
 ---
 
@@ -135,6 +135,24 @@ python -m evals.backtest_risk --cutoff 2025-07-15
 Compare the `model` row with `baseline_past_work_orders` (spearman 0.586, P@20 0.30, captured@20 0.137). **Beating those is the pass mark.** If the model is lower, it's adding noise and the weights need rethinking. Results are saved to `.claude/hillclimb/risk_backtest/`.
 
 Result on 21 Nov: **model spearman 0.650, P@20 0.40, captured@20 0.164**, so it beats the baseline on all three. M3 tuned its weights on this backtest (4 cutoffs), so treat it as an in-sample number.
+
+---
+
+## Database (what the app connects to)
+
+```powershell
+python -m pipeline.db            # rebuild outputs/follow_the_rupee.db + docs/DATABASE.md after any pipeline run (~10 s)
+python -m pipeline.db --check    # is the database up to date with data/ and outputs/?
+pytest tests/test_db.py -q       # keys, row counts, views, read-only access, freshness
+```
+
+```python
+from pipeline import db
+db.query("SELECT * FROM v_complaint_trail WHERE complaint_id = ?", ["BMC25-000005"])
+db.query("SELECT * FROM v_next_rupee WHERE ward_code = ? ORDER BY rank", ["F/S"])
+```
+
+Full run order after code changes: M1 `python -c "from pipeline.connect import run; run('data','outputs')"`, then M3 `python -m pipeline.risk`, then M2 `python -c "from pipeline.audit import run; run('data','outputs')"`, then `python -m pipeline.db`.
 
 ---
 

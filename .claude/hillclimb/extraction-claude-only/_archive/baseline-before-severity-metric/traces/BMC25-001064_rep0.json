@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001064\",\n \"received_at\": \"2025-06-27 20:01\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Road related\",\n \"description\": \"Complainant states road cave-in at Mahim, near church on Senapati Bapat Marg. Repeat caller.\",\n \"locality_text\": \"Mahim\",\n \"ward_code\": \"G/N\",\n \"lat\": 19.033849,\n \"lon\": 72.842761,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"G/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"A repeat caller reports a road cave-in on Senapati Bapat Marg near the church in Mahim.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

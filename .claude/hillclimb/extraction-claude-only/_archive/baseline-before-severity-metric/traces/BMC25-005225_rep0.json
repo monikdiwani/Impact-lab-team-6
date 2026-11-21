@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005225\",\n \"received_at\": \"2025-08-26 09:30\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Broken paver blocks\",\n \"description\": \"Bhai Juhu Tara Road pe signal ke paas bahut bada khadda hai, roz koi na koi girta hai. Please jaldi theek karo\",\n \"locality_text\": \"Vile Parle West\",\n \"ward_code\": \"K/W\",\n \"lat\": 19.115755,\n \"lon\": 72.847098,\n \"photo_description\": \"Uncovered manhole with a stick and plastic bag as warning\",\n \"upvotes\": 20\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Citizen reports a very large hole near the signal on Juhu Tara Road in Vile Parle West where people fall daily, and asks for a quick repair; the photo shows an uncovered manhole marked with a stick and plastic bag.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

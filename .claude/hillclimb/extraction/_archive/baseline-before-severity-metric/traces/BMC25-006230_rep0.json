@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-006230\",\n \"received_at\": \"2025-09-23 15:26\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi\",\n \"category_reported\": \"Other\",\n \"description\": \"As per caller waterlogging at Vinoba Bhave Nagar, near post office on Kurla Andheri Road. Caller agitated.\",\n \"locality_text\": \"Vinoba Bhave Nagar\",\n \"ward_code\": \"L\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Waterlogging reported at Vinoba Bhave Nagar (original text in hi).\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004144\",\n \"received_at\": \"2025-08-11 13:05\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"HEAVY WATERLOGGING NEAR SIGNAL. AMBULANCE COULD NOT PASS. URGENT.\",\n \"locality_text\": \"Malad West\",\n \"ward_code\": \"P/N\",\n \"lat\": 19.18689,\n \"lon\": 72.847742,\n \"photo_description\": null,\n \"upvotes\": 29\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Heavy waterlogging near a signal in Malad West blocked an ambulance from passing, and the citizen asks for urgent action.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

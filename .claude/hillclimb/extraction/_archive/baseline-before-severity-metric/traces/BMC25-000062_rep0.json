@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000062\",\n \"received_at\": \"2025-06-03 20:48\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"mr\",\n \"category_reported\": \"Road related\",\n \"description\": \"Citizen informs open or broken manhole at Anand Nagar, near masjid on LT Road. \",\n \"locality_text\": \"Anand Nagar\",\n \"ward_code\": \"R/N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"R/N\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Open or broken manhole reported at Anand Nagar (original text in mr).\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

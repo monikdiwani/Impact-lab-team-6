@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005049\",\n \"received_at\": \"2025-08-23 14:29\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Ghatkopar West mein market ke saamne paani bhar gaya hai ghutne tak, gaadi nahi nikal rahi\",\n \"locality_text\": \"Ghatkopar West\",\n \"ward_code\": \"N\",\n \"lat\": 19.098468,\n \"lon\": 72.920936,\n \"photo_description\": null,\n \"upvotes\": 24\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"N\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Pothole reported at Ghatkopar West (original text in hi-en).\",\n \"extraction_source\": \"citizen\"\n}"
+ }
+]

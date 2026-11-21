@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004249\",\n \"received_at\": \"2025-08-14 19:02\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"Complainant states waterlogging at Byculla, near hospital gate on Clare Road. Requests urgent action.\",\n \"locality_text\": \"Byculla\",\n \"ward_code\": \"E\",\n \"lat\": 18.976254,\n \"lon\": 72.83235,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"E\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Complainant reports waterlogging near the hospital gate on Clare Road, Byculla, and requests urgent action.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

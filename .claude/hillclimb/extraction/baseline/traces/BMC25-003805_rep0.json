@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003805\",\n \"received_at\": \"2025-08-06 18:24\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"small pothole near mandir, Linking Road. Two wheelers falling daily, please fix urgently.\",\n \"locality_text\": \"Linking Road\",\n \"ward_code\": \"H/W\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": \"Close-up of a crater filled with muddy water, broken asphalt edges\",\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"H/W\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"small pothole near mandir, Linking Road. Two wheelers falling daily, please fix urgently.\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

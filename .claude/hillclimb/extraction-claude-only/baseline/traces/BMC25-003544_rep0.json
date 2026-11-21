@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003544\",\n \"received_at\": \"2025-08-03 11:52\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Part of SV Road has sunk near masjid. Pipeline leaking below?\",\n \"locality_text\": \"Juhu\",\n \"ward_code\": null,\n \"lat\": 19.122475,\n \"lon\": 72.848,\n \"photo_description\": null,\n \"upvotes\": 40\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"gps\",\n \"language\": \"en\",\n \"english_summary\": \"Citizen reports that part of SV Road near the masjid in Juhu has sunk, possibly due to a leaking pipeline underneath.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

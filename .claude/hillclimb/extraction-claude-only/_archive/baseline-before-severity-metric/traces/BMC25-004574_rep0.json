@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004574\",\n \"received_at\": \"2025-08-20 13:16\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Other\",\n \"description\": \"metro station के पास सड़क पर बड़ा गड्ढा है, Kalbadevi. जल्दी ठीक करें.\",\n \"locality_text\": \"Kalbadevi\",\n \"ward_code\": \"C\",\n \"lat\": 18.955546,\n \"lon\": 72.828584,\n \"photo_description\": \"Uprooted paver blocks on footpath\",\n \"upvotes\": 12\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Broken paver blocks\",\n \"severity_1_5\": 1,\n \"ward_code\": \"C\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Citizen reports a large pothole on the road near the metro station in Kalbadevi and asks for a quick repair; the photo shows uprooted paver blocks on the footpath.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

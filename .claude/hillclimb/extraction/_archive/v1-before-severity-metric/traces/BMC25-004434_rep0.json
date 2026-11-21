@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004434\",\n \"received_at\": \"2025-08-17 14:23\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"heavy waterlogging near ganpati mandal pandal. ambulance could not pass. urgent.\",\n \"locality_text\": \"RCF Colony\",\n \"ward_code\": null,\n \"lat\": 19.04874,\n \"lon\": 72.898434,\n \"photo_description\": \"Road under brown water up to car wheel arches\",\n \"upvotes\": 2\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"M/W\",\n \"ward_source\": \"gps\",\n \"language\": \"en\",\n \"english_summary\": \"heavy waterlogging near ganpati mandal pandal. ambulance could not pass. urgent.\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

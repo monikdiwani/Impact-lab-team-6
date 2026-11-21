@@ -54,3 +54,19 @@ def test_extraction_grader():
     assert gr["severity_within1"] == 1 and gr["severity_exact"] == 0
     assert grade_extraction({**perfect, "category_clean": "Potholes"}, exp)[0]["valid_output"] == 0
     assert not any(grade_extraction("I don't know", exp)[0].values())
+
+
+def test_severity_best_credits_the_best_possible_guess():
+    """Severity truth is noise within a category, so the grader also credits the best
+    possible answer for the true category (expected['severity_best'])."""
+    exp = {"category": "Pothole", "severity": 2, "severity_best": [3], "ward_code": "A"}
+    base = {"category_clean": "Pothole", "ward_code": "A"}
+    g = grade_extraction({**base, "severity_1_5": 3}, exp)[0]       # best guess, not exact
+    assert g["severity_best"] == 1 and g["severity_exact"] == 0
+    g = grade_extraction({**base, "severity_1_5": 2}, exp)[0]       # exact truth
+    assert g["severity_best"] == 1 and g["severity_exact"] == 1
+    g = grade_extraction({**base, "severity_1_5": 5}, exp)[0]       # neither
+    assert g["severity_best"] == 0
+    tie = {**exp, "category": "Choked drain / nullah overflow", "severity": 2, "severity_best": [3, 4]}
+    assert grade_extraction({**base, "severity_1_5": 4}, tie)[0]["severity_best"] == 1
+    assert grade_extraction({**base, "severity_1_5": None}, exp)[0]["severity_best"] == 0

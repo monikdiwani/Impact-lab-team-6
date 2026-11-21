@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002483\",\n \"received_at\": \"2025-07-17 11:50\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"mandir के पास सड़क पर बड़ा गड्ढा है, Sion. जल्दी ठीक करें.\",\n \"locality_text\": \"Sion\",\n \"ward_code\": \"F/N\",\n \"lat\": 19.039015,\n \"lon\": 72.862234,\n \"photo_description\": \"People wading through knee-deep water near shops\",\n \"upvotes\": 14\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"F/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Waterlogging reported at Sion (original text in hi).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

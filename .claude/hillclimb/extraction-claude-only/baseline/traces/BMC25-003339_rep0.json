@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003339\",\n \"received_at\": \"2025-07-26 06:55\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Dahisar East मध्ये पाणी साचले आहे, गाड्या अडकल्या आहेत. पंप पाठवा.\",\n \"locality_text\": \"Dahisar\",\n \"ward_code\": \"R/N\",\n \"lat\": 19.249309,\n \"lon\": 72.866849,\n \"photo_description\": null,\n \"upvotes\": 20\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"R/N\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Water has accumulated in Dahisar East and vehicles are stuck; the citizen requests that a pump be sent.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

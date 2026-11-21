@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000085\",\n \"received_at\": \"2025-06-04 15:41\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Caller reports pothole at Jogeshwari East, near bus stop on Mahakali Caves Road. Says vehicles getting damaged.\",\n \"locality_text\": \"Jogeshwari East\",\n \"ward_code\": \"K/E\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"K/E\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Caller reports a pothole near the bus stop on Mahakali Caves Road in Jogeshwari East that is damaging vehicles.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

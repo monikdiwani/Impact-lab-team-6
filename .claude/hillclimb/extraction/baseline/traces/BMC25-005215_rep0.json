@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005215\",\n \"received_at\": \"2025-08-26 22:19\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"medical store के पास सड़क पर बड़ा गड्ढा है, Juhu. जल्दी ठीक करें.\",\n \"locality_text\": \"Juhu\",\n \"ward_code\": \"K/W\",\n \"lat\": 19.122036,\n \"lon\": 72.848809,\n \"photo_description\": \"People wading through knee-deep water near shops\",\n \"upvotes\": 21\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Waterlogging reported at Juhu (original text in hi).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

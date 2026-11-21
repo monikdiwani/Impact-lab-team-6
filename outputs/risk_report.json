@@ -7,16 +7,16 @@
   "c_flood": 0.3,
   "c_condition": 0.45
  },
- "open_issues_source": "M3-fallback",
- "n_open_issues": 455,
+ "open_issues_source": "M1",
+ "n_open_issues": 658,
  "data_notes": [],
  "n_roads": 291,
  "plan_actions": {
-  "Repair": 124,
-  "Monitor": 106,
+  "Repair": 119,
+  "Monitor": 111,
   "Invoke DLP": 61
  },
- "plan_repair_inr": 8250430.0,
+ "plan_repair_inr": 8574650.0,
  "over_budget_wards": [
   "A",
   "E",

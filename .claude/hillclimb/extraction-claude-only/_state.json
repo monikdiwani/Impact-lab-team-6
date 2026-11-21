@@ -1,0 +1,46 @@
+{
+ "metrics": [
+  {
+   "id": "category",
+   "label": "category",
+   "kind": "binary"
+  },
+  {
+   "id": "severity_within1",
+   "label": "severity \u00b11",
+   "kind": "binary"
+  },
+  {
+   "id": "severity_exact",
+   "label": "severity =",
+   "kind": "binary"
+  },
+  {
+   "id": "severity_best",
+   "label": "severity best",
+   "kind": "binary"
+  },
+  {
+   "id": "ward",
+   "label": "ward",
+   "kind": "binary"
+  },
+  {
+   "id": "valid_output",
+   "label": "valid output",
+   "kind": "binary"
+  }
+ ],
+ "perf_fields": [
+  {
+   "id": "latency_s",
+   "label": "latency",
+   "unit": "s"
+  },
+  {
+   "id": "cost_usd",
+   "label": "cost",
+   "unit": "$"
+  }
+ ]
+}

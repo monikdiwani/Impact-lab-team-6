@@ -85,6 +85,99 @@ These were measured on the linked complaints, where the truth is the category of
 ## 6. Not done yet / your steps
 
 1. **Paid evals.** `--approve-harness` is your step. The cases and runner changed, so review [evals/cases/REVIEW.md](../evals/cases/REVIEW.md), then run the pilot, the full `app` run and the `claude` ablation (commands in [sanjay command.md](../sanjay%20command.md)). Your `.env` key is picked up automatically.
-2. **Committed outputs are stale.** `outputs/complaints_clean.parquet`, `open_issues.parquet` and `wo_trail.parquet` were built by the old extraction code. M3's committed outputs were built from its own stand-in for open issues (`open_issues_source: M3-fallback` in `risk_report.json`), not from M1's. Regenerating them means one M1 run with Claude (about 151 calls, under $1) and one M3 run.
+2. **Committed outputs: regenerated (done, see section 7).**
 3. **Independent review in progress.** A multi-agent review of these changes, with every finding checked by a separate skeptic, was still running at commit time. Confirmed findings will be fixed and added here in a follow-up commit.
-4. **Teammates' notes:** `docs/ganesh m1 result.md` still has the old numbers. `outputs/llm_cache/` has 3 entries from the old pilot that the new prompt will never hit; they aren't committed.
+4. **Teammates' notes:** `docs/ganesh m1 result.md` still has the old numbers.
+
+## 7. Regenerated outputs (Claude on)
+
+All of `outputs/` was rebuilt from the current code, with Claude enabled, in this order: M1 (`pipeline.connect.run`), M3 (`pipeline.risk.run`), M2 (`pipeline.audit.run`). The CSV copies in `outputs/csv/` were rewritten from the new parquet files. All 9 contract files pass `contracts.schemas.validate`.
+
+| Output | Before (committed) | After |
+|---|---|---|
+| Extraction sources (6,501 complaints) | rules 6,501 (no key) | text 2,862 · photo 2,838 · citizen 650 · **Claude 151** (0 fallbacks, so every call succeeded) |
+| Complaints whose category differs from the citizen's pick | 0 | 1,055 |
+| De-dup precision / recall / F1 | 0.713 / 0.684 / 0.698 | 0.732 / 0.782 / 0.756 |
+| Open issues (M1) | 687 | 658 |
+| M3 open-issue source | `M3-fallback` (455, its own stand-in) | **`M1`** (658) |
+| M3 plan | 124 repairs, ₹82.5 L | 119 repairs, ₹85.7 L (61 "Invoke DLP" unchanged) |
+| M3 ward memos | 24 templates | 24 Claude-written |
+| M2 audit flags | 114 / 45 / 493 / 1259 / 611 | **identical** (M2 doesn't depend on M1) |
+| M2 contractor and ward summaries | 32 templates | 30 Claude-written, 2 templates |
+
+- **Why 2 M2 summaries are templates:** Claude's text ran over the 120 or 150-word limit, so M2's own guard kept its template. That's working as designed.
+- **Number formatting:** Claude writes amounts like "Rs 17209448", without Indian digit grouping. M2's prompt could ask for ₹ with commas.
+- **Cache:** `outputs/llm_cache/` now holds 206 cached answers (151 M1, 32 M2, 24 M3, one prompt shared), so the demo runs with no network. The 3 stale entries from the pre-fix pilot were set aside, not committed.
+- **Cost:** about 207 Claude calls in total.
+
+## 8. Paid eval results and the severity question
+
+Sanjay ran the paid evals after re-approving the harness. All runs had 166 cases scored and 0 failed attempts.
+
+| Run | Category | Severity exact | Severity within one | Ward | Claude calls |
+|---|---|---|---|---|---|
+| `app` baseline (and a `v1` re-run, identical) | **100%** | 46.4% | 95.2% | 100% | 5 (the ambiguous cases, all correct) |
+| `claude` ablation (every case through Claude, rules bypassed) | 93.4% | 45.8% | 91.6% | 100% | 166 (median 812 tokens in, 73 out) |
+
+**Claude on its own makes the mistake the router is built to avoid.** All 11 of its misses are Hindi, Marathi or Hinglish complaints from the app or portal (11 of 67 such cases, 0 of 99 elsewhere). In 9 it believed text like "मैनहोल खुला है" (manhole open) over a correct citizen category. In 2 it even overrode a decisive photo, although the prompt puts the photo first. In the real app those cases never reach Claude, so the router scores 100%. The photo weakness only affects photo text Claude hasn't seen before, because all 12 known templates are handled by rules. Fixing it in the prompt would invalidate the 151 cached pipeline answers, so that's left for later.
+
+### Is severity failing?
+
+No. **There is no pass mark for severity, and 46.4% exact is the best any method can score.**
+
+- **The correct answer comes from the work order, not the complaint.** It's the work order's deadline (24 h = 5 … 168 h = 1), and in this synthetic data it depends only on the category. Within a category it's random.
+- **Nothing beats the category lookup.** A cross-validated model (grouped by work order) using 30 features scored worse than the lookup on 4,798 linked complaints. The features covered channel, language, upvotes, hour, weekday, rainfall, tides, ward, low-lying index, flood-hotspot distance, GPS, photo and text length, plus work-order fields the extractor never sees (method, cost, area, road traffic).
+
+  | Method | Exact | Within one |
+  |---|---|---|
+  | **Category lookup (what M1 does)** | **46.6%** | **88.9%** |
+  | Model, category only | 46.5% | 87.1% |
+  | Model, everything the complaint offers | 42.7% | 82.5% |
+  | Model, plus work-order fields | 45.9% | 84.0% |
+- **On these 166 cases**, within one (95.2%) is already the maximum. Exact (77/166) could reach 84 only by switching pothole to 2, waterlogging to 5 and drain to 4. Those values suit this sample but are wrong across all complaints (pothole: 776 at 3 vs 672 at 2; waterlogging: 474 at 4 vs 304 at 5), so changing them would be tuning to the test set.
+- **Category is 100% correct**, so no extraction change can raise severity.
+
+**What was actually wrong was the report.** Nothing showed that 46.4% is the ceiling, so it read as a failure. Fixed:
+
+| # | Change |
+|---|---|
+| 26 | New metric **`severity best`**. A case passes if the severity is the exact truth or the best possible answer for the true category. That's the part extraction controls. The best values come from linked complaints outside the eval set (`evals/build_cases.py`, `severity_best_table`): paver 1, drain 3 (4 is a near-tie, also accepted), manhole 5, pothole 3, cave-in 5, waterlogging 4. They match M1's lookup, and a test checks this. |
+| 27 | The runner now prints the ceiling next to the raw numbers: *"severity ceiling on this set: exact 46.4%, within one 95.2%"*. |
+| 28 | Free self-checks with the new metric: `rules` scores severity best **100%**, exact 46.4% and within one 95.2%, both at the ceiling. Oracle 100%, null 0%, citizen (always 3) 54.8%. |
+
+**How to read severity from now on:**
+- `severity best` should be 100%.
+- `severity =` and `severity ±1` should equal the printed ceiling.
+- Anything below the ceiling means the category was wrong.
+
+**Official re-run with the new metric** (Sanjay re-approved the harness, 166 scored, 0 failed attempts each):
+
+| Run | Category | `severity best` | Severity exact | Severity within one | Ceiling (exact / within one) |
+|---|---|---|---|---|---|
+| `app` | **100%** | **100%** | 46.4% | 95.2% | 46.4% / 95.2% |
+| `claude` ablation | 93.4% | 95.2% | 45.8% | 91.6% | 46.4% / 95.2% |
+
+The app is at the severity ceiling. The Claude-only run loses severity only where it got the category wrong. Earlier runs from before the metric are kept in the `_archive/` folders, with the suffix `-before-severity-metric`.
+
+## 9. SQLite database (what the app connects to)
+
+All cleaned data now lives in one SQLite database, `outputs/follow_the_rupee.db`. The app connects to it through `pipeline.db` instead of reading loose parquet, CSV and JSON files.
+
+| What | Detail |
+|---|---|
+| Build | `python -m pipeline.db` (about 10 s) builds from `data/` and `outputs/` and writes [docs/DATABASE.md](DATABASE.md) |
+| Contents | 28 tables. Reference data (wards, roads, traffic, contractors and their wards, rate card, work orders, facilities, hotspots, accidents, rainfall, tides, social posts, map GeoJSON); `complaints` (raw text merged with M1's cleaned fields); `issues` (all 3,302 duplicate clusters linked to their work order); every M1/M2/M3 output; `narratives` (56 Claude or template texts); `meta` (build time, row counts, input hashes, de-dup metrics, risk report, scoring weights, fairness notes) |
+| Integrity | STRICT column types, primary keys and foreign keys on every table. The build fails on any foreign-key violation, failed integrity check or row-count mismatch |
+| App API | 6 views: `v_complaint_trail` (complaint → issue → work order → contractor, cost, SLA, re-opened, flags), `v_work_orders`, `v_ward_money`, `v_contractor_cards`, `v_next_rupee`, `v_work_order_flags`. `db.query(sql, params)` returns a DataFrame. `db.connect()` is read-only, with foreign keys on |
+| Safety | Built into a temp file and swapped in at the end. The app's connection rejects writes |
+| Freshness | `meta` stores the sha256 of every input. `python -m pipeline.db --check` and `tests/test_db.py` fail if the committed DB is older than its inputs |
+
+**A bug the tests caught while building it:** SQLite divides an integer by an integer as integers. For per-job repair methods the cost and the rate are both whole numbers, so the first version of `v_work_orders` showed a 1.4× bill as ratio 1 and lost 23 of the 114 over-bills. Fixed with `CAST(... AS REAL)`, and a test now checks the view agrees with M2 on all 114.
+
+**Example:** `SELECT * FROM v_complaint_trail WHERE complaint_id = 'BMC25-000005'` returns:
+- the Hinglish complaint, cleaned to "Open or broken manhole";
+- its issue ISS-00001, which groups 5 complaints across the app, the helpline and English text;
+- the work order that fixed it, with the contractor, the cost against the rate card, whether it met the SLA and whether it re-opened;
+- the audit flags on that job.
+
+17 new tests in `tests/test_db.py`.

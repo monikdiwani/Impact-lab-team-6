@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005342\",\n \"received_at\": \"2025-08-29 21:50\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"Chembur मध्ये पाणी साचले आहे, गाड्या अडकल्या आहेत. पंप पाठवा.\",\n \"locality_text\": \"Chembur\",\n \"ward_code\": \"M/W\",\n \"lat\": 19.050012,\n \"lon\": 72.896138,\n \"photo_description\": \"Nullah water overflowing onto road\",\n \"upvotes\": 36\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"M/W\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Water has accumulated in Chembur from a nullah overflowing onto the road, vehicles are stuck, and the citizen requests a pump.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

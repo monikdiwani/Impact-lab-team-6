@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001800\",\n \"received_at\": \"2025-07-08 20:41\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Parel में पानी भर गया है, एम्बुलेंस नहीं निकल पा रही.\",\n \"locality_text\": \"Parel\",\n \"ward_code\": \"F/S\",\n \"lat\": 19.000439,\n \"lon\": 72.851935,\n \"photo_description\": \"Cracked manhole cover sunk below road level\",\n \"upvotes\": 28\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"F/S\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Open or broken manhole reported at Parel (original text in hi).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

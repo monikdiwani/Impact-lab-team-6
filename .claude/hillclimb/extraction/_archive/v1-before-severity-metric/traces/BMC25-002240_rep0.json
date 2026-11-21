@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002240\",\n \"received_at\": \"2025-07-12 07:09\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"masjid समोर खड्डे बुजवले होते पण पुन्हा उखडले. काम निकृष्ट दर्जाचे आहे.\",\n \"locality_text\": \"Dadar East\",\n \"ward_code\": \"F/S\",\n \"lat\": 19.005579,\n \"lon\": 72.843436,\n \"photo_description\": \"Nullah water overflowing onto road\",\n \"upvotes\": 34\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"F/S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Choked drain / nullah overflow reported at Dadar East (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

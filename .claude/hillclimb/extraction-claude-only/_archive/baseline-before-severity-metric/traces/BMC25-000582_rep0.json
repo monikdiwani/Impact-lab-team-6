@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000582\",\n \"received_at\": \"2025-06-17 22:33\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Gutter choked near church, Juhu. Dirty water on road, smell is unbearable.\",\n \"locality_text\": \"Juhu\",\n \"ward_code\": null,\n \"lat\": 19.130171,\n \"lon\": 72.845631,\n \"photo_description\": \"Garbage blocking storm drain grate, dirty water pooling\",\n \"upvotes\": 21\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"gps\",\n \"language\": \"en\",\n \"english_summary\": \"A choked gutter near the church in Juhu is causing dirty, foul-smelling water to collect on the road.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

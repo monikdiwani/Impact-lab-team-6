@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005389\",\n \"received_at\": \"2025-08-30 10:36\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Since morning water not receding on Kalanagar Road. Santacruz East. Shops flooded.\",\n \"locality_text\": \"Santacruz East\",\n \"ward_code\": \"H/E\",\n \"lat\": 19.060588,\n \"lon\": 72.846675,\n \"photo_description\": null,\n \"upvotes\": 14\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"H/E\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Since morning water not receding on Kalanagar Road. Santacruz East. Shops flooded.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

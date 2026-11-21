@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002200\",\n \"received_at\": \"2025-07-11 20:44\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Complainant states choked drain / nullah overflow at Saki Naka Junction, near BEST depot on Kamani Junction Road. Repeat caller.\",\n \"locality_text\": \"Saki Naka Junction\",\n \"ward_code\": \"L\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"A repeat caller to the 1916 helpline reports a choked drain / nullah overflow at Saki Naka Junction, near the BEST depot on Kamani Junction Road.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000624\",\n \"received_at\": \"2025-06-18 14:07\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"railway station के पास सड़क पर बड़ा गड्ढा है, mahim. जल्दी ठीक करें.\",\n \"locality_text\": \"Mahim\",\n \"ward_code\": \"G/N\",\n \"lat\": 19.034138,\n \"lon\": 72.84281,\n \"photo_description\": \"Loose paver blocks with standing water\",\n \"upvotes\": 2\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Broken paver blocks\",\n \"severity_1_5\": 1,\n \"ward_code\": \"G/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Citizen reports a big pothole on the road near the railway station in Mahim and asks for a quick repair; the photo shows loose paver blocks with standing water.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

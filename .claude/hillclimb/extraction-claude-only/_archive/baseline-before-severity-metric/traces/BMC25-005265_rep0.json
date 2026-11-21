@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005265\",\n \"received_at\": \"2025-08-27 11:08\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Choked drain / nullah overflow\",\n \"description\": \"Ganpatrao Kadam Marg पर मैनहोल खुला है, बहुत खतरनाक है.\",\n \"locality_text\": \"Lalbaug\",\n \"ward_code\": \"F/S\",\n \"lat\": 19.009622,\n \"lon\": 72.84055,\n \"photo_description\": \"Garbage blocking storm drain grate, dirty water pooling\",\n \"upvotes\": 15\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Choked drain / nullah overflow\",\n \"severity_1_5\": 3,\n \"ward_code\": \"F/S\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"The citizen reports an open, dangerous manhole on Ganpatrao Kadam Marg in Lalbaug, while the photo shows garbage blocking a storm drain grate with dirty water pooling.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

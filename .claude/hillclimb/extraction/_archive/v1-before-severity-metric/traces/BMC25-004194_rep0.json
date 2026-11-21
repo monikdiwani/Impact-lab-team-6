@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004194\",\n \"received_at\": \"2025-08-12 07:06\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Other\",\n \"description\": \"Caller reports broken paver blocks at Kurla East, near railway station on Kurla Andheri Road. Requests urgent action.\",\n \"locality_text\": \"Kurla East\",\n \"ward_code\": \"L\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Broken paver blocks\",\n \"severity_1_5\": 1,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Caller reports broken paver blocks at Kurla East, near railway station on Kurla Andheri Road. Requests urgent action.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

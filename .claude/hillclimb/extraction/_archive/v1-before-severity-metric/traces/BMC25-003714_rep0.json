@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003714\",\n \"received_at\": \"2025-08-03 16:06\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Heavy waterlogging near mandir. Ambulance could not pass. Urgent.\",\n \"locality_text\": \"Vile Parle East\",\n \"ward_code\": null,\n \"lat\": 19.111201,\n \"lon\": 72.879996,\n \"photo_description\": null,\n \"upvotes\": 39\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"K/E\",\n \"ward_source\": \"gps\",\n \"language\": \"en\",\n \"english_summary\": \"Heavy waterlogging near mandir. Ambulance could not pass. Urgent.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

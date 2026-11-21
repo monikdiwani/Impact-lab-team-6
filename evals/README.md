@@ -30,7 +30,9 @@ The gap between `rules` and `app` is what Claude adds. `claude` is an ablation: 
 All of it is derived from `data/` by `python -m evals.build_cases`, which is deterministic:
 
 - **category**: `work_type` of the work order the complaint is linked to. Citizens picked a different category for 16.5% of linked complaints.
-- **severity 1–5**: the work order's `sla_hours` (24 → 5, 48 → 4, 72 → 3, 120 → 2, 168 → 1). Within a category this is noise: no word, photo, road type, area or upvote count predicts it. So even a perfect category scores at most about **47% exact / 89% within one**. Read severity numbers against that ceiling, not against 100%.
+- **severity 1–5**: the work order's `sla_hours` (24 → 5, 48 → 4, 72 → 3, 120 → 2, 168 → 1). Within a category this is noise. A cross-validated model on 30 features (time, rain, tides, ward, hotspot distance, road traffic, even work-order cost and method) scores worse than a per-category lookup. So even a perfect category scores at most about **47% exact / 89% within one** overall.
+  - `severity =` and `severity ±1` are capped by the data. The runner prints the ceiling for the set next to them (166-case set: 46.4% / 95.2%).
+  - **`severity best`** is what the extractor controls. It passes when the answer is the exact truth or the best possible guess for the true category (`expected.severity_best`, derived from linked complaints outside the eval set). It should be 100%.
 - **ward**: the work order's ward. It matches 100% of complaints that have a ward, and 30 test cases have a blank ward.
 - **language is an input, not scored.** 1916-helpline rows are English operator notes even when the caller spoke Marathi or Hindi (740 linked rows), so the label can't be recovered from the text.
 - `complaints_sample_200.csv` is kept **out** of the test set. Use it for prompt development.
@@ -78,7 +80,7 @@ pipeline.common.llm.reset_last_meta() / get_last_meta()                         
 python -m evals.run_eval --suite extraction --target oracle    # must be 100%
 python -m evals.run_eval --suite extraction --target null      # must be 0%
 python -m evals.run_eval --suite extraction --target citizen   # the bar: 54.8% category on this set
-python -m evals.run_eval --suite extraction --target rules     # M1 without Claude
+python -m evals.run_eval --suite extraction --target rules     # M1 without Claude: category 100%, severity best 100%
 python -m evals.run_eval --suite narrative  --target template  # 100% on programmatic checks
 python -m evals.run_eval --suite narrative  --target rules     # M2's templates through the graders
 python -m evals.backtest_risk --target naive                    # baseline the risk model must beat

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004668\",\n \"received_at\": \"2025-08-19 17:16\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Heavy waterlogging near medical store. Ambulance could not pass. Urgent.\",\n \"locality_text\": \"Kurla West\",\n \"ward_code\": null,\n \"lat\": 19.066953,\n \"lon\": 72.878803,\n \"photo_description\": null,\n \"upvotes\": 40\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"L\",\n \"ward_source\": \"gps\",\n \"language\": \"en\",\n \"english_summary\": \"Heavy waterlogging near a medical store in Kurla West stopped an ambulance from passing, and the citizen calls it urgent.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

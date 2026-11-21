@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003632\",\n \"received_at\": \"2025-08-05 20:07\",\n \"channel\": \"MyBMC Web Portal\",\n \"language\": \"hi\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Deonar में पानी भर गया है, एम्बुलेंस नहीं निकल पा रही.\",\n \"locality_text\": \"Deonar\",\n \"ward_code\": \"M/E\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": \"Close-up of a crater filled with muddy water, broken asphalt edges\",\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"M/E\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Citizen in Deonar reports water has accumulated on the road and ambulances are unable to get through; the photo shows a crater with broken asphalt edges filled with muddy water.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

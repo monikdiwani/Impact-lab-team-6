@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004888\",\n \"received_at\": \"2025-08-20 16:35\",\n \"channel\": \"Ward Office Walk-in\",\n \"language\": \"mr\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Kamani Junction Road वर गटाराचे झाकण उघडे आहे, खूप धोकादायक आहे.\",\n \"locality_text\": \"Saki Naka Junction\",\n \"ward_code\": \"L\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Open or broken manhole reported at Saki Naka Junction (original text in mr).\",\n \"extraction_source\": \"citizen\"\n}"
+ }
+]

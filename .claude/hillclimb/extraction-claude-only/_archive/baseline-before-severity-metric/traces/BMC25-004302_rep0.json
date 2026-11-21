@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004302\",\n \"received_at\": \"2025-08-15 07:56\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"As per caller pothole at Shivaji Nagar, near signal on Ghatkopar Mankhurd Link Road. Water level rising.\",\n \"locality_text\": \"Shivaji Nagar\",\n \"ward_code\": null,\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"M/E\",\n \"ward_source\": \"locality\",\n \"language\": \"en\",\n \"english_summary\": \"Caller reports a pothole near the signal on Ghatkopar Mankhurd Link Road at Shivaji Nagar, with the water level rising.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000183\",\n \"received_at\": \"2025-06-09 17:20\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Elphinstone मध्ये पाणी साचले आहे, गाड्या अडकल्या आहेत. पंप पाठवा.\",\n \"locality_text\": \"Elphinstone\",\n \"ward_code\": \"G/S\",\n \"lat\": 18.998222,\n \"lon\": 72.819522,\n \"photo_description\": \"Road under brown water up to car wheel arches\",\n \"upvotes\": 31\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"G/S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Water has accumulated on the road in Elphinstone, vehicles are stuck, and the citizen requests that pumps be sent.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

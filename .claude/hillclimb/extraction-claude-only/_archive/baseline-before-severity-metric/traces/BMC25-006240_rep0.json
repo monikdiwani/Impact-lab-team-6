@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-006240\",\n \"received_at\": \"2025-09-23 16:02\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Pot-hole reopened after last week's patch work on Dr Annie Besant Road, Prabhadevi. Same spot again.\",\n \"locality_text\": \"Prabhadevi\",\n \"ward_code\": \"G/S\",\n \"lat\": 18.991043,\n \"lon\": 72.822709,\n \"photo_description\": null,\n \"upvotes\": 38\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"G/S\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"A pothole on Dr Annie Besant Road, Prabhadevi has reopened at the same spot after last week's patch work.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

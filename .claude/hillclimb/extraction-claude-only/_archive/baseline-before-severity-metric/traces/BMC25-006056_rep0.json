@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-006056\",\n \"received_at\": \"2025-09-16 17:53\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Complainant states open or broken manhole at Saki Naka Junction, near police chowky on LBS Marg. \",\n \"locality_text\": \"Saki Naka Junction\",\n \"ward_code\": null,\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"L\",\n \"ward_source\": \"locality\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Complainant reports an open or broken manhole at Saki Naka Junction near the police chowky on LBS Marg.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

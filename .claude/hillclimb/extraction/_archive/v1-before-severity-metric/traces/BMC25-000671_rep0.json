@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-000671\",\n \"received_at\": \"2025-06-18 15:24\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"PART OF LBS MARG HAS SUNK NEAR MUNICIPAL SCHOOL. PIPELINE LEAKING BELOW?\",\n \"locality_text\": \"Kurla West\",\n \"ward_code\": \"L\",\n \"lat\": 19.0703,\n \"lon\": 72.887997,\n \"photo_description\": \"Collapsed road section with barricade tape\",\n \"upvotes\": 6\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"L\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"PART OF LBS MARG HAS SUNK NEAR MUNICIPAL SCHOOL. PIPELINE LEAKING BELOW?\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003215\",\n \"received_at\": \"2025-07-26 12:13\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"big pothole near post office, Lokhandwala. Two wheelers falling daily, please fix urgently.\",\n \"locality_text\": \"Lokhandwala\",\n \"ward_code\": \"K/W\",\n \"lat\": 19.130663,\n \"lon\": 72.839604,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"A citizen reports a big pothole near the post office in Lokhandwala that is causing two-wheelers to fall daily and asks for an urgent fix.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

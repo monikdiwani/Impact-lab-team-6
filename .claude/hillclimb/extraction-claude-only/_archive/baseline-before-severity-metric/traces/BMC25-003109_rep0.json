@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003109\",\n \"received_at\": \"2025-07-25 19:51\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Open or broken manhole\",\n \"description\": \"Caller reports road cave-in at Juhu, near petrol pump on Link Road. Repeat caller.\",\n \"locality_text\": \"Juhu\",\n \"ward_code\": \"K/W\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"A repeat caller to the 1916 helpline reports a road cave-in near the petrol pump on Link Road in Juhu.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

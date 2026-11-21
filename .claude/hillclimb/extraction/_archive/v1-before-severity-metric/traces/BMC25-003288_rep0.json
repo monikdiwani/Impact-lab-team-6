@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003288\",\n \"received_at\": \"2025-07-26 20:13\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Citizen informs pothole at Goregaon West, near BEST depot on SV Road. Repeat caller.\",\n \"locality_text\": \"Goregaon West\",\n \"ward_code\": \"P/S\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"P/S\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Citizen informs pothole at Goregaon West, near BEST depot on SV Road. Repeat caller.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

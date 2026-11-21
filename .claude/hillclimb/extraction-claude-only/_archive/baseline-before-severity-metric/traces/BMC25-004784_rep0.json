@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-004784\",\n \"received_at\": \"2025-08-20 18:31\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi\",\n \"category_reported\": \"Broken paver blocks\",\n \"description\": \"As per caller waterlogging at Vikhroli, near chawl gate on LBS Marg. Water level rising.\",\n \"locality_text\": \"Vikhroli\",\n \"ward_code\": \"N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"N\",\n \"ward_source\": \"given\",\n \"language\": \"hi\",\n \"english_summary\": \"Caller reports waterlogging near the chawl gate on LBS Marg in Vikhroli, with the water level rising.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

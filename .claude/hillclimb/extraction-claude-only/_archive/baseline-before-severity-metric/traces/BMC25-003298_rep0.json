@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003298\",\n \"received_at\": \"2025-07-30 17:59\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Other\",\n \"description\": \"Manhole cover broken near Shiv Sena shakha. Someone kept a stick and plastic as warning. Fix ASAP.\",\n \"locality_text\": \"Thakur Village\",\n \"ward_code\": \"R/S\",\n \"lat\": 19.198148,\n \"lon\": 72.849829,\n \"photo_description\": null,\n \"upvotes\": 15\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Open or broken manhole\",\n \"severity_1_5\": 5,\n \"ward_code\": \"R/S\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"A broken manhole cover near the Shiv Sena shakha in Thakur Village has only a stick and plastic placed as a warning, and the citizen asks for it to be fixed urgently.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

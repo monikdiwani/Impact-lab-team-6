@@ -54,3 +54,14 @@ def test_extraction_cases_are_well_formed():
         assert c["meta"]["support"], f"{c['id']} has no reliable evidence for its label"
         assert "status" not in c["input"] and "resolved_at" not in c["input"]
     assert sum("ambiguous" in c["tags"] for c in cases) >= 10
+
+
+def test_severity_best_matches_m1_lookup_and_is_independent():
+    """build_cases derives the best-possible severity from complaints OUTSIDE the eval
+    set; M1's lookup must be one of those values for every category."""
+    from pipeline.connect.extract import severity_for
+    cases = R.load_cases("extraction")
+    for c in cases:
+        best = c["expected"]["severity_best"]
+        assert best and all(1 <= v <= 5 for v in best), c["id"]
+        assert severity_for(c["expected"]["category"]) in best, c["id"]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002064\",\n \"received_at\": \"2025-07-10 22:37\",\n \"channel\": \"Ward Office Walk-in\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Bhai JP Road pe hospital gate ke paas bahut bada khadda hai, roz koi na koi girta hai. Please jaldi theek karo\",\n \"locality_text\": \"Juhu\",\n \"ward_code\": null,\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"locality\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Waterlogging reported at Juhu (original text in hi-en).\",\n \"extraction_source\": \"citizen\"\n}"
+ }
+]

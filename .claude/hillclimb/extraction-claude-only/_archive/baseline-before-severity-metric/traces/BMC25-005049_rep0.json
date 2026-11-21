@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005049\",\n \"received_at\": \"2025-08-23 14:29\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Ghatkopar West mein market ke saamne paani bhar gaya hai ghutne tak, gaadi nahi nikal rahi\",\n \"locality_text\": \"Ghatkopar West\",\n \"ward_code\": \"N\",\n \"lat\": 19.098468,\n \"lon\": 72.920936,\n \"photo_description\": null,\n \"upvotes\": 24\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"N\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Knee-deep water has accumulated on the road in front of the market in Ghatkopar West, and vehicles are unable to pass.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

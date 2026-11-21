@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002827\",\n \"received_at\": \"2025-07-24 21:57\",\n \"channel\": \"MyBMC App\",\n \"language\": \"mr\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Nahur मध्ये पाणी साचले आहे, गाड्या अडकल्या आहेत. पंप पाठवा.\",\n \"locality_text\": \"Nahur\",\n \"ward_code\": \"S\",\n \"lat\": 19.144577,\n \"lon\": 72.938093,\n \"photo_description\": \"Wide shot of road with several potholes, auto rickshaw swerving\",\n \"upvotes\": 28\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"S\",\n \"ward_source\": \"given\",\n \"language\": \"mr\",\n \"english_summary\": \"Pothole reported at Nahur (original text in mr).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

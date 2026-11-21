@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-005182\",\n \"received_at\": \"2025-08-26 09:56\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Nahur mein church ke saamne paani bhar gaya hai ghutne tak, gaadi nahi nikal rahi\",\n \"locality_text\": \"Nahur\",\n \"ward_code\": \"S\",\n \"lat\": 19.144201,\n \"lon\": 72.937643,\n \"photo_description\": \"Collapsed road section with barricade tape\",\n \"upvotes\": 14\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"S\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Road cave-in reported at Nahur (original text in hi-en).\",\n \"extraction_source\": \"photo\"\n}"
+ }
+]

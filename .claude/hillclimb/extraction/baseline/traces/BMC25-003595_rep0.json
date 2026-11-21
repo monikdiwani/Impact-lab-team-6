@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003595\",\n \"received_at\": \"2025-08-01 08:48\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Other\",\n \"description\": \"Huge crater on Clare Road opposite railway station. Cars swerving into other lane. Accident waiting to happen.\",\n \"locality_text\": \"Byculla\",\n \"ward_code\": \"E\",\n \"lat\": 18.976278,\n \"lon\": 72.832272,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"E\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Huge crater on Clare Road opposite railway station. Cars swerving into other lane. Accident waiting to happen.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

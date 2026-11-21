@@ -45,6 +45,13 @@ Things that trip people up:
 
 The team plan (stack, module ownership, output schemas, audit rules with expected counts) is in [docs/BLUEPRINT.md](docs/BLUEPRINT.md). Follow its ownership and schema contracts when adding code. Output schemas are in `contracts/schemas.py`.
 
+## Database (what the app reads)
+
+- `outputs/follow_the_rupee.db` (SQLite, about 7 MB, committed) holds the reference data, every cleaned pipeline output and the Claude texts, with primary and foreign keys enforced at build time. The app should read it through `pipeline.db` (`db.query(sql, params)` or `db.connect()`, read-only), not the parquet or CSV files.
+- Start from the views: `v_complaint_trail`, `v_work_orders`, `v_ward_money`, `v_contractor_cards`, `v_next_rupee`, `v_work_order_flags`. The schema reference, with an example query per question, is [docs/DATABASE.md](docs/DATABASE.md), which is generated, so don't hand-edit it.
+- **Rebuild after any pipeline run:** `python -m pipeline.db` (about 10 s). Check freshness with `python -m pipeline.db --check`. `tests/test_db.py` fails if the committed DB is older than its inputs.
+- SQLite divides an INTEGER by an INTEGER as integers, so `CAST(... AS REAL)` before dividing money columns (`cost_inr` and `standard_rate_inr` are both integers).
+
 ## Tests and evals
 
 - `pytest -q`: Layer-1 suite, about 2.5 min, free. `tests/conftest.py` sets `LLM_DISABLE=1`, so no Claude calls even with a key in `.env`. Run one file with `pytest tests/test_audit.py -q`, or one test with `pytest tests/test_audit.py -k planted -q`. The fast unit tests are `tests/test_extract.py`, `tests/test_llm.py` and `tests/test_eval_harness.py`.

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003648\",\n \"received_at\": \"2025-08-01 13:46\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"hi-en\",\n \"category_reported\": \"Pothole\",\n \"description\": \"Complainant states pothole at Malvani, near post office on Marve Road. Water level rising.\",\n \"locality_text\": \"Malvani\",\n \"ward_code\": \"P/N\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"given\",\n \"language\": \"hi-en\",\n \"english_summary\": \"Complainant reports a pothole near the post office on Marve Road in Malvani, noting that the water level is rising.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

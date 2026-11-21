@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-003540\",\n \"received_at\": \"2025-07-31 21:14\",\n \"channel\": \"MyBMC App\",\n \"language\": \"hi\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Juhu में पानी भर गया है, एम्बुलेंस नहीं निकल पा रही.\",\n \"locality_text\": \"Juhu\",\n \"ward_code\": null,\n \"lat\": 19.122434,\n \"lon\": 72.848019,\n \"photo_description\": \"Collapsed road section with barricade tape\",\n \"upvotes\": 4\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Road cave-in\",\n \"severity_1_5\": 5,\n \"ward_code\": \"K/W\",\n \"ward_source\": \"gps\",\n \"language\": \"hi\",\n \"english_summary\": \"Complainant in Juhu reports that water has accumulated and an ambulance cannot get through, while the attached photo shows a collapsed road section with barricade tape.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=app suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-001120\",\n \"received_at\": \"2025-07-01 11:41\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"en\",\n \"category_reported\": \"Road cave-in\",\n \"description\": \"Complainant states pothole at Santacruz West, near market on Hill Road. Water level rising.\",\n \"locality_text\": \"Santacruz West\",\n \"ward_code\": \"H/W\",\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"H/W\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Complainant states pothole at Santacruz West, near market on Hill Road. Water level rising.\",\n \"extraction_source\": \"text\"\n}"
+ }
+]

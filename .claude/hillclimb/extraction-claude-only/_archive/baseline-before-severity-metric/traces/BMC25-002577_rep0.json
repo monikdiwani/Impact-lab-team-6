@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002577\",\n \"received_at\": \"2025-07-20 11:30\",\n \"channel\": \"1916 Helpline\",\n \"language\": \"mr\",\n \"category_reported\": \"Waterlogging\",\n \"description\": \"Caller reports waterlogging at Malvani, near signal on Marve Road. Repeat caller.\",\n \"locality_text\": \"Malvani\",\n \"ward_code\": null,\n \"lat\": null,\n \"lon\": null,\n \"photo_description\": null,\n \"upvotes\": 0\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Waterlogging\",\n \"severity_1_5\": 4,\n \"ward_code\": \"P/N\",\n \"ward_source\": \"locality\",\n \"language\": \"mr\",\n \"english_summary\": \"A repeat caller reports waterlogging near the signal on Marve Road in Malvani.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]

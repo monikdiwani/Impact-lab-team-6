@@ -1,0 +1,14 @@
+[
+ {
+  "role": "system",
+  "content": "target=claude suite=extraction"
+ },
+ {
+  "role": "user",
+  "content": "{\n \"complaint_id\": \"BMC25-002290\",\n \"received_at\": \"2025-07-13 15:39\",\n \"channel\": \"MyBMC App\",\n \"language\": \"en\",\n \"category_reported\": \"Other\",\n \"description\": \"MY BIKE TYRE BURST BECAUSE OF POTHOLE AT BUS STOP, BANDRA EAST. PLEASE REPAIR BEFORE SOMEONE GETS HURT.\",\n \"locality_text\": \"Bandra East\",\n \"ward_code\": \"H/E\",\n \"lat\": 19.078832,\n \"lon\": 72.860696,\n \"photo_description\": null,\n \"upvotes\": 32\n}"
+ },
+ {
+  "role": "assistant",
+  "content": "{\n \"category_clean\": \"Pothole\",\n \"severity_1_5\": 3,\n \"ward_code\": \"H/E\",\n \"ward_source\": \"given\",\n \"language\": \"en\",\n \"english_summary\": \"Citizen reports a pothole at a bus stop in Bandra East that burst their bike tyre and asks for repair before someone gets hurt.\",\n \"extraction_source\": \"claude\"\n}"
+ }
+]
