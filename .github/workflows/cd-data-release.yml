@@ -69,7 +69,7 @@ jobs:
           gh release create data-latest \
             dist/follow_the_rupee.db dist/DATABASE.md dist/outputs.zip dist/llm_cache.zip dist/SHA256SUMS.txt \
             --target "$SHA" --title "Data: latest main (${SHA::7})" --notes-file dist/notes.md --prerelease
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: data-${{ env.SHA }}
           path: dist/
