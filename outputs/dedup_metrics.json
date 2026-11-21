@@ -1,0 +1,15 @@
+{
+  "precision": 0.7131,
+  "recall": 0.6843,
+  "f1": 0.6984,
+  "n_truth_pairs": 3868,
+  "n_pred_pairs": 3712,
+  "extraction_source_counts": {
+    "rules": 6501
+  },
+  "ward_source_counts": {
+    "given": 6044,
+    "gps": 271,
+    "locality": 186
+  }
+}
